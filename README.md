@@ -19,7 +19,7 @@ First, clone the repository to your local machine:
 
 ```bash
 git clone https://github.com/like-minded-nus/backend.git
-cd your-project-directory
+cd backend
 ```
 
 ### Running the application

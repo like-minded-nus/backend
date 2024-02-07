@@ -18,7 +18,7 @@ Before you begin, ensure you have the following installed on your system:
 First, clone the repository to your local machine:
 
 ```bash
-git clone https://yourrepositoryurl.git
+git clone https://github.com/like-minded-nus/backend.git
 cd your-project-directory
 ```
 

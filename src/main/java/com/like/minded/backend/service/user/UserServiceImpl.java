@@ -5,6 +5,7 @@ import com.like.minded.backend.domain.user.UserRole;
 import com.like.minded.backend.dto.user.UserLoginDto;
 import com.like.minded.backend.dto.user.UserRegistrationDto;
 import com.like.minded.backend.exception.DatabaseTransactionException;
+import com.like.minded.backend.exception.LoginException;
 import com.like.minded.backend.exception.RegistrationException;
 import com.like.minded.backend.mapper.UserMapper;
 import com.like.minded.backend.repository.user.UserRepository;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -39,7 +42,6 @@ public class UserServiceImpl implements UserService{
                 .userRole(userRole)
                 .build();
 
-
         try {
             userRepository.save(newUser);
         } catch (Exception e) {
@@ -55,7 +57,14 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public ResponseEntity<UserResponse> loginUser(UserLoginDto userLoginDto) {
-        return null;
+        User foundUser = userRepository.findByUsername(userLoginDto.getUsername());
+        validateUserLoginData(userLoginDto, foundUser);
+        UserResponse response = UserResponse.builder()
+                .status(200)
+                .message("Successfully logged in.")
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     private void validateUserRegistrationData(UserRegistrationDto userRegistrationDto) {
@@ -68,5 +77,17 @@ public class UserServiceImpl implements UserService{
         if (!userRegistrationDto.getConfirmPassword().equals(userRegistrationDto.getPassword())){
             throw new RegistrationException("Confirm password must be the same as password");
         }
+    }
+
+    private void validateUserLoginData(UserLoginDto userLoginDto, User foundUser) {
+
+        if (foundUser == null) {
+            throw new LoginException("User not found.");
+        }
+
+        if (!userLoginDto.getPassword().equals(foundUser.getPassword())) {
+            throw new LoginException("Incorrect Password.");
+        }
+
     }
 }

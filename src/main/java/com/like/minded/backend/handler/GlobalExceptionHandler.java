@@ -1,6 +1,7 @@
 package com.like.minded.backend.handler;
 
 import com.like.minded.backend.exception.DatabaseTransactionException;
+import com.like.minded.backend.exception.LoginException;
 import com.like.minded.backend.exception.RegistrationException;
 import com.like.minded.backend.vo.UserResponse;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.OK).body(
                 UserResponse.builder()
                         .status(500)
+                        .message(ex.getMessage())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(LoginException.class)
+    public ResponseEntity<UserResponse> handleUserLoginException(LoginException ex) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                UserResponse.builder()
+                        .status(401)
                         .message(ex.getMessage())
                         .build()
         );

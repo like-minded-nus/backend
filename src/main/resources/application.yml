@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:mysql://likeminded-database-1.crmcuycuw4jy.ap-southeast-1.rds.amazonaws.com:3306/like_minded?useSSL=true
+    username: admin
+    password: password123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+  server:
+    servlet:
+      context-path:

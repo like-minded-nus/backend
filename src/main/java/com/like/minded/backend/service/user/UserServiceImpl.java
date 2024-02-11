@@ -7,16 +7,13 @@ import com.like.minded.backend.dto.user.UserRegistrationDto;
 import com.like.minded.backend.exception.DatabaseTransactionException;
 import com.like.minded.backend.exception.LoginException;
 import com.like.minded.backend.exception.RegistrationException;
-import com.like.minded.backend.mapper.UserMapper;
 import com.like.minded.backend.repository.user.UserRepository;
 import com.like.minded.backend.repository.user.UserRoleRepository;
-import com.like.minded.backend.vo.UserResponse;
+import com.like.minded.backend.vo.user.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -62,6 +59,7 @@ public class UserServiceImpl implements UserService{
         UserResponse response = UserResponse.builder()
                 .status(200)
                 .message("Successfully logged in.")
+                .userId(foundUser.getUserId())
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);

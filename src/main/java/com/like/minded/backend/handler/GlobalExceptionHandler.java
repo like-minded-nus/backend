@@ -3,7 +3,7 @@ package com.like.minded.backend.handler;
 import com.like.minded.backend.exception.DatabaseTransactionException;
 import com.like.minded.backend.exception.LoginException;
 import com.like.minded.backend.exception.RegistrationException;
-import com.like.minded.backend.vo.UserResponse;
+import com.like.minded.backend.vo.user.UserResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

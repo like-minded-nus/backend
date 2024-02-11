@@ -1,4 +1,4 @@
-package com.like.minded.backend.vo;
+package com.like.minded.backend.vo.user;
 
 import lombok.Builder;
 import lombok.Data;
@@ -8,5 +8,6 @@ import lombok.Data;
 public class UserResponse {
     private Integer status;
     private String message;
+    private Integer userId;
 
 }

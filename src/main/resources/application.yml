@@ -4,6 +4,9 @@ spring:
     username: admin
     password: password123
     driver-class-name: com.mysql.cj.jdbc.Driver
+    max-lifetime: 6000
+    hikari:
+      keep-alive-time:240000
 
   jpa:
     show-sql: true

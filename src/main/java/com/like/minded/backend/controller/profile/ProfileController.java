@@ -4,6 +4,7 @@ import com.like.minded.backend.dto.profile.ProfilePassionDto;
 import com.like.minded.backend.dto.profile.UpdateProfilePassionDto;
 import com.like.minded.backend.dto.profile.UpdateUserProfileDto;
 import com.like.minded.backend.dto.profile.UserProfileDto;
+import com.like.minded.backend.service.profile.ProfilePassionMatchService;
 import com.like.minded.backend.service.profile.ProfileService;
 import com.like.minded.backend.vo.profile.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class ProfileController {
 
     @Autowired
     private ProfileService profileService;
+
+    @Autowired
+    private ProfilePassionMatchService profilePassionMatchService;
 
     @GetMapping("/{id}")
     public ResponseEntity<GetProfileResponse> getProfile(@PathVariable Integer id) {
@@ -48,5 +52,9 @@ public class ProfileController {
         return profileService.updateProfilePassions(updateProfilePassionDto);
     }
 
+    @GetMapping("/passions/match/{profileId}")
+    public ResponseEntity<ProfilePassionMatchResponse> getProfilePassionMatches(@PathVariable Integer profileId) {
+        return profilePassionMatchService.getProfilePassionMatches(profileId);
+    }
 }
 

@@ -16,3 +16,8 @@ spring:
   server:
     servlet:
       context-path:
+
+  devtools:
+    restart:
+      exclude: static/**,public/**
+      additional-paths: src/main/java

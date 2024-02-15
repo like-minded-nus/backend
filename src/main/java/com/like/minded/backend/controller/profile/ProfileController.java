@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 @RestController
 @RequestMapping("/api/v1/profile")
 @CrossOrigin
@@ -23,7 +26,7 @@ public class ProfileController {
     private ProfilePassionMatchService profilePassionMatchService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetProfileResponse> getProfile(@PathVariable Integer id) {
+    public ResponseEntity<GetProfileResponse> getProfile(@PathVariable Integer id) throws SQLException, IOException {
         return profileService.getProfile(id);
     }
 

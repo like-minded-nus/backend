@@ -3,6 +3,7 @@ package com.like.minded.backend.domain.profile;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Blob;
 import java.time.LocalDate;
 
 @Entity
@@ -33,4 +34,29 @@ public class Profile {
     @NonNull
     @Column(name="BIRTHDATE")
     private LocalDate birthdate;
+
+    @Lob
+    @Column(name="IMAGE_1")
+    private Blob image1;
+
+    @Lob
+    @Column(name="IMAGE_2")
+    private Blob image2;
+
+    @Lob
+    @Column(name="IMAGE_3")
+    private Blob image3;
+
+    @Lob
+    @Column(name="IMAGE_4")
+    private Blob image4;
+
+    @Lob
+    @Column(name="IMAGE_5")
+    private Blob image5;
+
+    @Lob
+    @Column(name="IMAGE_6")
+    private Blob image6;
+
 }

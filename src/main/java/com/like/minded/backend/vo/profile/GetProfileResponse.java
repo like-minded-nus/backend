@@ -3,6 +3,7 @@ package com.like.minded.backend.vo.profile;
 import lombok.Builder;
 import lombok.Data;
 
+import java.sql.Blob;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,4 +18,10 @@ public class GetProfileResponse {
     private String gender;
     private LocalDate birthdate;
     private List <String> profilePassionList;
+    private String image1;
+    private String image2;
+    private String image3;
+    private String image4;
+    private String image5;
+    private String image6;
 }

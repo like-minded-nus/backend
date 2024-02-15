@@ -7,8 +7,11 @@ import com.like.minded.backend.dto.profile.UserProfileDto;
 import com.like.minded.backend.vo.profile.*;
 import org.springframework.http.ResponseEntity;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 public interface ProfileService {
-    public ResponseEntity<GetProfileResponse> getProfile(Integer id);
+    public ResponseEntity<GetProfileResponse> getProfile(Integer id) throws SQLException, IOException;
 
     public ResponseEntity<CreateProfileResponse> createProfile(UserProfileDto userProfileDto);
 

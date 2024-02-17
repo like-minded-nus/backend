@@ -2,6 +2,7 @@ package com.like.minded.backend.service.user;
 
 import com.like.minded.backend.domain.user.User;
 import com.like.minded.backend.domain.user.UserRole;
+import com.like.minded.backend.dto.user.UserDto;
 import com.like.minded.backend.dto.user.UserLoginDto;
 import com.like.minded.backend.dto.user.UserRegistrationDto;
 import com.like.minded.backend.exception.DatabaseTransactionException;
@@ -9,6 +10,7 @@ import com.like.minded.backend.exception.LoginException;
 import com.like.minded.backend.exception.RegistrationException;
 import com.like.minded.backend.repository.user.UserRepository;
 import com.like.minded.backend.repository.user.UserRoleRepository;
+import com.like.minded.backend.vo.BaseResponse;
 import com.like.minded.backend.vo.user.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,13 +55,19 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public ResponseEntity<UserResponse> loginUser(UserLoginDto userLoginDto) {
+    public ResponseEntity<BaseResponse<UserDto>> loginUser(UserLoginDto userLoginDto) {
         User foundUser = userRepository.findByUsername(userLoginDto.getUsername());
         validateUserLoginData(userLoginDto, foundUser);
-        UserResponse response = UserResponse.builder()
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(foundUser.getUserId());
+        userDto.setUsername(foundUser.getUsername());
+        userDto.setEmail(foundUser.getEmail());
+
+        BaseResponse<UserDto> response = BaseResponse.<UserDto>builder()
                 .status(200)
                 .message("Successfully logged in.")
-                .userId(foundUser.getUserId())
+                .payload(userDto)
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);

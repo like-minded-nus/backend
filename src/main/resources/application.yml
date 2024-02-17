@@ -24,7 +24,12 @@ spring:
 logging:
   file:
     name: server.log
+
   level:
     root: info
     org.springframework: info
     org.hibernate: info
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 3

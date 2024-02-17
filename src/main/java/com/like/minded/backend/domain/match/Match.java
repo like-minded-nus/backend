@@ -28,9 +28,9 @@ public class Match extends CreatedUpdatedColumns {
 
     @NonNull
     @Column(name="LIKE_1")
-    private Boolean like_1;
+    private Boolean like_1 = false;
 
     @NonNull
     @Column(name="LIKE_2")
-    private Boolean like_2;
+    private Boolean like_2 = false;
 }

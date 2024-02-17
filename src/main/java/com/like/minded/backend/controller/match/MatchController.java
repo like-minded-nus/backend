@@ -1,6 +1,7 @@
 package com.like.minded.backend.controller.match;
 
 import com.like.minded.backend.domain.match.Match;
+import com.like.minded.backend.dto.match.MatchRequestBodyDto;
 import com.like.minded.backend.service.match.MatchService;
 import com.like.minded.backend.vo.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,12 @@ public class MatchController {
     private MatchService matchService;
 
     @GetMapping("/{profileId}")
-    public ResponseEntity<BaseResponse<List<Match>>> getMatchesByProfileId(@PathVariable Integer profileId) {
-        return matchService.getMatchesByProfileId(profileId);
+    public ResponseEntity<BaseResponse<List<Match>>> getProfileMatches(@PathVariable Integer profileId) {
+        return matchService.getProfileMatches(profileId);
+    }
+
+    @PostMapping
+    public ResponseEntity<BaseResponse<Match>> getMatchesByProfileId(@RequestBody MatchRequestBodyDto matchRequestBody) {
+        return matchService.createMatchRecord(matchRequestBody.getProfileId_1(), matchRequestBody.getProfileId_2());
     }
 }

@@ -32,14 +32,14 @@ public class MatchServiceImpl implements MatchService{
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    public ResponseEntity<BaseResponse<Match>> createMatchRecord(Integer profileId_1, Integer profileId_2) {
+    public ResponseEntity<BaseResponse<Match>> createMatchRecord(Integer userProfileId, Integer targetProfileId) {
         BaseResponse<Match> response;
         String message;
 
         // Find match record from db
-        Match match = matchRepository.findMatchByProfileIds(profileId_2, profileId_1);
+        Match match = matchRepository.findMatchByProfileIds(targetProfileId, userProfileId);
 
-        logger.info("before: {}", match);
+//        logger.info("before: {}", match);
 
         // If match record exists, update it
         if (match != null) {
@@ -49,13 +49,13 @@ public class MatchServiceImpl implements MatchService{
         // Otherwise, create new match record
         else {
             match = new Match();
-            match.setProfileId_1(profileId_1);
-            match.setProfileId_2(profileId_2);
+            match.setProfileId_1(userProfileId);
+            match.setProfileId_2(targetProfileId);
             match.setLike_1(true);
             message = "Successfully updated match record";
         }
 
-        logger.info("after: {}", match);
+//        logger.info("after: {}", match);
 
         try {
             matchRepository.save(match);

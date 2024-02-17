@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface MatchService {
     public ResponseEntity<BaseResponse<List<Match>>> getProfileMatches(Integer profileId);
-    public ResponseEntity<BaseResponse<Match>> createMatchRecord(Integer profileId_1, Integer profileId_2);
+    public ResponseEntity<BaseResponse<Match>> createMatchRecord(Integer userProfileId, Integer targetProfileId);
 }

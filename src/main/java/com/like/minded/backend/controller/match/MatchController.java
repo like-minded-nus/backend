@@ -24,6 +24,6 @@ public class MatchController {
 
     @PostMapping
     public ResponseEntity<BaseResponse<Match>> getMatchesByProfileId(@RequestBody MatchRequestBodyDto matchRequestBody) {
-        return matchService.createMatchRecord(matchRequestBody.getProfileId_1(), matchRequestBody.getProfileId_2());
+        return matchService.createMatchRecord(matchRequestBody.getUserProfileId(), matchRequestBody.getTargetProfileId());
     }
 }

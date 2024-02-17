@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MatchRequestBodyDto {
-    private Integer profileId_1;
-    private Integer profileId_2;
+    private Integer userProfileId;
+    private Integer targetProfileId;
 }
 

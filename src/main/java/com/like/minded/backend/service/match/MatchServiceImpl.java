@@ -44,7 +44,7 @@ public class MatchServiceImpl implements MatchService{
         // If match record exists, update it
         if (match != null) {
             match.setLike_2(true);
-            message = "Successfully created match record";
+            message = "Successfully updated match record";
         }
         // Otherwise, create new match record
         else {
@@ -52,7 +52,7 @@ public class MatchServiceImpl implements MatchService{
             match.setProfileId_1(userProfileId);
             match.setProfileId_2(targetProfileId);
             match.setLike_1(true);
-            message = "Successfully updated match record";
+            message = "Successfully created match record";
         }
 
 //        logger.info("after: {}", match);

@@ -14,9 +14,10 @@ spring:
       ddl-auto: validate
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
         jdbc:
           time_zone: +08:00
-        dialect: org.hibernate.dialect.MySQLDialect
 
   server:
     servlet:
@@ -29,12 +30,14 @@ spring:
 logging:
   level:
     root: info
-    org.springframework: info
-    org.hibernate: info
+    org:
+      springframework: info
+      hibernate:
+        SQL: debug
+        type.descriptor.sql.BasicBinder: trace
   file:
     name: server.log
   logback:
     rollingpolicy:
       max-file-size: 25MB
       max-history: 3
-      file-name-pattern: server-%d{yyyy-MM-dd}.log

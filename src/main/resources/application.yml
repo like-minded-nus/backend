@@ -21,3 +21,10 @@ spring:
     restart:
       exclude: static/**,public/**
       additional-paths: src/main/java
+logging:
+  file:
+    name: server.log
+  level:
+    root: info
+    org.springframework: info
+    org.hibernate: info

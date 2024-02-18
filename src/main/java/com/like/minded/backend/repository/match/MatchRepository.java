@@ -15,6 +15,7 @@ public interface MatchRepository extends JpaRepository<Match, Integer> {
     List<Match> findProfileMatches(Integer profileId);
 
     @Query("SELECT m FROM Match m " +
-            "WHERE m.profileId_1 = :profileId_1 AND m.profileId_2 = :profileId_2")
+            "WHERE (m.profileId_1 = :profileId_1 AND m.profileId_2 = :profileId_2) " +
+            "OR (m.profileId_1 = :profileId_2 AND m.profileId_2 = :profileId_1)")
     Match findMatchByProfileIds(Integer profileId_1, Integer profileId_2);
 }

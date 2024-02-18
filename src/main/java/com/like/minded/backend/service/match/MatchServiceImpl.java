@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class MatchServiceImpl implements MatchService{
+public class MatchServiceImpl implements MatchService {
     private static final Logger logger = LoggerFactory.getLogger(MatchServiceImpl.class);
 
     @Autowired
@@ -45,7 +45,10 @@ public class MatchServiceImpl implements MatchService{
 
         // If match record exists, update it
         if (match != null) {
-            match.setLike_2(matchRequestBody.getLike());
+            if (match.getProfileId_1().equals(matchRequestBody.getUserProfileId()))
+                match.setLike_1(matchRequestBody.getLike());
+            else if (match.getProfileId_2().equals(matchRequestBody.getUserProfileId()))
+                match.setLike_2(matchRequestBody.getLike());
             match.setUpdatedDate(LocalDateTime.now());
             message = "Successfully updated match record";
         }

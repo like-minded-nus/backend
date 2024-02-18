@@ -23,7 +23,7 @@ public class MatchController {
     }
 
     @PostMapping
-    public ResponseEntity<BaseResponse<Match>> getMatchesByProfileId(@RequestBody MatchRequestBodyDto matchRequestBody) {
-        return matchService.createMatchRecord(matchRequestBody.getUserProfileId(), matchRequestBody.getTargetProfileId());
+    public ResponseEntity<BaseResponse<Match>> createMatchRecord(@RequestBody MatchRequestBodyDto matchRequestBody) {
+        return matchService.createMatchRecord(matchRequestBody);
     }
 }

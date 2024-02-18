@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class MatchRequestBodyDto {
     private Integer userProfileId;
     private Integer targetProfileId;
+    private Boolean like;
 }
 

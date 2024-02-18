@@ -1,6 +1,7 @@
 package com.like.minded.backend.service.match;
 
 import com.like.minded.backend.domain.match.Match;
+import com.like.minded.backend.dto.match.MatchRequestBodyDto;
 import com.like.minded.backend.exception.DatabaseTransactionException;
 import com.like.minded.backend.repository.match.MatchRepository;
 import com.like.minded.backend.vo.BaseResponse;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -32,26 +34,27 @@ public class MatchServiceImpl implements MatchService{
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    public ResponseEntity<BaseResponse<Match>> createMatchRecord(Integer userProfileId, Integer targetProfileId) {
+    public ResponseEntity<BaseResponse<Match>> createMatchRecord(MatchRequestBodyDto matchRequestBody) {
         BaseResponse<Match> response;
         String message;
 
         // Find match record from db
-        Match match = matchRepository.findMatchByProfileIds(targetProfileId, userProfileId);
+        Match match = matchRepository.findMatchByProfileIds(matchRequestBody.getTargetProfileId(), matchRequestBody.getUserProfileId());
 
 //        logger.info("before: {}", match);
 
         // If match record exists, update it
         if (match != null) {
-            match.setLike_2(true);
+            match.setLike_2(matchRequestBody.getLike());
+            match.setUpdatedDate(LocalDateTime.now());
             message = "Successfully updated match record";
         }
         // Otherwise, create new match record
         else {
             match = new Match();
-            match.setProfileId_1(userProfileId);
-            match.setProfileId_2(targetProfileId);
-            match.setLike_1(true);
+            match.setProfileId_1(matchRequestBody.getUserProfileId());
+            match.setProfileId_2(matchRequestBody.getTargetProfileId());
+            match.setLike_1(matchRequestBody.getLike());
             message = "Successfully created match record";
         }
 

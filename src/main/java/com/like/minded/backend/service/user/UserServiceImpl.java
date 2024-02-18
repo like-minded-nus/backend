@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService{
         validateUserLoginData(userLoginDto, foundUser);
 
         UserDto userDto = new UserDto();
-        userDto.setUserId(foundUser.getUserId());
+        userDto.setId(foundUser.getUserId());
         userDto.setUsername(foundUser.getUsername());
         userDto.setEmail(foundUser.getEmail());
 

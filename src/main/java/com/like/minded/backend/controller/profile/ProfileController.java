@@ -28,6 +28,11 @@ public class ProfileController {
         return profileService.getProfile(id);
     }
 
+    @GetMapping("/userId/{userId}")
+    public ResponseEntity<BaseResponse<ProfileResponseBodyDto>> getProfileByUserId(@PathVariable Integer userId) throws SQLException, IOException {
+        return profileService.getProfileByUserId(userId);
+    }
+
     @PostMapping
     public ResponseEntity<CreateProfileResponse> createProfile(@RequestBody UserProfileDto userProfileDto) {
         return profileService.createProfile(userProfileDto);

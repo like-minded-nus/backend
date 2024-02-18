@@ -5,14 +5,12 @@ import java.sql.SQLException;
 import java.util.Base64;
 import com.like.minded.backend.domain.profile.Profile;
 import com.like.minded.backend.domain.profile.ProfilePassion;
-import com.like.minded.backend.dto.profile.ProfilePassionDto;
-import com.like.minded.backend.dto.profile.UpdateProfilePassionDto;
-import com.like.minded.backend.dto.profile.UpdateUserProfileDto;
-import com.like.minded.backend.dto.profile.UserProfileDto;
+import com.like.minded.backend.dto.profile.*;
 import com.like.minded.backend.exception.DatabaseTransactionException;
 import com.like.minded.backend.repository.profile.ProfileRepository;
 import com.like.minded.backend.repository.profile.ProfilePassionRepository;
 import com.like.minded.backend.utils.BlobUtils;
+import com.like.minded.backend.vo.BaseResponse;
 import com.like.minded.backend.vo.profile.*;
 import jakarta.transaction.Transactional;
 import org.hibernate.engine.jdbc.BlobProxy;
@@ -67,6 +65,48 @@ public class ProfileServiceImpl implements ProfileService {
                 .image4(image4)
                 .image5(image5)
                 .image6(image6)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @Override
+    public ResponseEntity<BaseResponse<ProfileResponseBodyDto>> getProfileByUserId(Integer userId) throws SQLException, IOException {
+
+        Optional<Profile> profileOptional = Optional.ofNullable(profileRepository.findByUserId(userId));
+
+        if(profileOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        }
+        Profile profile = profileOptional.get();
+
+        List<String> profilePassions = profilePassionRepository.findProfilePassionNameByProfileId(profile.getProfileId());
+
+        String image1 = BlobUtils.blobToBase64(profile.getImage1());
+        String image2 = BlobUtils.blobToBase64(profile.getImage2());
+        String image3 = BlobUtils.blobToBase64(profile.getImage3());
+        String image4 = BlobUtils.blobToBase64(profile.getImage4());
+        String image5 = BlobUtils.blobToBase64(profile.getImage5());
+        String image6 = BlobUtils.blobToBase64(profile.getImage6());
+
+        ProfileResponseBodyDto profileDto = new ProfileResponseBodyDto();
+        profileDto.setProfileId(profile.getProfileId());
+        profileDto.setUserId(profile.getUserId());
+        profileDto.setDisplayName(profile.getDisplayName());
+        profileDto.setGender(profile.getGender());
+        profileDto.setBirthdate(profile.getBirthdate());
+        profileDto.setProfilePassionList(profilePassions);
+        profileDto.setImage1(image1);
+        profileDto.setImage2(image2);
+        profileDto.setImage3(image3);
+        profileDto.setImage4(image4);
+        profileDto.setImage5(image5);
+        profileDto.setImage6(image6);
+
+        BaseResponse<ProfileResponseBodyDto> response = BaseResponse.<ProfileResponseBodyDto>builder()
+                .status(200)
+                .message("Successfully retrieved profile by userId")
+                .payload(profileDto)
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);

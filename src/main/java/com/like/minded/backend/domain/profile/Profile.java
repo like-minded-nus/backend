@@ -35,6 +35,9 @@ public class Profile {
     @Column(name="BIRTHDATE")
     private LocalDate birthdate;
 
+    @Column(name="BIO")
+    private String bio;
+
     @Lob
     @Column(name="IMAGE_1")
     private Blob image1;

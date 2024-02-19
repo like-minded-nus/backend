@@ -1,6 +1,7 @@
 package com.like.minded.backend.controller.passion;
 
 import com.like.minded.backend.service.passion.PassionService;
+import com.like.minded.backend.vo.BaseResponse;
 import com.like.minded.backend.vo.passion.PassionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ public class PassionController {
     private PassionService passionService;
 
     @GetMapping
-    public ResponseEntity<PassionResponse> getPassions() {
+    public ResponseEntity<BaseResponse<PassionResponse>> getPassions() {
         return passionService.getPassions();
     }
 

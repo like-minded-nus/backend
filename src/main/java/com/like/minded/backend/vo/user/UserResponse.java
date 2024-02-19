@@ -8,6 +8,4 @@ import lombok.Data;
 public class UserResponse {
     private Integer status;
     private String message;
-    private Integer userId;
-
 }

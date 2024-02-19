@@ -3,7 +3,7 @@ package com.like.minded.backend.service.profile;
 import com.like.minded.backend.dto.profile.ProfilePassionMatchDto;
 import com.like.minded.backend.dto.profile.ProfilePassionMatchListDto;
 import com.like.minded.backend.repository.profile.ProfilePassionRepository;
-import com.like.minded.backend.vo.profile.ProfilePassionMatchResponse;
+import com.like.minded.backend.vo.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ public class ProfilePassionMatchServiceImpl implements ProfilePassionMatchServic
     private ProfilePassionRepository profilePassionRepository;
 
     @Override
-    public ResponseEntity<ProfilePassionMatchResponse> getProfilePassionMatches(Integer profileId) {
+    public ResponseEntity<BaseResponse<ProfilePassionMatchListDto>> getProfilePassionMatches(Integer profileId) {
         {
             List<String> profileMatchList = profilePassionRepository.findProfilePassionMatchesByProfileId(profileId);
 
@@ -31,10 +31,10 @@ public class ProfilePassionMatchServiceImpl implements ProfilePassionMatchServic
             }
             profilePassionMatchListDto.setMatchList(matchList);
 
-            ProfilePassionMatchResponse response = ProfilePassionMatchResponse.builder()
+            BaseResponse<ProfilePassionMatchListDto> response = BaseResponse.<ProfilePassionMatchListDto>builder()
                     .status(200)
                     .message("Successfully retrieved profile passion match list")
-                    .profilePassionMatchList(profilePassionMatchListDto)
+                    .payload(profilePassionMatchListDto)
                     .build();
 
             return ResponseEntity.status(HttpStatus.OK).body(response);

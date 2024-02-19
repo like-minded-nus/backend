@@ -1,9 +1,7 @@
 package com.like.minded.backend.service.profile;
 
-import com.like.minded.backend.dto.profile.ProfilePassionDto;
-import com.like.minded.backend.dto.profile.UpdateProfilePassionDto;
-import com.like.minded.backend.dto.profile.UpdateUserProfileDto;
-import com.like.minded.backend.dto.profile.UserProfileDto;
+import com.like.minded.backend.dto.profile.*;
+import com.like.minded.backend.vo.BaseResponse;
 import com.like.minded.backend.vo.profile.*;
 import org.springframework.http.ResponseEntity;
 
@@ -12,6 +10,8 @@ import java.sql.SQLException;
 
 public interface ProfileService {
     public ResponseEntity<GetProfileResponse> getProfile(Integer id) throws SQLException, IOException;
+
+    public ResponseEntity<BaseResponse<ProfileResponseBodyDto>> getProfileByUserId(Integer userId) throws SQLException, IOException;
 
     public ResponseEntity<CreateProfileResponse> createProfile(UserProfileDto userProfileDto);
 

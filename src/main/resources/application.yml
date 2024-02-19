@@ -11,7 +11,13 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        jdbc:
+          time_zone: +08:00
 
   server:
     servlet:
@@ -21,3 +27,17 @@ spring:
     restart:
       exclude: static/**,public/**
       additional-paths: src/main/java
+logging:
+  level:
+    root: info
+    org:
+      springframework: info
+      hibernate:
+        SQL: debug
+        type.descriptor.sql.BasicBinder: trace
+  file:
+    name: server.log
+  logback:
+    rollingpolicy:
+      max-file-size: 25MB
+      max-history: 3

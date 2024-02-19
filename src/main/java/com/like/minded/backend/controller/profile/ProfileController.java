@@ -1,11 +1,9 @@
 package com.like.minded.backend.controller.profile;
 
-import com.like.minded.backend.dto.profile.ProfilePassionDto;
-import com.like.minded.backend.dto.profile.UpdateProfilePassionDto;
-import com.like.minded.backend.dto.profile.UpdateUserProfileDto;
-import com.like.minded.backend.dto.profile.UserProfileDto;
+import com.like.minded.backend.dto.profile.*;
 import com.like.minded.backend.service.profile.ProfilePassionMatchService;
 import com.like.minded.backend.service.profile.ProfileService;
+import com.like.minded.backend.vo.BaseResponse;
 import com.like.minded.backend.vo.profile.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +26,11 @@ public class ProfileController {
     @GetMapping("/{id}")
     public ResponseEntity<GetProfileResponse> getProfile(@PathVariable Integer id) throws SQLException, IOException {
         return profileService.getProfile(id);
+    }
+
+    @GetMapping("/userId/{userId}")
+    public ResponseEntity<BaseResponse<ProfileResponseBodyDto>> getProfileByUserId(@PathVariable Integer userId) throws SQLException, IOException {
+        return profileService.getProfileByUserId(userId);
     }
 
     @PostMapping
@@ -56,7 +59,7 @@ public class ProfileController {
     }
 
     @GetMapping("/passions/match/{profileId}")
-    public ResponseEntity<ProfilePassionMatchResponse> getProfilePassionMatches(@PathVariable Integer profileId) {
+    public ResponseEntity<BaseResponse<ProfilePassionMatchListDto>> getProfilePassionMatches(@PathVariable Integer profileId) {
         return profilePassionMatchService.getProfilePassionMatches(profileId);
     }
 }

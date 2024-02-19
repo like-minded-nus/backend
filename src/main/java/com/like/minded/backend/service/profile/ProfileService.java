@@ -2,24 +2,18 @@ package com.like.minded.backend.service.profile;
 
 import com.like.minded.backend.dto.profile.*;
 import com.like.minded.backend.vo.BaseResponse;
-import com.like.minded.backend.vo.profile.*;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 public interface ProfileService {
-    public ResponseEntity<GetProfileResponse> getProfile(Integer id) throws SQLException, IOException;
+    public ResponseEntity<BaseResponse<ProfileResponseBodyDto>> getProfileByProfileId(Integer profileId) throws SQLException, IOException;
 
     public ResponseEntity<BaseResponse<ProfileResponseBodyDto>> getProfileByUserId(Integer userId) throws SQLException, IOException;
 
-    public ResponseEntity<CreateProfileResponse> createProfile(UserProfileDto userProfileDto);
+    public ResponseEntity<BaseResponse<ProfileResponseBodyDto>> createProfile(UserProfileDto userProfileDto);
 
-    public ResponseEntity<GetProfileResponse> updateProfile(UpdateUserProfileDto updateUserProfileDto);
-
-    public ResponseEntity<CreateProfilePassionResponse> createProfilePassions(ProfilePassionDto profilePassionDto);
-    public ResponseEntity<GetProfilePassionResponse> getProfilePassions(Integer profileId);
-
-    public ResponseEntity<UpdateProfilePassionResponse> updateProfilePassions(UpdateProfilePassionDto updateProfilePassionDto);
+    public ResponseEntity<BaseResponse<ProfileResponseBodyDto>> updateProfile(UpdateUserProfileDto updateUserProfileDto);
 
 }

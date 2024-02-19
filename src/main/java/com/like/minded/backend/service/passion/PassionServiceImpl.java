@@ -1,7 +1,9 @@
 package com.like.minded.backend.service.passion;
 
+import com.like.minded.backend.domain.match.Match;
 import com.like.minded.backend.domain.passion.Passion;
 import com.like.minded.backend.repository.passion.PassionRepository;
+import com.like.minded.backend.vo.BaseResponse;
 import com.like.minded.backend.vo.passion.PassionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,14 +18,17 @@ public class PassionServiceImpl implements PassionService{
     private PassionRepository passionRepository;
 
     @Override
-    public ResponseEntity<PassionResponse> getPassions() {
+    public ResponseEntity<BaseResponse<PassionResponse>> getPassions() {
 
         List<Passion> passionList = passionRepository.findAll();
 
-        PassionResponse response = PassionResponse.builder()
+        PassionResponse passionResponse = new PassionResponse();
+        passionResponse.setPassionList(passionList);
+
+        BaseResponse<PassionResponse> response = BaseResponse.<PassionResponse>builder()
                 .status(200)
-                .message("Successfully retrieved all passions")
-                .passionList(passionList)
+                .message("Successfully retrieved passions")
+                .payload(passionResponse)
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);

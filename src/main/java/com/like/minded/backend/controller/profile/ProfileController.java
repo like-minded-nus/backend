@@ -4,7 +4,6 @@ import com.like.minded.backend.dto.profile.*;
 import com.like.minded.backend.service.profile.ProfilePassionMatchService;
 import com.like.minded.backend.service.profile.ProfileService;
 import com.like.minded.backend.vo.BaseResponse;
-import com.like.minded.backend.vo.profile.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +23,8 @@ public class ProfileController {
     private ProfilePassionMatchService profilePassionMatchService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetProfileResponse> getProfile(@PathVariable Integer id) throws SQLException, IOException {
-        return profileService.getProfile(id);
+    public ResponseEntity<BaseResponse<ProfileResponseBodyDto>> getProfile(@PathVariable Integer id) throws SQLException, IOException {
+        return profileService.getProfileByProfileId(id);
     }
 
     @GetMapping("/userId/{userId}")
@@ -34,28 +33,13 @@ public class ProfileController {
     }
 
     @PostMapping
-    public ResponseEntity<CreateProfileResponse> createProfile(@RequestBody UserProfileDto userProfileDto) {
+    public ResponseEntity<BaseResponse<ProfileResponseBodyDto>> createProfile(@RequestBody UserProfileDto userProfileDto) {
         return profileService.createProfile(userProfileDto);
     }
 
     @PutMapping
-    public ResponseEntity<GetProfileResponse> updateProfile(@RequestBody UpdateUserProfileDto updateUserProfileDto) {
+    public ResponseEntity<BaseResponse<ProfileResponseBodyDto>> updateProfile(@RequestBody UpdateUserProfileDto updateUserProfileDto) {
         return profileService.updateProfile(updateUserProfileDto);
-    }
-
-    @PostMapping("/passions")
-    public ResponseEntity<CreateProfilePassionResponse> createProfilePassions(@RequestBody ProfilePassionDto profilePassionDto) {
-        return profileService.createProfilePassions(profilePassionDto);
-    }
-
-    @GetMapping("/passions/{profileId}")
-    public ResponseEntity<GetProfilePassionResponse> getUserPassions(@PathVariable Integer profileId) {
-        return profileService.getProfilePassions(profileId);
-    }
-
-    @PutMapping("/passions")
-    public ResponseEntity<UpdateProfilePassionResponse> updateProfilePassions(@RequestBody UpdateProfilePassionDto updateProfilePassionDto) {
-        return profileService.updateProfilePassions(updateProfilePassionDto);
     }
 
     @GetMapping("/passions/match/{profileId}")

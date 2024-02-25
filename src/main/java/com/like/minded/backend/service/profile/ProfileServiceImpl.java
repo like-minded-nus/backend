@@ -67,7 +67,7 @@ public class ProfileServiceImpl implements ProfileService {
 
         BaseResponse<ProfileResponseBodyDto> response = BaseResponse.<ProfileResponseBodyDto>builder()
                 .status(200)
-                .message("Successfully retrieved profile by userId")
+                .message("Successfully retrieved profile by profileId")
                 .payload(profileDto)
                 .build();
 

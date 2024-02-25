@@ -18,8 +18,8 @@ public class UserProfileDto {
     private String displayName;
     private String gender;
     private LocalDate birthdate;
-    private List<Integer> profilePassionList;
     private String bio;
+    private List<Integer> profilePassionList;
     private String image1;
     private String image2;
     private String image3;

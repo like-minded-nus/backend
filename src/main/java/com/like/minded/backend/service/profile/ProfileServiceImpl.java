@@ -14,6 +14,8 @@ import com.like.minded.backend.utils.BlobUtils;
 import com.like.minded.backend.vo.BaseResponse;
 import jakarta.transaction.Transactional;
 import org.hibernate.engine.jdbc.BlobProxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,8 @@ import java.util.Optional;
 
 @Service
 public class ProfileServiceImpl implements ProfileService {
+    private static final Logger logger = LoggerFactory.getLogger(ProfileServiceImpl.class);
+
     @Autowired
     private ProfileRepository profileRepository;
 
@@ -292,9 +296,8 @@ public class ProfileServiceImpl implements ProfileService {
                 profilePassionRepository.deleteProfilePassionByProfileId(foundProfile.getProfileId());
                 profilePassionRepository.saveAll(profilePassionList);
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.info(e.getMessage());
                 throw new DatabaseTransactionException("Error updating profile passions into Database", e);
-
             }
 
             List<String> profilePassions = profilePassionRepository.findProfilePassionNameByProfileId(foundProfile.getProfileId());

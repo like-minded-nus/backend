@@ -14,6 +14,7 @@ import com.like.minded.backend.utils.BlobUtils;
 import com.like.minded.backend.vo.BaseResponse;
 import jakarta.transaction.Transactional;
 import org.hibernate.engine.jdbc.BlobProxy;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ import java.util.Optional;
 @Service
 public class ProfileServiceImpl implements ProfileService {
     private static final Logger logger = LoggerFactory.getLogger(ProfileServiceImpl.class);
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Autowired
     private ProfileRepository profileRepository;
@@ -54,13 +58,7 @@ public class ProfileServiceImpl implements ProfileService {
         String image5 = BlobUtils.blobToBase64(profile.getImage5());
         String image6 = BlobUtils.blobToBase64(profile.getImage6());
 
-        ProfileResponseBodyDto profileDto = new ProfileResponseBodyDto();
-        profileDto.setProfileId(profile.getProfileId());
-        profileDto.setUserId(profile.getUserId());
-        profileDto.setDisplayName(profile.getDisplayName());
-        profileDto.setGender(profile.getGender());
-        profileDto.setBirthdate(profile.getBirthdate());
-        profileDto.setBio(profile.getBio());
+        ProfileResponseBodyDto profileDto = modelMapper.map(profile, ProfileResponseBodyDto.class);
         profileDto.setProfilePassionList(profilePassions);
         profileDto.setImage1(image1);
         profileDto.setImage2(image2);
@@ -97,13 +95,7 @@ public class ProfileServiceImpl implements ProfileService {
         String image5 = BlobUtils.blobToBase64(profile.getImage5());
         String image6 = BlobUtils.blobToBase64(profile.getImage6());
 
-        ProfileResponseBodyDto profileDto = new ProfileResponseBodyDto();
-        profileDto.setProfileId(profile.getProfileId());
-        profileDto.setUserId(profile.getUserId());
-        profileDto.setDisplayName(profile.getDisplayName());
-        profileDto.setGender(profile.getGender());
-        profileDto.setBirthdate(profile.getBirthdate());
-        profileDto.setBio(profile.getBio());
+        ProfileResponseBodyDto profileDto = modelMapper.map(profile, ProfileResponseBodyDto.class);
         profileDto.setProfilePassionList(profilePassions);
         profileDto.setImage1(image1);
         profileDto.setImage2(image2);

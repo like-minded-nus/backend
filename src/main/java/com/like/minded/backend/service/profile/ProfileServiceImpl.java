@@ -54,9 +54,9 @@ public class ProfileServiceImpl implements ProfileService {
         profileDto.setProfileId(profile.getProfileId());
         profileDto.setUserId(profile.getUserId());
         profileDto.setDisplayName(profile.getDisplayName());
-        profileDto.setBio(profile.getBio());
         profileDto.setGender(profile.getGender());
         profileDto.setBirthdate(profile.getBirthdate());
+        profileDto.setBio(profile.getBio());
         profileDto.setProfilePassionList(profilePassions);
         profileDto.setImage1(image1);
         profileDto.setImage2(image2);
@@ -98,8 +98,8 @@ public class ProfileServiceImpl implements ProfileService {
         profileDto.setUserId(profile.getUserId());
         profileDto.setDisplayName(profile.getDisplayName());
         profileDto.setGender(profile.getGender());
-        profileDto.setBio(profileDto.getBio());
         profileDto.setBirthdate(profile.getBirthdate());
+        profileDto.setBio(profile.getBio());
         profileDto.setProfilePassionList(profilePassions);
         profileDto.setImage1(image1);
         profileDto.setImage2(image2);

@@ -60,4 +60,9 @@ public class VoucherServiceImpl implements VoucherService{
     public List<Voucher> getAllVouchers() {
         return voucherRepository.findAll();
     }
+
+    @Override
+    public List<Voucher> getVouchersByVendorId(Integer vendorId) {
+        return voucherRepository.findByVendorId(vendorId);
+    }
 }

@@ -40,4 +40,14 @@ public class VoucherController {
         }
         return ResponseEntity.ok(voucher);
     }
+
+    @GetMapping("/vendor/{vendorId}/vouchers")
+    public ResponseEntity<List<Voucher>> getVouchersByVendorId(@PathVariable Integer vendorId) {
+        List<Voucher> vouchers = voucherService.getVouchersByVendorId(vendorId);
+        if (vouchers.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(vouchers);
+    }
+
 }

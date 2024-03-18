@@ -14,4 +14,6 @@ public interface VoucherService {
     Voucher getVoucherById(Integer voucherId);
 
     List<Voucher> getAllVouchers();
+
+    List<Voucher> getVouchersByVendorId(Integer vendorId);
 }

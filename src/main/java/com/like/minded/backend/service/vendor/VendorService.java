@@ -10,6 +10,8 @@ import java.util.List;
 public interface VendorService {
     ResponseEntity<VendorResponse> createVendor(VendorCreationDto vendorCreationDto);
 
+    ResponseEntity<VendorResponse> updateVendor(Integer vendorId, VendorCreationDto updatedVendorDto);
+
     Vendor getVendorById(Integer vendorId);
 
     List<Vendor> getAllVendors();

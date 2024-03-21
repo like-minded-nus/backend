@@ -5,6 +5,7 @@ import com.like.minded.backend.dto.vendor.VendorCreationDto;
 import com.like.minded.backend.service.vendor.VendorService;
 import com.like.minded.backend.vo.vendor.VendorResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,5 +39,14 @@ public class VendorController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(vendor);
+    }
+
+    @PutMapping("/{vendorId}")
+    public ResponseEntity<VendorResponse> updateVendor(@PathVariable Integer vendorId, @RequestBody VendorCreationDto updatedVendorDto) {
+        ResponseEntity<VendorResponse> responseEntity = vendorService.updateVendor(vendorId, updatedVendorDto);
+        if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
+            return ResponseEntity.notFound().build();
+        }
+        return responseEntity;
     }
 }

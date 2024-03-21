@@ -1,18 +1,38 @@
 package com.like.minded.backend.domain.message;
+import java.sql.Timestamp;
 
+import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
 
-@NoArgsConstructor
+@Entity
+@Builder
+@Data
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
+@NoArgsConstructor
+@Table(name="message")
 public class Message {
-    private String senderProfileId;
-    private String receiverProfileId;
+    @Id
+    @Column(name="MESSAGE_ID")
+    private Integer messageId;
+
+    @NonNull
+    @Column(name="SENDER_PROFILE_ID")
+    private Integer senderProfileId;
+
+    @NonNull
+    @Column(name="RECEIVER_PROFILE_ID")
+    private Integer receiverProfileId;
+
+    @NonNull
+    @Column(name="TEXT")
     private String text;
-    private String dateTime;
-    private Status status;
+
+    @NonNull
+    @Column(name="SENT_DATETIME")
+    private Timestamp sentDateTime;
+
+    @NonNull
+    @Column(name="IS_READ")
+    private String isRead;
 }

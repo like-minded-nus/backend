@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/match")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class MatchController {
     @Autowired
     private MatchService matchService;

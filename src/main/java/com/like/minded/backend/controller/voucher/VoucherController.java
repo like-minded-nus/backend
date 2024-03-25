@@ -4,8 +4,10 @@ import com.like.minded.backend.domain.vendor.Vendor;
 import com.like.minded.backend.domain.voucher.Voucher;
 import com.like.minded.backend.dto.voucher.VoucherCreationDto;
 import com.like.minded.backend.service.voucher.VoucherService;
+import com.like.minded.backend.vo.vendor.VendorResponse;
 import com.like.minded.backend.vo.voucher.VoucherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,6 +50,15 @@ public class VoucherController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(vouchers);
+    }
+
+    @PutMapping("/{voucherId}")
+    public ResponseEntity<VoucherResponse> updateVoucher(@PathVariable Integer voucherId, @RequestBody VoucherCreationDto updatedVoucherDto) {
+        ResponseEntity<VoucherResponse> responseEntity = voucherService.updateVoucher(voucherId, updatedVoucherDto);
+        if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
+            return ResponseEntity.notFound().build();
+        }
+        return responseEntity;
     }
 
 }

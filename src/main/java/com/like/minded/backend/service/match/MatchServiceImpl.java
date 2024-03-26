@@ -71,7 +71,7 @@ public class MatchServiceImpl implements MatchService {
             matchResponseBodyDtoList.add(matchResponseBodyDto);
         }
 
-        BaseResponse<List<MatchResponseBodyDto>> response = BaseResponse.<List<MatchResponseBodyDto>>builder()
+        BaseResponse<List<MatchResponseBodyDto>> response = new BaseResponse.Builder<List<MatchResponseBodyDto>>()
                 .status(HttpStatus.OK.value())
                 .message("Successfully retrieved list of matches")
                 .payload(matchResponseBodyDtoList)
@@ -111,7 +111,7 @@ public class MatchServiceImpl implements MatchService {
             throw new DatabaseTransactionException("Error saving into Database", e);
         }
 
-        response = BaseResponse.<Match>builder()
+        response = new BaseResponse.Builder<Match>()
                 .status(HttpStatus.OK.value())
                 .message(message)
                 .payload(match)

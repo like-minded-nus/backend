@@ -36,10 +36,13 @@ public class MatchServiceImpl implements MatchService {
     @Autowired
     private final ProfileRepository profileRepository;
 
+    @Autowired
+    private final MatchStrategy matchStrategy;
+
     public ResponseEntity<BaseResponse<List<MatchResponseBodyDto>>> getProfileMatches(Integer profileId) throws Exception {
         List<MatchResponseBodyDto> matchResponseBodyDtoList = new ArrayList<>();
 
-        List<Match> matches = matchRepository.findProfileMatches(profileId);
+        List<Match> matches = matchStrategy.findMatches(profileId);
         for (Match match : matches) {
             int queryId = match.getProfileId_1().equals(profileId) ? match.getProfileId_2() : match.getProfileId_1();
             Optional<Profile> profileOptional = profileRepository.findById(queryId);

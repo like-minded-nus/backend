@@ -19,4 +19,6 @@ public interface VoucherService {
     List<Voucher> getAllVouchers();
 
     List<Voucher> getVouchersByVendorId(Integer vendorId);
+
+    ResponseEntity<VoucherResponse> deleteVoucher(Integer voucherId);
 }

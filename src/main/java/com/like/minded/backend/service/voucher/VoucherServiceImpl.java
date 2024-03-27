@@ -92,4 +92,24 @@ public class VoucherServiceImpl implements VoucherService{
     public List<Voucher> getVouchersByVendorId(Integer vendorId) {
         return voucherRepository.findByVendorId(vendorId);
     }
+
+    @Override
+    public ResponseEntity<VoucherResponse> deleteVoucher(Integer voucherId) {
+        Voucher existingVoucher = voucherRepository.findById(voucherId).orElse(null);
+        if (existingVoucher == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        try {
+            voucherRepository.deleteById(voucherId);
+        } catch (Exception e) {
+            throw new DatabaseTransactionException("Error deleting voucher from the database", e);
+        }
+
+        VoucherResponse response = VoucherResponse.builder()
+                .status(200)
+                .message("Voucher deleted successfully")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }

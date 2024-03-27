@@ -61,4 +61,14 @@ public class VoucherController {
         return responseEntity;
     }
 
+    @DeleteMapping("/{voucherId}")
+    public ResponseEntity<VoucherResponse> deleteVoucher(@PathVariable Integer voucherId) {
+        ResponseEntity<VoucherResponse> responseEntity = voucherService.deleteVoucher(voucherId);
+        if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
+            return ResponseEntity.notFound().build();
+        }
+        return responseEntity;
+    }
+
+
 }

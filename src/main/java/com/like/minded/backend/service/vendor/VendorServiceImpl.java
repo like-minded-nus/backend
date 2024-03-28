@@ -1,9 +1,11 @@
 package com.like.minded.backend.service.vendor;
 
+import com.like.minded.backend.domain.voucher.Voucher;
 import com.like.minded.backend.dto.vendor.VendorCreationDto;
 import com.like.minded.backend.exception.DatabaseTransactionException;
 import com.like.minded.backend.exception.VendorException;
 import com.like.minded.backend.vo.vendor.VendorResponse;
+import com.like.minded.backend.vo.voucher.VoucherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -91,5 +93,25 @@ public class VendorServiceImpl implements VendorService{
     @Override
     public List<Vendor> getAllVendors() {
         return vendorRepository.findAll();
+    }
+
+    @Override
+    public ResponseEntity<VendorResponse> deleteVendor(Integer vendorId) {
+        Vendor existingVendor = vendorRepository.findById(vendorId).orElse(null);
+        if (existingVendor == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        try {
+            vendorRepository.deleteById(vendorId);
+        } catch (Exception e) {
+            throw new DatabaseTransactionException("Error deleting vendor from the database", e);
+        }
+
+        VendorResponse response = VendorResponse.builder()
+                .status(200)
+                .message("Vendor deleted successfully")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

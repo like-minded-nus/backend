@@ -4,6 +4,7 @@ import com.like.minded.backend.domain.vendor.Vendor;
 import com.like.minded.backend.dto.vendor.VendorCreationDto;
 import com.like.minded.backend.service.vendor.VendorService;
 import com.like.minded.backend.vo.vendor.VendorResponse;
+import com.like.minded.backend.vo.voucher.VoucherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,15 @@ public class VendorController {
     @PutMapping("/{vendorId}")
     public ResponseEntity<VendorResponse> updateVendor(@PathVariable Integer vendorId, @RequestBody VendorCreationDto updatedVendorDto) {
         ResponseEntity<VendorResponse> responseEntity = vendorService.updateVendor(vendorId, updatedVendorDto);
+        if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
+            return ResponseEntity.notFound().build();
+        }
+        return responseEntity;
+    }
+
+    @DeleteMapping("/{vendorId}")
+    public ResponseEntity<VendorResponse> deleteVendor(@PathVariable Integer vendorId) {
+        ResponseEntity<VendorResponse> responseEntity = vendorService.deleteVendor(vendorId);
         if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
             return ResponseEntity.notFound().build();
         }

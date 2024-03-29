@@ -7,21 +7,21 @@ import com.like.minded.backend.exception.DatabaseTransactionException;
 import com.like.minded.backend.repository.message.MessageRepository;
 import com.like.minded.backend.repository.message.MessageSequenceRepository;
 import com.like.minded.backend.vo.BaseResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
+@RequiredArgsConstructor
 @Service
 public class MessageServiceImpl implements MessageService{
 
-    @Autowired
-    private MessageRepository messageRepository;
-
-    @Autowired
-    private MessageSequenceRepository messageSequenceRepository;
+    private final MessageRepository messageRepository;
+    private final MessageSequenceRepository messageSequenceRepository;
 
     @Override
     public ResponseEntity<BaseResponse<MessageDto>> getMessage() {

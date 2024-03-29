@@ -7,7 +7,6 @@ import com.like.minded.backend.dto.match.MatchResponseBodyDto;
 import com.like.minded.backend.dto.profile.ProfileDto;
 import com.like.minded.backend.repository.match.MatchRepository;
 import com.like.minded.backend.repository.profile.ProfileRepository;
-import com.like.minded.backend.utils.BlobUtils;
 import com.like.minded.backend.vo.BaseResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +17,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.nio.charset.StandardCharsets;
 import java.sql.Blob;
 import java.time.LocalDate;
 import java.util.List;

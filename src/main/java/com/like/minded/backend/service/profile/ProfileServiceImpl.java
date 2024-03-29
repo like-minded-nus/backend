@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -110,7 +111,6 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public ResponseEntity<BaseResponse<ProfileResponseBodyDto>> createProfile(UserProfileDto userProfileDto) {
-
         String image1Base64 = userProfileDto.getImage1().isEmpty() ? "" : userProfileDto.getImage1().split(",")[1];
         String image2Base64 = userProfileDto.getImage2().isEmpty() ? "" : userProfileDto.getImage2().split(",")[1];
         String image3Base64 = userProfileDto.getImage3().isEmpty() ? "" : userProfileDto.getImage3().split(",")[1];
@@ -118,19 +118,12 @@ public class ProfileServiceImpl implements ProfileService {
         String image5Base64 = userProfileDto.getImage5().isEmpty() ? "" : userProfileDto.getImage5().split(",")[1];
         String image6Base64 = userProfileDto.getImage6().isEmpty() ? "" : userProfileDto.getImage6().split(",")[1];
 
-        byte[] image1ByteArr = !image1Base64.isEmpty() ? Base64.getDecoder().decode(image1Base64.getBytes(StandardCharsets.UTF_8)) : null;
-        byte[] image2ByteArr = !image2Base64.isEmpty() ? Base64.getDecoder().decode(image2Base64.getBytes(StandardCharsets.UTF_8)) : null;
-        byte[] image3ByteArr = !image3Base64.isEmpty() ? Base64.getDecoder().decode(image3Base64.getBytes(StandardCharsets.UTF_8)) : null;
-        byte[] image4ByteArr = !image4Base64.isEmpty() ? Base64.getDecoder().decode(image4Base64.getBytes(StandardCharsets.UTF_8)) : null;
-        byte[] image5ByteArr = !image5Base64.isEmpty() ? Base64.getDecoder().decode(image5Base64.getBytes(StandardCharsets.UTF_8)) : null;
-        byte[] image6ByteArr = !image6Base64.isEmpty() ? Base64.getDecoder().decode(image6Base64.getBytes(StandardCharsets.UTF_8)) : null;
-
-        Blob image1Blob = image1ByteArr != null ? BlobProxy.generateProxy(image1ByteArr) : null;
-        Blob image2Blob = image2ByteArr != null ? BlobProxy.generateProxy(image2ByteArr) : null;
-        Blob image3Blob = image3ByteArr != null ? BlobProxy.generateProxy(image3ByteArr) : null;
-        Blob image4Blob = image4ByteArr != null ? BlobProxy.generateProxy(image4ByteArr) : null;
-        Blob image5Blob = image5ByteArr != null ? BlobProxy.generateProxy(image5ByteArr) : null;
-        Blob image6Blob = image6ByteArr != null ? BlobProxy.generateProxy(image6ByteArr) : null;
+        Blob image1Blob = base64ToBlob(userProfileDto.getImage1());
+        Blob image2Blob = base64ToBlob(userProfileDto.getImage2());
+        Blob image3Blob = base64ToBlob(userProfileDto.getImage3());
+        Blob image4Blob = base64ToBlob(userProfileDto.getImage4());
+        Blob image5Blob = base64ToBlob(userProfileDto.getImage5());
+        Blob image6Blob = base64ToBlob(userProfileDto.getImage6());
 
         Profile newProfile = Profile.builder()
                 .userId(userProfileDto.getUserId())
@@ -215,53 +208,12 @@ public class ProfileServiceImpl implements ProfileService {
             profileResponseBodyDto.setBio(updateUserProfileDto.getBio());
         }
 
-        if(updateUserProfileDto.getImage1() != null){
-            String image1Base64 = updateUserProfileDto.getImage1().split(",")[1];
-            byte[] image1ByteArr = !image1Base64.isEmpty() ? Base64.getDecoder().decode(image1Base64.getBytes(StandardCharsets.UTF_8)) : null;
-            Blob image1Blob = image1ByteArr != null ? BlobProxy.generateProxy(image1ByteArr) : null;
-            foundProfile.setImage1(image1Blob);
-            profileResponseBodyDto.setImage1(image1Base64);
-        }
-
-        if(updateUserProfileDto.getImage2() != null){
-            String image2Base64 = updateUserProfileDto.getImage2().split(",")[1];
-            byte[] image2ByteArr = !image2Base64.isEmpty() ? Base64.getDecoder().decode(image2Base64.getBytes(StandardCharsets.UTF_8)) : null;
-            Blob image2Blob = image2ByteArr != null ? BlobProxy.generateProxy(image2ByteArr) : null;
-            foundProfile.setImage2(image2Blob);
-            profileResponseBodyDto.setImage2(image2Base64);
-        }
-
-        if(updateUserProfileDto.getImage3() != null){
-            String image3Base64 = updateUserProfileDto.getImage3().split(",")[1];
-            byte[] image3ByteArr = !image3Base64.isEmpty() ? Base64.getDecoder().decode(image3Base64.getBytes(StandardCharsets.UTF_8)) : null;
-            Blob image3Blob = image3ByteArr != null ? BlobProxy.generateProxy(image3ByteArr) : null;
-            foundProfile.setImage3(image3Blob);
-            profileResponseBodyDto.setImage3(image3Base64);
-        }
-
-        if(updateUserProfileDto.getImage4() != null){
-            String image4Base64 = updateUserProfileDto.getImage4().split(",")[1];
-            byte[] image4ByteArr = !image4Base64.isEmpty() ? Base64.getDecoder().decode(image4Base64.getBytes(StandardCharsets.UTF_8)) : null;
-            Blob image4Blob = image4ByteArr != null ? BlobProxy.generateProxy(image4ByteArr) : null;
-            foundProfile.setImage4(image4Blob);
-            profileResponseBodyDto.setImage4(image4Base64);
-        }
-
-        if(updateUserProfileDto.getImage5() != null){
-            String image5Base64 = updateUserProfileDto.getImage5().split(",")[1];
-            byte[] image5ByteArr = !image5Base64.isEmpty() ? Base64.getDecoder().decode(image5Base64.getBytes(StandardCharsets.UTF_8)) : null;
-            Blob image5Blob = image5ByteArr != null ? BlobProxy.generateProxy(image5ByteArr) : null;
-            foundProfile.setImage5(image5Blob);
-            profileResponseBodyDto.setImage5(image5Base64);
-        }
-
-        if(updateUserProfileDto.getImage6() != null){
-            String image6Base64 = updateUserProfileDto.getImage6().split(",")[1];
-            byte[] image6ByteArr = !image6Base64.isEmpty() ? Base64.getDecoder().decode(image6Base64.getBytes(StandardCharsets.UTF_8)) : null;
-            Blob image6Blob = image6ByteArr != null ? BlobProxy.generateProxy(image6ByteArr) : null;
-            foundProfile.setImage6(image6Blob);
-            profileResponseBodyDto.setImage6(image6Base64);
-        }
+        updateImageToProfile(updateUserProfileDto.getImage1(), foundProfile::setImage1, profileResponseBodyDto::setImage1);
+        updateImageToProfile(updateUserProfileDto.getImage2(), foundProfile::setImage2, profileResponseBodyDto::setImage2);
+        updateImageToProfile(updateUserProfileDto.getImage3(), foundProfile::setImage3, profileResponseBodyDto::setImage3);
+        updateImageToProfile(updateUserProfileDto.getImage4(), foundProfile::setImage4, profileResponseBodyDto::setImage4);
+        updateImageToProfile(updateUserProfileDto.getImage5(), foundProfile::setImage5, profileResponseBodyDto::setImage5);
+        updateImageToProfile(updateUserProfileDto.getImage6(), foundProfile::setImage6, profileResponseBodyDto::setImage6);
 
         try {
             profileRepository.save(foundProfile);
@@ -301,6 +253,25 @@ public class ProfileServiceImpl implements ProfileService {
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    private Blob base64ToBlob(String base64Image) {
+        if (base64Image != null && !base64Image.isEmpty()) {
+            String imageBase64 = base64Image.split(",")[1];
+            byte[] imageByteArr = Base64.getDecoder().decode(imageBase64.getBytes(StandardCharsets.UTF_8));
+            return BlobProxy.generateProxy(imageByteArr);
+        }
+        return null;
+    }
+
+    private void updateImageToProfile(String base64Image, Consumer<Blob> profileSetter, Consumer<String> dtoSetter) {
+        if (base64Image != null && !base64Image.isEmpty()) {
+            String imageBase64 = base64Image.split(",")[1];
+            byte[] imageByteArr = Base64.getDecoder().decode(imageBase64.getBytes(StandardCharsets.UTF_8));
+            Blob imageBlob = imageByteArr.length > 0 ? BlobProxy.generateProxy(imageByteArr) : null;
+            profileSetter.accept(imageBlob);
+            dtoSetter.accept(imageBase64);
+        }
     }
 
 }

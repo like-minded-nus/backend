@@ -1,12 +1,13 @@
 package com.like.minded.backend.service.voucher;
 
-import com.like.minded.backend.domain.vendor.Vendor;
 import com.like.minded.backend.domain.voucher.Voucher;
 import com.like.minded.backend.dto.voucher.VoucherCreationDto;
 import com.like.minded.backend.exception.DatabaseTransactionException;
 import com.like.minded.backend.exception.VoucherException;
 import com.like.minded.backend.repository.voucher.VoucherRepository;
 import com.like.minded.backend.vo.voucher.VoucherResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +15,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
+@RequiredArgsConstructor
 @Service
 public class VoucherServiceImpl implements VoucherService{
 
-    @Autowired
-    private VoucherRepository voucherRepository;
+    private final VoucherRepository voucherRepository;
 
     @Override
     public ResponseEntity<VoucherResponse> createVoucher(VoucherCreationDto voucherCreationDto) {

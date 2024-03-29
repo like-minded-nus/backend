@@ -27,16 +27,9 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class MatchServiceImpl implements MatchService {
-    @Autowired
     private final ModelMapper modelMapper;
-
-    @Autowired
     private final MatchRepository matchRepository;
-
-    @Autowired
     private final ProfileRepository profileRepository;
-
-    @Autowired
     private final MatchStrategy matchStrategy;
 
     public ResponseEntity<BaseResponse<List<MatchResponseBodyDto>>> getProfileMatches(Integer profileId) throws Exception {

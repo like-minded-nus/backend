@@ -13,11 +13,10 @@ import com.like.minded.backend.repository.profile.ProfilePassionRepository;
 import com.like.minded.backend.utils.BlobUtils;
 import com.like.minded.backend.vo.BaseResponse;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,18 +25,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
+@RequiredArgsConstructor
 @Service
 public class ProfileServiceImpl implements ProfileService {
-    private static final Logger logger = LoggerFactory.getLogger(ProfileServiceImpl.class);
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private ProfileRepository profileRepository;
-
-    @Autowired
-    private ProfilePassionRepository profilePassionRepository;
+    private final ModelMapper modelMapper;
+    private final ProfileRepository profileRepository;
+    private final ProfilePassionRepository profilePassionRepository;
 
     @Override
     public ResponseEntity<BaseResponse<ProfileResponseBodyDto>> getProfileByProfileId(Integer id) throws SQLException, IOException {
@@ -288,7 +283,7 @@ public class ProfileServiceImpl implements ProfileService {
                 profilePassionRepository.deleteProfilePassionByProfileId(foundProfile.getProfileId());
                 profilePassionRepository.saveAll(profilePassionList);
             } catch (Exception e) {
-                logger.info(e.getMessage());
+                log.error(e.getMessage());
                 throw new DatabaseTransactionException("Error updating profile passions into Database", e);
             }
 
@@ -306,7 +301,6 @@ public class ProfileServiceImpl implements ProfileService {
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
-
     }
 
 }

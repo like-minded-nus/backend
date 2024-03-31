@@ -3,11 +3,10 @@ package com.like.minded.backend.domain.user;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRole {

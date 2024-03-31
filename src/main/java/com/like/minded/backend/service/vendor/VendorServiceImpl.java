@@ -1,26 +1,25 @@
 package com.like.minded.backend.service.vendor;
 
-import com.like.minded.backend.domain.voucher.Voucher;
 import com.like.minded.backend.dto.vendor.VendorCreationDto;
 import com.like.minded.backend.exception.DatabaseTransactionException;
 import com.like.minded.backend.exception.VendorException;
 import com.like.minded.backend.vo.vendor.VendorResponse;
-import com.like.minded.backend.vo.voucher.VoucherResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 import com.like.minded.backend.domain.vendor.Vendor;
 import com.like.minded.backend.repository.vendor.VendorRepository;
-import com.like.minded.backend.repository.vendor.ActivityRepository;
 
 import java.util.List;
 
-
+@Slf4j
+@RequiredArgsConstructor
 @Service
 public class VendorServiceImpl implements VendorService{
-    @Autowired
-    private VendorRepository vendorRepository;
+
+    private final VendorRepository vendorRepository;
 
     @Override
     public ResponseEntity<VendorResponse> createVendor(VendorCreationDto vendorCreationDto) {

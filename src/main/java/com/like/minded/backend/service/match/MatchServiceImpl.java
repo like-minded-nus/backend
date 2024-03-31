@@ -10,9 +10,9 @@ import com.like.minded.backend.repository.match.MatchRepository;
 import com.like.minded.backend.repository.profile.ProfileRepository;
 import com.like.minded.backend.utils.BlobUtils;
 import com.like.minded.backend.vo.BaseResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,29 +23,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class MatchServiceImpl implements MatchService {
-    private static final Logger logger = LoggerFactory.getLogger(MatchServiceImpl.class);
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private MatchRepository matchRepository;
-
-    @Autowired
-    private ProfileRepository profileRepository;
+    private final ModelMapper modelMapper;
+    private final MatchRepository matchRepository;
+    private final ProfileRepository profileRepository;
+    private final MatchStrategy matchStrategy;
 
     public ResponseEntity<BaseResponse<List<MatchResponseBodyDto>>> getProfileMatches(Integer profileId) throws Exception {
         List<MatchResponseBodyDto> matchResponseBodyDtoList = new ArrayList<>();
 
-        List<Match> matches = matchRepository.findProfileMatches(profileId);
+        List<Match> matches = matchStrategy.findMatches(profileId);
         for (Match match : matches) {
             int queryId = match.getProfileId_1().equals(profileId) ? match.getProfileId_2() : match.getProfileId_1();
             Optional<Profile> profileOptional = profileRepository.findById(queryId);
 
-            if(profileOptional.isEmpty())
+            if(profileOptional.isEmpty()) {
                 throw new Exception("Profile should not be empty");
+            }
 
             Profile profile = profileOptional.get();
             String image1 = BlobUtils.blobToBase64(profile.getImage1());
@@ -67,8 +64,8 @@ public class MatchServiceImpl implements MatchService {
             matchResponseBodyDtoList.add(matchResponseBodyDto);
         }
 
-        BaseResponse<List<MatchResponseBodyDto>> response = BaseResponse.<List<MatchResponseBodyDto>>builder()
-                .status(200)
+        BaseResponse<List<MatchResponseBodyDto>> response = new BaseResponse.Builder<List<MatchResponseBodyDto>>()
+                .status(HttpStatus.OK.value())
                 .message("Successfully retrieved list of matches")
                 .payload(matchResponseBodyDtoList)
                 .build();
@@ -107,8 +104,8 @@ public class MatchServiceImpl implements MatchService {
             throw new DatabaseTransactionException("Error saving into Database", e);
         }
 
-        response = BaseResponse.<Match>builder()
-                .status(200)
+        response = new BaseResponse.Builder<Match>()
+                .status(HttpStatus.OK.value())
                 .message(message)
                 .payload(match)
                 .build();

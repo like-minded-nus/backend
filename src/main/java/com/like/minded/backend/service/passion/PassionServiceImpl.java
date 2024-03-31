@@ -1,21 +1,22 @@
 package com.like.minded.backend.service.passion;
 
-import com.like.minded.backend.domain.match.Match;
 import com.like.minded.backend.domain.passion.Passion;
 import com.like.minded.backend.repository.passion.PassionRepository;
 import com.like.minded.backend.vo.BaseResponse;
 import com.like.minded.backend.vo.passion.PassionResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
+@RequiredArgsConstructor
 @Service
-public class PassionServiceImpl implements PassionService{
-    @Autowired
-    private PassionRepository passionRepository;
+public class PassionServiceImpl implements PassionService {
+    private final PassionRepository passionRepository;
 
     @Override
     public ResponseEntity<BaseResponse<PassionResponse>> getPassions() {

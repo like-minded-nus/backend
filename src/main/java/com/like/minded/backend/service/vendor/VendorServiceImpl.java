@@ -46,6 +46,33 @@ public class VendorServiceImpl implements VendorService{
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @Override
+    public ResponseEntity<VendorResponse> updateVendor(Integer vendorId, VendorCreationDto updatedVendorDto) {
+        Vendor existingVendor = vendorRepository.findById(vendorId).orElse(null);
+        if (existingVendor == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        existingVendor.setVendorName(updatedVendorDto.getVendorName());
+        existingVendor.setActivityName(updatedVendorDto.getActivityName());
+        existingVendor.setAddress(updatedVendorDto.getAddress());
+        existingVendor.setPhoneNumber(updatedVendorDto.getPhoneNumber());
+        existingVendor.setWebsite(updatedVendorDto.getWebsite());
+
+        try {
+            vendorRepository.save(existingVendor);
+        } catch (Exception e) {
+            throw new DatabaseTransactionException("Error updating vendor in the database", e);
+        }
+
+        VendorResponse response = VendorResponse.builder()
+                .status(200)
+                .message("Successfully updated vendor")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+
     private void validateVendorCreationData(VendorCreationDto vendorCreationDto) {
         if (vendorRepository.existsByVendorName(vendorCreationDto.getVendorName())) {
             throw new VendorException("Vendor name already exists.");
@@ -65,5 +92,25 @@ public class VendorServiceImpl implements VendorService{
     @Override
     public List<Vendor> getAllVendors() {
         return vendorRepository.findAll();
+    }
+
+    @Override
+    public ResponseEntity<VendorResponse> deleteVendor(Integer vendorId) {
+        Vendor existingVendor = vendorRepository.findById(vendorId).orElse(null);
+        if (existingVendor == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        try {
+            vendorRepository.deleteById(vendorId);
+        } catch (Exception e) {
+            throw new DatabaseTransactionException("Error deleting vendor from the database", e);
+        }
+
+        VendorResponse response = VendorResponse.builder()
+                .status(200)
+                .message("Vendor deleted successfully")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

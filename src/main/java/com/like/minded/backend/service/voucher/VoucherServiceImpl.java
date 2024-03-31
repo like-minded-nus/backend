@@ -46,6 +46,33 @@ public class VoucherServiceImpl implements VoucherService{
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @Override
+    public ResponseEntity<VoucherResponse> updateVoucher(Integer voucherId, VoucherCreationDto updatedVoucherDto) {
+        Voucher existingVoucher = voucherRepository.findById(voucherId).orElse(null);
+        if (existingVoucher == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        existingVoucher.setVoucherName(updatedVoucherDto.getVoucherName());
+        existingVoucher.setVoucherEndDate(updatedVoucherDto.getVoucherEndDate());
+        existingVoucher.setVoucherDescription(updatedVoucherDto.getVoucherDescription());
+        existingVoucher.setRedeemStatus(updatedVoucherDto.isRedeemStatus());
+        existingVoucher.setVendorId(updatedVoucherDto.getVendorId());
+
+        try {
+            voucherRepository.save(existingVoucher);
+        } catch (Exception e) {
+            throw new DatabaseTransactionException("Error updating voucher in the database", e);
+        }
+
+        VoucherResponse response = VoucherResponse.builder()
+                .status(200)
+                .message("Successfully updated voucher")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+
     private void validateVoucherCreationData(VoucherCreationDto voucherCreationDto) {
         if (voucherRepository.existsByVoucherName(voucherCreationDto.getVoucherName())) {
             throw new VoucherException("Vendor name already exists.");
@@ -60,5 +87,30 @@ public class VoucherServiceImpl implements VoucherService{
     @Override
     public List<Voucher> getAllVouchers() {
         return voucherRepository.findAll();
+    }
+
+    @Override
+    public List<Voucher> getVouchersByVendorId(Integer vendorId) {
+        return voucherRepository.findByVendorId(vendorId);
+    }
+
+    @Override
+    public ResponseEntity<VoucherResponse> deleteVoucher(Integer voucherId) {
+        Voucher existingVoucher = voucherRepository.findById(voucherId).orElse(null);
+        if (existingVoucher == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        try {
+            voucherRepository.deleteById(voucherId);
+        } catch (Exception e) {
+            throw new DatabaseTransactionException("Error deleting voucher from the database", e);
+        }
+
+        VoucherResponse response = VoucherResponse.builder()
+                .status(200)
+                .message("Voucher deleted successfully")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

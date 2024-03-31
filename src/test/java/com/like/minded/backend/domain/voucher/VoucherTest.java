@@ -29,4 +29,63 @@ class VoucherTest {
         assertEquals(redeemStatus, voucher.isRedeemStatus(), "Redeem status should match the provided value");
         assertEquals(vendorId, voucher.getVendorId(), "Vendor ID should match the provided value");
     }
+
+    @Test
+    void testEquals() {
+        Voucher voucher1 = Voucher.builder()
+                .voucherId(1)
+                .voucherName("10% Off")
+                .voucherEndDate(LocalDate.of(2023, 12, 31))
+                .voucherDescription("Get 10% off on your next purchase")
+                .redeemStatus(false)
+                .vendorId(1)
+                .build();
+
+        Voucher voucher2 = Voucher.builder()
+                .voucherId(1)
+                .voucherName("10% Off")
+                .voucherEndDate(LocalDate.of(2023, 12, 31))
+                .voucherDescription("Get 10% off on your next purchase")
+                .redeemStatus(false)
+                .vendorId(1)
+                .build();
+
+        Voucher voucherDifferent = Voucher.builder()
+                .voucherId(2)
+                .voucherName("20% Off")
+                .build();
+
+        assertEquals(voucher1, voucher2, "Vouchers with the same values should be considered equal.");
+        assertNotEquals(voucher1, voucherDifferent, "Different vouchers should not be considered equal.");
+    }
+
+    @Test
+    void testHashCode() {
+        Voucher voucher1 = Voucher.builder()
+                .voucherId(1)
+                .voucherName("10% Off")
+                .voucherEndDate(LocalDate.of(2023, 12, 31))
+                .voucherDescription("Get 10% off on your next purchase")
+                .redeemStatus(false)
+                .vendorId(1)
+                .build();
+
+        Voucher voucher2 = Voucher.builder()
+                .voucherId(1)
+                .voucherName("10% Off")
+                .voucherEndDate(LocalDate.of(2023, 12, 31))
+                .voucherDescription("Get 10% off on your next purchase")
+                .redeemStatus(false)
+                .vendorId(1)
+                .build();
+
+        assertEquals(voucher1.hashCode(), voucher2.hashCode(), "Equal vouchers must have the same hash code.");
+
+        Voucher voucherDifferent = Voucher.builder()
+                .voucherId(2)
+                .voucherName("20% Off")
+                .build();
+
+        assertNotEquals(voucher1.hashCode(), voucherDifferent.hashCode(), "Different vouchers should ideally have different hash codes.");
+    }
 }

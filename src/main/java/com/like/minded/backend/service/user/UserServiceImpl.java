@@ -63,6 +63,7 @@ public class UserServiceImpl implements UserService{
         userDto.setId(foundUser.getUserId());
         userDto.setUsername(foundUser.getUsername());
         userDto.setEmail(foundUser.getEmail());
+        userDto.setUserRole(foundUser.getUserRole().getRoleType());
 
         BaseResponse<UserDto> response = BaseResponse.<UserDto>builder()
                 .status(200)

@@ -16,6 +16,7 @@ public interface MessageService {
     public ResponseEntity<BaseResponse<String>> markMessageAsRead(Integer messageId);
 
     ResponseEntity<BaseResponse<List<Message>>> getMessageBetweenUsers(Integer senderProfileId, Integer receiverProfileId);
+    ResponseEntity<BaseResponse<List<Message>>> getLatestMessageBetweenUsers(Integer senderProfileId, Integer receiverProfileId);
 
     ResponseEntity<BaseResponse<Integer>> getNextMessageId();
 }

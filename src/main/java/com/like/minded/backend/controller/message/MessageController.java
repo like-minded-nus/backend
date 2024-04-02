@@ -54,6 +54,11 @@ public class MessageController {
         return messageService.getMessageBetweenUsers(senderProfileId , receiverProfileId);
     }
 
+    @GetMapping("/latest/{senderProfileId}/{receiverProfileId}")
+    public ResponseEntity<BaseResponse<List<Message>>> getLatestMessageBetweenUsers(@PathVariable Integer senderProfileId , @PathVariable Integer receiverProfileId) throws SQLException, IOException {
+        return messageService.getLatestMessageBetweenUsers(senderProfileId , receiverProfileId);
+    }
+
     @GetMapping("/sequence")
     public ResponseEntity<BaseResponse<Integer>> getNextMessageId() throws SQLException, IOException {
         return messageService.getNextMessageId();

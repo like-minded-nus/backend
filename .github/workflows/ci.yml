@@ -49,4 +49,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/spring-boot-cicd:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/nus-like-minded-staging:latest

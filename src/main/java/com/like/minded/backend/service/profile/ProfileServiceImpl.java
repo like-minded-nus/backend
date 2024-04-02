@@ -47,21 +47,33 @@ public class ProfileServiceImpl implements ProfileService {
         List<String> profilePassions = profilePassionRepository.findProfilePassionNameByProfileId(id);
 
         Profile profile = profileOptional.get();
-        String image1 = BlobUtils.blobToBase64(profile.getImage1());
-        String image2 = BlobUtils.blobToBase64(profile.getImage2());
-        String image3 = BlobUtils.blobToBase64(profile.getImage3());
-        String image4 = BlobUtils.blobToBase64(profile.getImage4());
-        String image5 = BlobUtils.blobToBase64(profile.getImage5());
-        String image6 = BlobUtils.blobToBase64(profile.getImage6());
+        String image1 = profile.getImage1() != null ? BlobUtils.blobToBase64(profile.getImage1()) : null;
+        String image2 = profile.getImage2() != null ? BlobUtils.blobToBase64(profile.getImage2()) : null;
+        String image3 = profile.getImage3() != null ? BlobUtils.blobToBase64(profile.getImage3()) : null;
+        String image4 = profile.getImage4() != null ? BlobUtils.blobToBase64(profile.getImage4()) : null;
+        String image5 = profile.getImage5() != null ? BlobUtils.blobToBase64(profile.getImage5()) : null;
+        String image6 = profile.getImage6() != null ? BlobUtils.blobToBase64(profile.getImage6()) : null;
 
         ProfileResponseBodyDto profileDto = modelMapper.map(profile, ProfileResponseBodyDto.class);
         profileDto.setProfilePassionList(profilePassions);
-        profileDto.setImage1(image1);
-        profileDto.setImage2(image2);
-        profileDto.setImage3(image3);
-        profileDto.setImage4(image4);
-        profileDto.setImage5(image5);
-        profileDto.setImage6(image6);
+        if (image1 != null) {
+            profileDto.setImage1(image1);
+        }
+        if (image2 != null) {
+            profileDto.setImage2(image2);
+        }
+        if (image3 != null) {
+            profileDto.setImage3(image3);
+        }
+        if (image4 != null) {
+            profileDto.setImage4(image4);
+        }
+        if (image5 != null) {
+            profileDto.setImage5(image5);
+        }
+        if (image6 != null) {
+            profileDto.setImage6(image6);
+        }
 
         BaseResponse<ProfileResponseBodyDto> response = BaseResponse.<ProfileResponseBodyDto>builder()
                 .status(200)
@@ -84,21 +96,34 @@ public class ProfileServiceImpl implements ProfileService {
 
         List<String> profilePassions = profilePassionRepository.findProfilePassionNameByProfileId(profile.getProfileId());
 
-        String image1 = BlobUtils.blobToBase64(profile.getImage1());
-        String image2 = BlobUtils.blobToBase64(profile.getImage2());
-        String image3 = BlobUtils.blobToBase64(profile.getImage3());
-        String image4 = BlobUtils.blobToBase64(profile.getImage4());
-        String image5 = BlobUtils.blobToBase64(profile.getImage5());
-        String image6 = BlobUtils.blobToBase64(profile.getImage6());
+        String image1 = profile.getImage1() != null ? BlobUtils.blobToBase64(profile.getImage1()) : null;
+        String image2 = profile.getImage2() != null ? BlobUtils.blobToBase64(profile.getImage2()) : null;
+        String image3 = profile.getImage3() != null ? BlobUtils.blobToBase64(profile.getImage3()) : null;
+        String image4 = profile.getImage4() != null ? BlobUtils.blobToBase64(profile.getImage4()) : null;
+        String image5 = profile.getImage5() != null ? BlobUtils.blobToBase64(profile.getImage5()) : null;
+        String image6 = profile.getImage6() != null ? BlobUtils.blobToBase64(profile.getImage6()) : null;
+
 
         ProfileResponseBodyDto profileDto = modelMapper.map(profile, ProfileResponseBodyDto.class);
         profileDto.setProfilePassionList(profilePassions);
-        profileDto.setImage1(image1);
-        profileDto.setImage2(image2);
-        profileDto.setImage3(image3);
-        profileDto.setImage4(image4);
-        profileDto.setImage5(image5);
-        profileDto.setImage6(image6);
+        if (image1 != null) {
+            profileDto.setImage1(image1);
+        }
+        if (image2 != null) {
+            profileDto.setImage2(image2);
+        }
+        if (image3 != null) {
+            profileDto.setImage3(image3);
+        }
+        if (image4 != null) {
+            profileDto.setImage4(image4);
+        }
+        if (image5 != null) {
+            profileDto.setImage5(image5);
+        }
+        if (image6 != null) {
+            profileDto.setImage6(image6);
+        }
 
         BaseResponse<ProfileResponseBodyDto> response = BaseResponse.<ProfileResponseBodyDto>builder()
                 .status(200)

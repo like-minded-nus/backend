@@ -49,4 +49,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/like-minded-nus-staging:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/like-minded-api-staging:latest

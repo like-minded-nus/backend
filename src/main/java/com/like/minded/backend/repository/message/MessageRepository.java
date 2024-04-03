@@ -15,4 +15,11 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
             "   OR (m.senderProfileId = :receiverProfileId AND m.receiverProfileId = :senderProfileId) " +
             "ORDER BY m.sentDateTime")
     List<Message> findMessageBetweenUsers(Integer senderProfileId, Integer receiverProfileId);
+
+    @Query("SELECT m FROM Message m " +
+            "WHERE (m.senderProfileId = :senderProfileId AND m.receiverProfileId = :receiverProfileId) " +
+            "   OR (m.senderProfileId = :receiverProfileId AND m.receiverProfileId = :senderProfileId) " +
+            "ORDER BY m.sentDateTime DESC " +
+            "LIMIT 1")
+    List<Message> findLatestMessageBetweenUsers(Integer senderProfileId, Integer receiverProfileId);
 }

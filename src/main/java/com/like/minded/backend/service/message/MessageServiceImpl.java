@@ -108,7 +108,27 @@ public class MessageServiceImpl implements MessageService{
 
         BaseResponse <List<Message>> response = BaseResponse.<List<Message>>builder()
                 .status(200)
-                .message("Successfully retrieve messages betweeen users")
+                .message("Successfully retrieve messages between users")
+                .payload(messageList)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @Override
+    public ResponseEntity<BaseResponse<List<Message>>> getLatestMessageBetweenUsers(Integer senderProfileId, Integer receiverProfileId) {
+
+        List <Message> messageList;
+        try{
+            messageList = messageRepository.findLatestMessageBetweenUsers(senderProfileId, receiverProfileId);
+            System.out.println(messageList.toString());
+        }catch(Exception e){
+            throw new DatabaseTransactionException("Failed to retrieve latest message between users", e);
+        }
+
+        BaseResponse <List<Message>> response = BaseResponse.<List<Message>>builder()
+                .status(200)
+                .message("Successfully retrieve latest message between users")
                 .payload(messageList)
                 .build();
 

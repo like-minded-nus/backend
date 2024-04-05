@@ -31,6 +31,7 @@ public class VendorServiceImpl implements VendorService{
                 .address(vendorCreationDto.getAddress())
                 .phoneNumber(vendorCreationDto.getPhoneNumber())
                 .website(vendorCreationDto.getWebsite())
+                .passionId(vendorCreationDto.getPassionId())
                 .build();
 
         try {
@@ -58,6 +59,7 @@ public class VendorServiceImpl implements VendorService{
         existingVendor.setAddress(updatedVendorDto.getAddress());
         existingVendor.setPhoneNumber(updatedVendorDto.getPhoneNumber());
         existingVendor.setWebsite(updatedVendorDto.getWebsite());
+        existingVendor.setPassionId(updatedVendorDto.getPassionId());
 
         try {
             vendorRepository.save(existingVendor);
@@ -71,7 +73,6 @@ public class VendorServiceImpl implements VendorService{
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-
 
     private void validateVendorCreationData(VendorCreationDto vendorCreationDto) {
         if (vendorRepository.existsByVendorName(vendorCreationDto.getVendorName())) {

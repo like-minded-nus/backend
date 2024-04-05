@@ -31,7 +31,7 @@ class VendorServiceImplTest {
 
     @Test
     void createVendorShouldSucceed() {
-        VendorCreationDto dto = new VendorCreationDto("VendorName", "Activity", "Address", 87654321, "www.example.com");
+        VendorCreationDto dto = new VendorCreationDto("VendorName", "Activity", "Address", 87654321, "www.example.com", 1);
 
         when(vendorRepository.existsByVendorName(anyString())).thenReturn(false);
         when(vendorRepository.existsByPhoneNumber(anyInt())).thenReturn(false);
@@ -48,7 +48,7 @@ class VendorServiceImplTest {
 
     @Test
     void createVendorShouldFailWhenNameExists() {
-        VendorCreationDto dto = new VendorCreationDto("VendorName", "Activity", "Address", 87654321, "www.example.com");
+        VendorCreationDto dto = new VendorCreationDto("VendorName", "Activity", "Address", 87654321, "www.example.com", 1);
 
         when(vendorRepository.existsByVendorName(dto.getVendorName())).thenReturn(true);
 

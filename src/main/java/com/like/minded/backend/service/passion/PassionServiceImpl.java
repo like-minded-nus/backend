@@ -6,6 +6,7 @@ import com.like.minded.backend.vo.BaseResponse;
 import com.like.minded.backend.vo.passion.PassionResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -35,4 +36,23 @@ public class PassionServiceImpl implements PassionService {
         return ResponseEntity.status(HttpStatus.OK).body(response);
 
     }
+    @Override
+    public ResponseEntity<BaseResponse<PassionResponse>> getPassionsByProfileId(Integer profileId) {
+
+        List<Passion> passionList = passionRepository.findPassionsByProfileId(profileId);
+
+        PassionResponse passionResponse = new PassionResponse();
+        passionResponse.setPassionList(passionList);
+
+        BaseResponse<PassionResponse> response = BaseResponse.<PassionResponse>builder()
+                .status(200)
+                .message("Successfully retrieved passions")
+                .payload(passionResponse)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+
+    }
+
+
 }

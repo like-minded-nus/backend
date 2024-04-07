@@ -7,4 +7,6 @@ import org.springframework.http.ResponseEntity;
 public interface PassionService {
     public ResponseEntity<BaseResponse<PassionResponse>> getPassions();
 
+    public ResponseEntity<BaseResponse<PassionResponse>> getPassionsByProfileId(Integer profileId);
+
 }

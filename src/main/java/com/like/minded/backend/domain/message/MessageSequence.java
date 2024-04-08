@@ -5,7 +5,7 @@ import lombok.*;
 
 import java.math.BigInteger;
 
-
+@EqualsAndHashCode
 @Entity
 @Builder
 @Data

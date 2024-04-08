@@ -6,6 +6,7 @@ import lombok.*;
 import java.sql.Blob;
 import java.time.LocalDate;
 
+@EqualsAndHashCode
 @Entity
 @Builder
 @Data

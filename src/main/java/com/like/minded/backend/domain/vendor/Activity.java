@@ -3,6 +3,7 @@ package com.like.minded.backend.domain.vendor;
 import jakarta.persistence.*;
 import lombok.*;
 
+@EqualsAndHashCode
 @Entity
 @Data
 @AllArgsConstructor

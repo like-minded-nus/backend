@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import jakarta.persistence.*;
 import lombok.*;
 
-
+@EqualsAndHashCode
 @Entity
 @Builder
 @Data

@@ -68,6 +68,7 @@ class UserServiceImplTest {
         foundUser.setUsername("testUser");
         foundUser.setPassword("password");
         foundUser.setEmail("test@example.com");
+        foundUser.setUserRole(new UserRole(2, "User"));
 
         when(userRepository.findByUsername("testUser")).thenReturn(foundUser);
 

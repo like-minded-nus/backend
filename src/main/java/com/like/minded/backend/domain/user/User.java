@@ -4,7 +4,7 @@ import com.like.minded.backend.domain.CreatedUpdatedColumns;
 import jakarta.persistence.*;
 import lombok.*;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Builder
 @Data

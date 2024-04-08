@@ -6,7 +6,7 @@ import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Builder
 @Data

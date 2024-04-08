@@ -19,6 +19,7 @@ class UserTest {
                 .password(password)
                 .email(email)
                 .userRole(userRole)
+                .isPremium(1)
                 .build();
 
         assertNotNull(user, "User object should not be null");
@@ -40,6 +41,7 @@ class UserTest {
                 .password("password123")
                 .email("john@example.com")
                 .userRole(userRole1)
+                .isPremium(1)
                 .build();
 
         User user2 = User.builder()
@@ -48,6 +50,7 @@ class UserTest {
                 .password("password123")
                 .email("john@example.com")
                 .userRole(userRole2)
+                .isPremium(1)
                 .build();
 
         User userDifferent = User.builder()
@@ -56,6 +59,7 @@ class UserTest {
                 .password("password1234")
                 .email("jane@example.com")
                 .userRole(userRoleDifferent)
+                .isPremium(0)
                 .build();
 
         assertEquals(user1, user2, "Users with the same field values should be considered equal.");
@@ -72,6 +76,7 @@ class UserTest {
                 .password("password123")
                 .email("john@example.com")
                 .userRole(userRole)
+                .isPremium(1)
                 .build();
 
         User user2 = User.builder()
@@ -80,6 +85,7 @@ class UserTest {
                 .password("password123")
                 .email("john@example.com")
                 .userRole(userRole)
+                .isPremium(1)
                 .build();
 
         assertEquals(user1.hashCode(), user2.hashCode(), "Equal users must have the same hash code.");
@@ -99,6 +105,7 @@ class UserTest {
                 .password("password123")
                 .email("john@example.com")
                 .userRole(userRole1)
+                .isPremium(1)
                 .build();
 
         User userDifferent = User.builder()
@@ -107,6 +114,7 @@ class UserTest {
                 .password("password1234")
                 .email("jane@example.com")
                 .userRole(userRole2)
+                .isPremium(2)
                 .build();
 
         assertNotEquals(user1.hashCode(), userDifferent.hashCode(), "Different users ideally have different hash codes.");

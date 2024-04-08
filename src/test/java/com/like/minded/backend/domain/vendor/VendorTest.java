@@ -20,6 +20,7 @@ class VendorTest {
         Integer phoneNumber = 87654321;
         String website = "https://test.com";
         List<Voucher> mockVouchers = mock(List.class);
+        Integer passionId = 1;
 
         when(mockVouchers.size()).thenReturn(10);
 
@@ -31,6 +32,7 @@ class VendorTest {
                 .phoneNumber(phoneNumber)
                 .website(website)
                 .vouchers(mockVouchers)
+                .passionId(passionId)
                 .build();
 
         assertNotNull(vendor, "Vendor object should not be null");
@@ -53,6 +55,7 @@ class VendorTest {
                 .phoneNumber(87654321)
                 .website("https://test.com")
                 .vouchers(Collections.emptyList())
+                .passionId(1)
                 .build();
 
         Vendor vendor2 = Vendor.builder()
@@ -63,12 +66,18 @@ class VendorTest {
                 .phoneNumber(87654321)
                 .website("https://test.com")
                 .vouchers(Collections.emptyList())
+                .passionId(1)
                 .build();
 
         Vendor vendorDifferent = Vendor.builder()
                 .vendorId(2)
                 .vendorName("Outdoor Expeditions")
                 .activityName("Kayaking")
+                .address("Test Address")
+                .phoneNumber(87654321)
+                .website("https://test.com")
+                .vouchers(Collections.emptyList())
+                .passionId(2)
                 .build();
 
         assertEquals(vendor1, vendor2, "Identical vendors should be considered equal.");
@@ -85,6 +94,7 @@ class VendorTest {
                 .phoneNumber(87654321)
                 .website("https://test.com")
                 .vouchers(Collections.emptyList())
+                .passionId(1)
                 .build();
 
         Vendor vendor2 = Vendor.builder()
@@ -95,6 +105,7 @@ class VendorTest {
                 .phoneNumber(87654321)
                 .website("https://test.com")
                 .vouchers(Collections.emptyList())
+                .passionId(1)
                 .build();
 
         assertEquals(vendor1.hashCode(), vendor2.hashCode(), "Equal vendors must have the same hash code.");
@@ -103,6 +114,11 @@ class VendorTest {
                 .vendorId(2)
                 .vendorName("Outdoor Expeditions")
                 .activityName("Kayaking")
+                .address("Test Address")
+                .phoneNumber(87654321)
+                .website("https://test.com")
+                .vouchers(Collections.emptyList())
+                .passionId(2)
                 .build();
 
         assertNotEquals(vendor1.hashCode(), vendorDifferent.hashCode(), "Different vendors should ideally have different hash codes.");

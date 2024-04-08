@@ -35,4 +35,8 @@ public class User extends CreatedUpdatedColumns {
     @JoinColumn(name="ROLE_TYPE")
     private UserRole userRole;
 
+    @NonNull
+    @Column(name="IS_PREMIUM")
+    private Integer isPremium;
+
 }

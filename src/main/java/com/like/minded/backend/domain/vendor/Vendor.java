@@ -1,6 +1,7 @@
 package com.like.minded.backend.domain.vendor;
 
 import com.like.minded.backend.domain.CreatedUpdatedColumns;
+import com.like.minded.backend.domain.passion.Passion;
 import com.like.minded.backend.domain.voucher.Voucher;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,6 +30,7 @@ public class Vendor extends CreatedUpdatedColumns {
     @Column(name="ACTIVITY_NAME")
     private String activityName;
 
+    @NonNull
     @Column(name="ADDRESS")
     private String address;
 
@@ -37,6 +39,10 @@ public class Vendor extends CreatedUpdatedColumns {
 
     @Column(name="WEBSITE")
     private String website;
+
+    @NonNull
+    @Column(name="PASSION_ID")
+    private Integer passionId;
 
     @OneToMany(mappedBy = "vendorId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Voucher> vouchers;

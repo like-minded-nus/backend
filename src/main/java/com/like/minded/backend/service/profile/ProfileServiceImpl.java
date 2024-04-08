@@ -214,6 +214,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     @Transactional
     public ResponseEntity<BaseResponse<ProfileResponseBodyDto>> updateProfile(UpdateUserProfileDto updateUserProfileDto) {
+//        log.info("update profile dto: " + updateUserProfileDto);
         Optional<Profile> profile = profileRepository.findById(updateUserProfileDto.getProfileId());
         ProfileResponseBodyDto profileResponseBodyDto = new ProfileResponseBodyDto();
 
@@ -232,7 +233,6 @@ public class ProfileServiceImpl implements ProfileService {
             foundProfile.setBio(updateUserProfileDto.getBio());
             profileResponseBodyDto.setBio(updateUserProfileDto.getBio());
         }
-
         updateImageToProfile(updateUserProfileDto.getImage1(), foundProfile::setImage1, profileResponseBodyDto::setImage1);
         updateImageToProfile(updateUserProfileDto.getImage2(), foundProfile::setImage2, profileResponseBodyDto::setImage2);
         updateImageToProfile(updateUserProfileDto.getImage3(), foundProfile::setImage3, profileResponseBodyDto::setImage3);
@@ -241,6 +241,7 @@ public class ProfileServiceImpl implements ProfileService {
         updateImageToProfile(updateUserProfileDto.getImage6(), foundProfile::setImage6, profileResponseBodyDto::setImage6);
 
         try {
+            log.info(String.valueOf(foundProfile));
             profileRepository.save(foundProfile);
         } catch (Exception e) {
             throw new DatabaseTransactionException("Error saving profile into Database", e);

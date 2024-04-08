@@ -1,10 +1,12 @@
 package com.like.minded.backend.repository.profile;
 
+import com.like.minded.backend.domain.passion.Passion;
 import com.like.minded.backend.domain.profile.ProfilePassion;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,5 +30,7 @@ public interface ProfilePassionRepository extends JpaRepository<ProfilePassion, 
     @Modifying
     @Query("DELETE FROM ProfilePassion WHERE profileId = :profileId")
     void deleteProfilePassionByProfileId(Integer profileId);
+
+
 
 }

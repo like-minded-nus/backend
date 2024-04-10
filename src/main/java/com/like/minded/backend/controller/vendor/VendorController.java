@@ -4,7 +4,6 @@ import com.like.minded.backend.domain.vendor.Vendor;
 import com.like.minded.backend.dto.vendor.VendorCreationDto;
 import com.like.minded.backend.service.vendor.VendorService;
 import com.like.minded.backend.vo.vendor.VendorResponse;
-import com.like.minded.backend.vo.voucher.VoucherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

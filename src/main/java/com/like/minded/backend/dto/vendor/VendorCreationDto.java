@@ -1,5 +1,6 @@
 package com.like.minded.backend.dto.vendor;
 
+import com.like.minded.backend.enums.VendorType;
 import lombok.*;
 
 @Data
@@ -12,4 +13,8 @@ public class VendorCreationDto {
     private Integer phoneNumber;
     private String website;
     private Integer passionId;
+    private VendorType vendorType;
+    private String intensityLevel;
+    private String conversationFriendly;
+
 }

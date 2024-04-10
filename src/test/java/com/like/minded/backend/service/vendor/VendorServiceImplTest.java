@@ -3,6 +3,8 @@ package com.like.minded.backend.service.vendor;
 import com.like.minded.backend.domain.vendor.Vendor;
 import com.like.minded.backend.dto.vendor.VendorCreationDto;
 import com.like.minded.backend.exception.VendorException;
+import com.like.minded.backend.enums.ConversationFriendly;
+import com.like.minded.backend.enums.VendorType;
 import com.like.minded.backend.repository.vendor.VendorRepository;
 import com.like.minded.backend.vo.vendor.VendorResponse;
 import org.junit.jupiter.api.Test;
@@ -31,7 +33,7 @@ class VendorServiceImplTest {
 
     @Test
     void createVendorShouldSucceed() {
-        VendorCreationDto dto = new VendorCreationDto("VendorName", "Activity", "Address", 87654321, "www.example.com", 1);
+        VendorCreationDto dto = new VendorCreationDto("VendorName", "Activity", "Address", 87654321, "www.example.com", 1,VendorType.OUTDOOR, "High", null);
 
         when(vendorRepository.existsByVendorName(anyString())).thenReturn(false);
         when(vendorRepository.existsByPhoneNumber(anyInt())).thenReturn(false);
@@ -48,7 +50,7 @@ class VendorServiceImplTest {
 
     @Test
     void createVendorShouldFailWhenNameExists() {
-        VendorCreationDto dto = new VendorCreationDto("VendorName", "Activity", "Address", 87654321, "www.example.com", 1);
+        VendorCreationDto dto = new VendorCreationDto("VendorName", "Activity", "Address", 87654321, "www.example.com", 1, VendorType.INDOOR, null, "Yes");
 
         when(vendorRepository.existsByVendorName(dto.getVendorName())).thenReturn(true);
 

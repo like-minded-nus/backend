@@ -20,10 +20,10 @@ jobs:
           cache: maven
 
       - name: Build Maven Project
-        run: mvn clean install -DskipTests
+        run: ./mvnw clean install -DskipTests
 
       - name: Run Tests
-        run: mvn clean verify
+        run: ./mvnw clean verify
 
   docker:
     runs-on: ubuntu-latest

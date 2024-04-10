@@ -1,10 +1,15 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.service.profile;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 import com.like.minded.backend.dto.profile.ProfilePassionMatchDto;
 import com.like.minded.backend.dto.profile.ProfilePassionMatchListDto;
 import com.like.minded.backend.repository.profile.ProfilePassionRepository;
 import com.like.minded.backend.vo.BaseResponse;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,30 +18,24 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 class ProfilePassionMatchServiceImplTest {
 
-    @Mock
-    private ProfilePassionRepository profilePassionRepository;
+    @Mock private ProfilePassionRepository profilePassionRepository;
 
-    @InjectMocks
-    private ProfilePassionMatchServiceImpl profilePassionMatchService;
+    @InjectMocks private ProfilePassionMatchServiceImpl profilePassionMatchService;
 
     @Test
     void getProfilePassionMatchesShouldReturnMatches() {
         // Arrange
         Integer profileId = 1;
         List<String> mockMatchList = Arrays.asList("1,2", "3,4");
-        when(profilePassionRepository.findProfilePassionMatchesByProfileId(profileId)).thenReturn(mockMatchList);
+        when(profilePassionRepository.findProfilePassionMatchesByProfileId(profileId))
+                .thenReturn(mockMatchList);
 
         // Act
-        ResponseEntity<BaseResponse<ProfilePassionMatchListDto>> response = profilePassionMatchService.getProfilePassionMatches(profileId);
+        ResponseEntity<BaseResponse<ProfilePassionMatchListDto>> response =
+                profilePassionMatchService.getProfilePassionMatches(profileId);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());

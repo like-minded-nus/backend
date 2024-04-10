@@ -1,13 +1,11 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.dto.profile;
 
-import com.like.minded.backend.domain.profile.ProfilePassion;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Blob;
-import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -27,4 +25,3 @@ public class UserProfileDto {
     private String image5;
     private String image6;
 }
-

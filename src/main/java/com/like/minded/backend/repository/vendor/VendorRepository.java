@@ -1,3 +1,4 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.repository.vendor;
 
 import com.like.minded.backend.domain.vendor.Vendor;

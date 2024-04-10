@@ -1,3 +1,4 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.service.match;
 
 import com.like.minded.backend.domain.match.Match;
@@ -10,18 +11,16 @@ import com.like.minded.backend.repository.match.MatchRepository;
 import com.like.minded.backend.repository.profile.ProfileRepository;
 import com.like.minded.backend.utils.BlobUtils;
 import com.like.minded.backend.vo.BaseResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
@@ -32,15 +31,19 @@ public class MatchServiceImpl implements MatchService {
     private final ProfileRepository profileRepository;
     private final MatchStrategy matchStrategy;
 
-    public ResponseEntity<BaseResponse<List<MatchResponseBodyDto>>> getProfileMatches(Integer profileId) throws Exception {
+    public ResponseEntity<BaseResponse<List<MatchResponseBodyDto>>> getProfileMatches(
+            Integer profileId) throws Exception {
         List<MatchResponseBodyDto> matchResponseBodyDtoList = new ArrayList<>();
 
         List<Match> matches = matchStrategy.findMatches(profileId);
         for (Match match : matches) {
-            int queryId = match.getProfileId_1().equals(profileId) ? match.getProfileId_2() : match.getProfileId_1();
+            int queryId =
+                    match.getProfileId_1().equals(profileId)
+                            ? match.getProfileId_2()
+                            : match.getProfileId_1();
             Optional<Profile> profileOptional = profileRepository.findById(queryId);
 
-            if(profileOptional.isEmpty()) {
+            if (profileOptional.isEmpty()) {
                 throw new Exception("Profile should not be empty");
             }
 
@@ -64,21 +67,25 @@ public class MatchServiceImpl implements MatchService {
             matchResponseBodyDtoList.add(matchResponseBodyDto);
         }
 
-        BaseResponse<List<MatchResponseBodyDto>> response = new BaseResponse.Builder<List<MatchResponseBodyDto>>()
-                .status(HttpStatus.OK.value())
-                .message("Successfully retrieved list of matches")
-                .payload(matchResponseBodyDtoList)
-                .build();
+        BaseResponse<List<MatchResponseBodyDto>> response =
+                new BaseResponse.Builder<List<MatchResponseBodyDto>>()
+                        .status(HttpStatus.OK.value())
+                        .message("Successfully retrieved list of matches")
+                        .payload(matchResponseBodyDtoList)
+                        .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    public ResponseEntity<BaseResponse<Match>> createMatchRecord(MatchRequestBodyDto matchRequestBody) {
+    public ResponseEntity<BaseResponse<Match>> createMatchRecord(
+            MatchRequestBodyDto matchRequestBody) {
         BaseResponse<Match> response;
         String message;
 
         // Find match record from db
-        Match match = matchRepository.findMatchByProfileIds(matchRequestBody.getTargetProfileId(), matchRequestBody.getUserProfileId());
+        Match match =
+                matchRepository.findMatchByProfileIds(
+                        matchRequestBody.getTargetProfileId(), matchRequestBody.getUserProfileId());
 
         // If match record exists, update it
         if (match != null) {
@@ -104,11 +111,12 @@ public class MatchServiceImpl implements MatchService {
             throw new DatabaseTransactionException("Error saving into Database", e);
         }
 
-        response = new BaseResponse.Builder<Match>()
-                .status(HttpStatus.OK.value())
-                .message(message)
-                .payload(match)
-                .build();
+        response =
+                new BaseResponse.Builder<Match>()
+                        .status(HttpStatus.OK.value())
+                        .message(message)
+                        .payload(match)
+                        .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

@@ -1,3 +1,4 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.mapper.vendor;
 
 import com.like.minded.backend.domain.vendor.Vendor;
@@ -9,6 +10,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface VendorMapper {
     VendorMapper INSTANCE = Mappers.getMapper(VendorMapper.class);
+
     @Mapping(target = "vendorId", ignore = true)
     @Mapping(target = "vendorName", source = "vendorName")
     @Mapping(target = "activityName", source = "activityName")
@@ -16,5 +18,4 @@ public interface VendorMapper {
     @Mapping(target = "phoneNumber", source = "phoneNumber")
     @Mapping(target = "website", source = "website")
     Vendor mapToVendor(VendorCreationDto vendorCreationDto);
-
 }

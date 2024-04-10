@@ -1,8 +1,10 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.domain.vendor;
 
 import jakarta.persistence.*;
 import lombok.*;
 
+@EqualsAndHashCode
 @Entity
 @Data
 @AllArgsConstructor
@@ -10,10 +12,10 @@ import lombok.*;
 public class Activity {
     @Id
     @NonNull
-    @Column(name="ACTIVITY")
+    @Column(name = "ACTIVITY")
     private String activity;
 
     @NonNull
-    @Column(name="ACTIVITY_TYPE")
+    @Column(name = "ACTIVITY_TYPE")
     private String activityType;
 }

@@ -1,3 +1,4 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.dto.user;
 
 import lombok.AllArgsConstructor;
@@ -12,4 +13,5 @@ public class UserDto {
     private String username;
     private String email;
     private Integer userRole;
+    private Integer isPremium;
 }

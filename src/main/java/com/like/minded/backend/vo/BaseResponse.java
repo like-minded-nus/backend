@@ -1,3 +1,4 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.vo;
 
 import lombok.Data;

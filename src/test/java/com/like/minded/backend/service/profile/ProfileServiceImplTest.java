@@ -1,4 +1,8 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.service.profile;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import com.like.minded.backend.domain.profile.Profile;
 import com.like.minded.backend.dto.profile.ProfileResponseBodyDto;
@@ -8,6 +12,11 @@ import com.like.minded.backend.repository.profile.ProfilePassionRepository;
 import com.like.minded.backend.repository.profile.ProfileRepository;
 import com.like.minded.backend.utils.BlobUtils;
 import com.like.minded.backend.vo.BaseResponse;
+import java.io.ByteArrayInputStream;
+import java.sql.Blob;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,29 +26,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.io.ByteArrayInputStream;
-import java.sql.Blob;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 @ExtendWith(MockitoExtension.class)
 class ProfileServiceImplTest {
 
-    @Mock
-    private ProfileRepository profileRepository;
+    @Mock private ProfileRepository profileRepository;
 
-    @Mock
-    private ProfilePassionRepository profilePassionRepository;
+    @Mock private ProfilePassionRepository profilePassionRepository;
 
-    @Mock
-    private ModelMapper modelMapper;
+    @Mock private ModelMapper modelMapper;
 
-    @InjectMocks
-    private ProfileServiceImpl profileService;
+    @InjectMocks private ProfileServiceImpl profileService;
 
     @Test
     void getProfileByProfileIdShouldReturnProfile() throws Exception {
@@ -66,33 +62,39 @@ class ProfileServiceImplTest {
         mockProfile.setImage6(mockBlob);
 
         when(profileRepository.findById(profileId)).thenReturn(Optional.of(mockProfile));
-        when(profilePassionRepository.findProfilePassionNameByProfileId(profileId)).thenReturn(List.of("Passion1", "Passion2"));
-        when(modelMapper.map(any(Profile.class), eq(ProfileResponseBodyDto.class))).thenAnswer(invocation -> {
-            Profile source = invocation.getArgument(0);
-            ProfileResponseBodyDto dto = new ProfileResponseBodyDto();
-            dto.setProfileId(source.getProfileId());
-            dto.setUserId(source.getUserId());
-            dto.setDisplayName(source.getDisplayName());
-            dto.setGender(source.getGender());
-            dto.setBirthdate(LocalDate.now());
-            dto.setBio(source.getBio());
-            dto.setProfilePassionList(List.of("1", "2", "3"));
-            dto.setImage1(BlobUtils.blobToBase64(source.getImage1()));
-            dto.setImage2(BlobUtils.blobToBase64(source.getImage2()));
-            dto.setImage3(BlobUtils.blobToBase64(source.getImage3()));
-            dto.setImage4(BlobUtils.blobToBase64(source.getImage4()));
-            dto.setImage5(BlobUtils.blobToBase64(source.getImage5()));
-            dto.setImage6(BlobUtils.blobToBase64(source.getImage6()));
-            return dto;
-        });
+        when(profilePassionRepository.findProfilePassionNameByProfileId(profileId))
+                .thenReturn(List.of("Passion1", "Passion2"));
+        when(modelMapper.map(any(Profile.class), eq(ProfileResponseBodyDto.class)))
+                .thenAnswer(
+                        invocation -> {
+                            Profile source = invocation.getArgument(0);
+                            ProfileResponseBodyDto dto = new ProfileResponseBodyDto();
+                            dto.setProfileId(source.getProfileId());
+                            dto.setUserId(source.getUserId());
+                            dto.setDisplayName(source.getDisplayName());
+                            dto.setGender(source.getGender());
+                            dto.setBirthdate(LocalDate.now());
+                            dto.setBio(source.getBio());
+                            dto.setProfilePassionList(List.of("1", "2", "3"));
+                            dto.setImage1(BlobUtils.blobToBase64(source.getImage1()));
+                            dto.setImage2(BlobUtils.blobToBase64(source.getImage2()));
+                            dto.setImage3(BlobUtils.blobToBase64(source.getImage3()));
+                            dto.setImage4(BlobUtils.blobToBase64(source.getImage4()));
+                            dto.setImage5(BlobUtils.blobToBase64(source.getImage5()));
+                            dto.setImage6(BlobUtils.blobToBase64(source.getImage6()));
+                            return dto;
+                        });
 
         // Act
-        ResponseEntity<BaseResponse<ProfileResponseBodyDto>> responseEntity = profileService.getProfileByProfileId(profileId);
+        ResponseEntity<BaseResponse<ProfileResponseBodyDto>> responseEntity =
+                profileService.getProfileByProfileId(profileId);
 
         // Assert
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
-        assertEquals("Successfully retrieved profile by profileId", responseEntity.getBody().getMessage());
+        assertEquals(
+                "Successfully retrieved profile by profileId",
+                responseEntity.getBody().getMessage());
         assertNotNull(responseEntity.getBody().getPayload().getDisplayName());
 
         verify(profileRepository).findById(profileId);
@@ -124,28 +126,32 @@ class ProfileServiceImplTest {
         mockProfile.setImage6(mockBlob);
 
         when(profileRepository.findByUserId(userId)).thenReturn(mockProfile);
-        when(profilePassionRepository.findProfilePassionNameByProfileId(mockProfile.getProfileId())).thenReturn(List.of("Passion1", "Passion2"));
-        when(modelMapper.map(any(Profile.class), eq(ProfileResponseBodyDto.class))).thenAnswer(invocation -> {
-            Profile source = invocation.getArgument(0);
-            ProfileResponseBodyDto dto = new ProfileResponseBodyDto();
-            dto.setProfileId(source.getProfileId());
-            dto.setUserId(source.getUserId());
-            dto.setDisplayName(source.getDisplayName());
-            dto.setGender(source.getGender());
-            dto.setBirthdate(LocalDate.now());
-            dto.setBio(source.getBio());
-            dto.setProfilePassionList(List.of("1", "2", "3"));
-            dto.setImage1(BlobUtils.blobToBase64(source.getImage1()));
-            dto.setImage2(BlobUtils.blobToBase64(source.getImage2()));
-            dto.setImage3(BlobUtils.blobToBase64(source.getImage3()));
-            dto.setImage4(BlobUtils.blobToBase64(source.getImage4()));
-            dto.setImage5(BlobUtils.blobToBase64(source.getImage5()));
-            dto.setImage6(BlobUtils.blobToBase64(source.getImage6()));
-            return dto;
-        });
+        when(profilePassionRepository.findProfilePassionNameByProfileId(mockProfile.getProfileId()))
+                .thenReturn(List.of("Passion1", "Passion2"));
+        when(modelMapper.map(any(Profile.class), eq(ProfileResponseBodyDto.class)))
+                .thenAnswer(
+                        invocation -> {
+                            Profile source = invocation.getArgument(0);
+                            ProfileResponseBodyDto dto = new ProfileResponseBodyDto();
+                            dto.setProfileId(source.getProfileId());
+                            dto.setUserId(source.getUserId());
+                            dto.setDisplayName(source.getDisplayName());
+                            dto.setGender(source.getGender());
+                            dto.setBirthdate(LocalDate.now());
+                            dto.setBio(source.getBio());
+                            dto.setProfilePassionList(List.of("1", "2", "3"));
+                            dto.setImage1(BlobUtils.blobToBase64(source.getImage1()));
+                            dto.setImage2(BlobUtils.blobToBase64(source.getImage2()));
+                            dto.setImage3(BlobUtils.blobToBase64(source.getImage3()));
+                            dto.setImage4(BlobUtils.blobToBase64(source.getImage4()));
+                            dto.setImage5(BlobUtils.blobToBase64(source.getImage5()));
+                            dto.setImage6(BlobUtils.blobToBase64(source.getImage6()));
+                            return dto;
+                        });
 
         // Act
-        ResponseEntity<BaseResponse<ProfileResponseBodyDto>> response = profileService.getProfileByUserId(userId);
+        ResponseEntity<BaseResponse<ProfileResponseBodyDto>> response =
+                profileService.getProfileByUserId(userId);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -171,7 +177,7 @@ class ProfileServiceImplTest {
         userProfileDto.setGender("male");
         userProfileDto.setBirthdate(LocalDate.now());
         userProfileDto.setBio("bio");
-        userProfileDto.setProfilePassionList(List.of(1,2,3));
+        userProfileDto.setProfilePassionList(List.of(1, 2, 3));
         userProfileDto.setImage1("");
         userProfileDto.setImage2("");
         userProfileDto.setImage3("");
@@ -179,25 +185,30 @@ class ProfileServiceImplTest {
         userProfileDto.setImage5("");
         userProfileDto.setImage6("");
 
-        Profile profile = Profile.builder()
-                .userId(1)
-                .displayName("Test Name")
-                .gender("male")
-                .birthdate(LocalDate.now())
-                .bio("bio")
-                .build();
+        Profile profile =
+                Profile.builder()
+                        .userId(1)
+                        .displayName("Test Name")
+                        .gender("male")
+                        .birthdate(LocalDate.now())
+                        .bio("bio")
+                        .build();
 
-        when(profileRepository.save(profile)).thenAnswer(invocation -> {
-            Profile savedProfile = invocation.getArgument(0);
-            if (savedProfile.getProfileId() == null) {
-                savedProfile.setProfileId(1);
-            }
-            return savedProfile;
-        });
-        when(profilePassionRepository.saveAll(anyIterable())).thenAnswer(invocation -> invocation.getArgument(0));
+        when(profileRepository.save(profile))
+                .thenAnswer(
+                        invocation -> {
+                            Profile savedProfile = invocation.getArgument(0);
+                            if (savedProfile.getProfileId() == null) {
+                                savedProfile.setProfileId(1);
+                            }
+                            return savedProfile;
+                        });
+        when(profilePassionRepository.saveAll(anyIterable()))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act
-        ResponseEntity<BaseResponse<ProfileResponseBodyDto>> response = profileService.createProfile(userProfileDto);
+        ResponseEntity<BaseResponse<ProfileResponseBodyDto>> response =
+                profileService.createProfile(userProfileDto);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -215,28 +226,33 @@ class ProfileServiceImplTest {
         updateUserProfileDto.setProfileId(profileId);
         updateUserProfileDto.setDisplayName("Test Name");
         updateUserProfileDto.setBio("bio");
-        updateUserProfileDto.setProfilePassionList(List.of(1,2,3));
+        updateUserProfileDto.setProfilePassionList(List.of(1, 2, 3));
 
-        Profile profile = Profile.builder()
-                .userId(1)
-                .displayName("Test Name")
-                .gender("male")
-                .birthdate(LocalDate.now())
-                .bio("bio")
-                .build();
+        Profile profile =
+                Profile.builder()
+                        .userId(1)
+                        .displayName("Test Name")
+                        .gender("male")
+                        .birthdate(LocalDate.now())
+                        .bio("bio")
+                        .build();
 
         when(profileRepository.findById(profileId)).thenReturn(Optional.of(profile));
-        when(profileRepository.save(profile)).thenAnswer(invocation -> {
-            Profile savedProfile = invocation.getArgument(0);
-            if (savedProfile.getProfileId() == null) {
-                savedProfile.setProfileId(1);
-            }
-            return savedProfile;
-        });
-        when(profilePassionRepository.findProfilePassionNameByProfileId(profileId)).thenReturn(List.of("Passion1", "Passion2"));
+        when(profileRepository.save(profile))
+                .thenAnswer(
+                        invocation -> {
+                            Profile savedProfile = invocation.getArgument(0);
+                            if (savedProfile.getProfileId() == null) {
+                                savedProfile.setProfileId(1);
+                            }
+                            return savedProfile;
+                        });
+        when(profilePassionRepository.findProfilePassionNameByProfileId(profileId))
+                .thenReturn(List.of("Passion1", "Passion2"));
 
         // Act
-        ResponseEntity<BaseResponse<ProfileResponseBodyDto>> response = profileService.updateProfile(updateUserProfileDto);
+        ResponseEntity<BaseResponse<ProfileResponseBodyDto>> response =
+                profileService.updateProfile(updateUserProfileDto);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());

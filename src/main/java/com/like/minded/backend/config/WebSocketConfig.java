@@ -1,3 +1,4 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.config;
 
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app");
-        registry.enableSimpleBroker("/chatroom","/user");
+        registry.enableSimpleBroker("/chatroom", "/user");
         registry.setUserDestinationPrefix("/user");
     }
 }

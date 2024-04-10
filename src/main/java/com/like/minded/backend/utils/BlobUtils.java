@@ -1,3 +1,4 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.utils;
 
 import java.io.ByteArrayOutputStream;
@@ -6,6 +7,7 @@ import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Base64;
+
 public class BlobUtils {
 
     public static String blobToBase64(Blob blob) throws SQLException, IOException {

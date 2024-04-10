@@ -1,22 +1,25 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.domain.voucher;
 
 import com.like.minded.backend.domain.CreatedUpdatedColumns;
-import com.like.minded.backend.domain.vendor.Vendor;
-import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import lombok.*;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="voucher")
+@Table(name = "voucher")
 public class Voucher extends CreatedUpdatedColumns {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "voucher_sequence")
-    @SequenceGenerator(name="voucher_sequence", sequenceName = "voucher_sequence", allocationSize = 1)
+    @SequenceGenerator(
+            name = "voucher_sequence",
+            sequenceName = "voucher_sequence",
+            allocationSize = 1)
     @Column(name = "VOUCHER_ID")
     private Integer voucherId;
 

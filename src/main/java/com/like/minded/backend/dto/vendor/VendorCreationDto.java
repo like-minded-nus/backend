@@ -1,3 +1,4 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.dto.vendor;
 
 import lombok.*;
@@ -11,4 +12,5 @@ public class VendorCreationDto {
     private String address;
     private Integer phoneNumber;
     private String website;
+    private Integer passionId;
 }

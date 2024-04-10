@@ -1,16 +1,16 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.service.passion;
 
 import com.like.minded.backend.domain.passion.Passion;
 import com.like.minded.backend.repository.passion.PassionRepository;
 import com.like.minded.backend.vo.BaseResponse;
 import com.like.minded.backend.vo.passion.PassionResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,13 +26,31 @@ public class PassionServiceImpl implements PassionService {
         PassionResponse passionResponse = new PassionResponse();
         passionResponse.setPassionList(passionList);
 
-        BaseResponse<PassionResponse> response = BaseResponse.<PassionResponse>builder()
-                .status(200)
-                .message("Successfully retrieved passions")
-                .payload(passionResponse)
-                .build();
+        BaseResponse<PassionResponse> response =
+                BaseResponse.<PassionResponse>builder()
+                        .status(200)
+                        .message("Successfully retrieved passions")
+                        .payload(passionResponse)
+                        .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
+    @Override
+    public ResponseEntity<BaseResponse<PassionResponse>> getPassionsByProfileId(Integer profileId) {
+
+        List<Passion> passionList = passionRepository.findPassionsByProfileId(profileId);
+
+        PassionResponse passionResponse = new PassionResponse();
+        passionResponse.setPassionList(passionList);
+
+        BaseResponse<PassionResponse> response =
+                BaseResponse.<PassionResponse>builder()
+                        .status(200)
+                        .message("Successfully retrieved passions")
+                        .payload(passionResponse)
+                        .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

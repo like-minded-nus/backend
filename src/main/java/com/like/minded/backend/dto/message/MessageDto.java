@@ -1,10 +1,10 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.dto.message;
 
+import java.sql.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Timestamp;
 
 @Data
 @AllArgsConstructor

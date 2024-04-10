@@ -1,3 +1,4 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.dto.match;
 
 import lombok.AllArgsConstructor;
@@ -12,4 +13,3 @@ public class MatchRequestBodyDto {
     private Integer targetProfileId;
     private Boolean like;
 }
-

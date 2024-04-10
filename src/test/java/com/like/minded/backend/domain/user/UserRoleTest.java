@@ -1,7 +1,9 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.domain.user;
 
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 class UserRoleTest {
 
@@ -14,7 +16,10 @@ class UserRoleTest {
 
         assertNotNull(userRole, "User role object should not be null");
         assertEquals(roleType, userRole.getRoleType(), "Role type should match the provided value");
-        assertEquals(roleDesc, userRole.getRoleDesc(), "Role description should match the provided value");
+        assertEquals(
+                roleDesc,
+                userRole.getRoleDesc(),
+                "Role description should match the provided value");
     }
 
     @Test
@@ -23,7 +28,10 @@ class UserRoleTest {
         UserRole role2 = new UserRole(1, "Admin");
 
         assertEquals(role1, role2, "Roles with the same values should be considered equal.");
-        assertEquals(role1, role2, "Roles with the same values should be considered equal using equals().");
+        assertEquals(
+                role1,
+                role2,
+                "Roles with the same values should be considered equal using equals().");
     }
 
     @Test
@@ -31,8 +39,12 @@ class UserRoleTest {
         UserRole role1 = new UserRole(1, "Admin");
         UserRole role2 = new UserRole(2, "User");
 
-        assertNotEquals(role1, role2, "Roles with different values should not be considered equal.");
-        assertNotEquals(role1, role2, "Roles with different values should not be considered equal using equals().");
+        assertNotEquals(
+                role1, role2, "Roles with different values should not be considered equal.");
+        assertNotEquals(
+                role1,
+                role2,
+                "Roles with different values should not be considered equal using equals().");
     }
 
     @Test
@@ -41,10 +53,17 @@ class UserRoleTest {
         UserRole role2 = new UserRole(1, "Admin");
         UserRole role3 = new UserRole(2, "User");
 
-        assertEquals(role1.hashCode(), role2.hashCode(), "Equal objects must have the same hash code.");
-        assertNotEquals(role1.hashCode(), role3.hashCode(), "Ideally, unequal objects have different hash codes.");
+        assertEquals(
+                role1.hashCode(), role2.hashCode(), "Equal objects must have the same hash code.");
+        assertNotEquals(
+                role1.hashCode(),
+                role3.hashCode(),
+                "Ideally, unequal objects have different hash codes.");
 
         int initialHashCode = role1.hashCode();
-        assertEquals(initialHashCode, role1.hashCode(), "Hash code should remain consistent across invocations.");
+        assertEquals(
+                initialHashCode,
+                role1.hashCode(),
+                "Hash code should remain consistent across invocations.");
     }
 }

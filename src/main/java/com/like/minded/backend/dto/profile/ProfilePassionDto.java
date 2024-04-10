@@ -1,12 +1,11 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.dto.profile;
 
 import com.like.minded.backend.domain.profile.ProfilePassion;
-
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -14,4 +13,3 @@ import java.util.List;
 public class ProfilePassionDto {
     private List<ProfilePassion> profilePassionList;
 }
-

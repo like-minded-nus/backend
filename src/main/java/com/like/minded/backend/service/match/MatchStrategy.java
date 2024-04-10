@@ -1,7 +1,7 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.service.match;
 
 import com.like.minded.backend.domain.match.Match;
-
 import java.util.List;
 
 /**

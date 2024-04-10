@@ -1,12 +1,10 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.dto.voucher;
 
-import com.like.minded.backend.domain.vendor.Vendor;
-import com.like.minded.backend.domain.voucher.Voucher;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor

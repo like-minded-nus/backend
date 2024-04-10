@@ -1,3 +1,4 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.repository.user;
 
 import com.like.minded.backend.domain.user.UserRole;

@@ -1,3 +1,4 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.controller.user;
 
 import com.like.minded.backend.dto.user.UserDto;
@@ -16,22 +17,22 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    @Autowired private UserService userService;
 
-    @PostMapping(path="/register")
-    public ResponseEntity<UserResponse> registerUser(@RequestBody UserRegistrationDto userRegistrationDto) {
+    @PostMapping(path = "/register")
+    public ResponseEntity<UserResponse> registerUser(
+            @RequestBody UserRegistrationDto userRegistrationDto) {
         return userService.registerUser(userRegistrationDto);
     }
 
-    @PostMapping(path="/login")
+    @PostMapping(path = "/login")
     public ResponseEntity<BaseResponse<UserDto>> loginUser(@RequestBody UserLoginDto userLoginDto) {
         return userService.loginUser(userLoginDto);
     }
 
-    @PutMapping(path="/upgradetopremium")
-    public ResponseEntity<BaseResponse<Boolean>> upgradeToPremium(@RequestBody UserUpgradePremiumDto userUpgradePremiumDto) {
+    @PutMapping(path = "/upgradetopremium")
+    public ResponseEntity<BaseResponse<Boolean>> upgradeToPremium(
+            @RequestBody UserUpgradePremiumDto userUpgradePremiumDto) {
         return userService.upgradeToPremium(userUpgradePremiumDto);
     }
 }
-

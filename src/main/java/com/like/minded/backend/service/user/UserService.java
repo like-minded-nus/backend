@@ -1,3 +1,4 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.service.user;
 
 import com.like.minded.backend.dto.user.UserDto;

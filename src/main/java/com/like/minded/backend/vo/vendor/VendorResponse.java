@@ -1,3 +1,4 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.vo.vendor;
 
 import lombok.Builder;
@@ -9,4 +10,3 @@ public class VendorResponse {
     private Integer status;
     private String message;
 }
-

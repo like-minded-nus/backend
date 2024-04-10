@@ -1,3 +1,4 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.service.voucher;
 
 import com.like.minded.backend.domain.voucher.Voucher;
@@ -6,18 +7,17 @@ import com.like.minded.backend.exception.DatabaseTransactionException;
 import com.like.minded.backend.exception.VoucherException;
 import com.like.minded.backend.repository.voucher.VoucherRepository;
 import com.like.minded.backend.vo.voucher.VoucherResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class VoucherServiceImpl implements VoucherService{
+public class VoucherServiceImpl implements VoucherService {
 
     private final VoucherRepository voucherRepository;
 
@@ -25,13 +25,14 @@ public class VoucherServiceImpl implements VoucherService{
     public ResponseEntity<VoucherResponse> createVoucher(VoucherCreationDto voucherCreationDto) {
         validateVoucherCreationData(voucherCreationDto);
 
-        Voucher newVoucher = Voucher.builder()
-                .voucherName(voucherCreationDto.getVoucherName())
-                .voucherEndDate(voucherCreationDto.getVoucherEndDate())
-                .voucherDescription(voucherCreationDto.getVoucherDescription())
-                .redeemStatus(voucherCreationDto.isRedeemStatus())
-                .vendorId(voucherCreationDto.getVendorId())
-                .build();
+        Voucher newVoucher =
+                Voucher.builder()
+                        .voucherName(voucherCreationDto.getVoucherName())
+                        .voucherEndDate(voucherCreationDto.getVoucherEndDate())
+                        .voucherDescription(voucherCreationDto.getVoucherDescription())
+                        .redeemStatus(voucherCreationDto.isRedeemStatus())
+                        .vendorId(voucherCreationDto.getVendorId())
+                        .build();
 
         try {
             voucherRepository.save(newVoucher);
@@ -39,15 +40,17 @@ public class VoucherServiceImpl implements VoucherService{
             throw new DatabaseTransactionException("Error saving voucher into Database", e);
         }
 
-        VoucherResponse response = VoucherResponse.builder()
-                .status(200)
-                .message("Successfully created voucher")
-                .build();
+        VoucherResponse response =
+                VoucherResponse.builder()
+                        .status(200)
+                        .message("Successfully created voucher")
+                        .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @Override
-    public ResponseEntity<VoucherResponse> updateVoucher(Integer voucherId, VoucherCreationDto updatedVoucherDto) {
+    public ResponseEntity<VoucherResponse> updateVoucher(
+            Integer voucherId, VoucherCreationDto updatedVoucherDto) {
         Voucher existingVoucher = voucherRepository.findById(voucherId).orElse(null);
         if (existingVoucher == null) {
             return ResponseEntity.notFound().build();
@@ -65,13 +68,13 @@ public class VoucherServiceImpl implements VoucherService{
             throw new DatabaseTransactionException("Error updating voucher in the database", e);
         }
 
-        VoucherResponse response = VoucherResponse.builder()
-                .status(200)
-                .message("Successfully updated voucher")
-                .build();
+        VoucherResponse response =
+                VoucherResponse.builder()
+                        .status(200)
+                        .message("Successfully updated voucher")
+                        .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-
 
     private void validateVoucherCreationData(VoucherCreationDto voucherCreationDto) {
         if (voucherRepository.existsByVoucherName(voucherCreationDto.getVoucherName())) {
@@ -107,10 +110,11 @@ public class VoucherServiceImpl implements VoucherService{
             throw new DatabaseTransactionException("Error deleting voucher from the database", e);
         }
 
-        VoucherResponse response = VoucherResponse.builder()
-                .status(200)
-                .message("Voucher deleted successfully")
-                .build();
+        VoucherResponse response =
+                VoucherResponse.builder()
+                        .status(200)
+                        .message("Voucher deleted successfully")
+                        .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

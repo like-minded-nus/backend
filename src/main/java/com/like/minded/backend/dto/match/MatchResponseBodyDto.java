@@ -1,13 +1,12 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.dto.match;
 
 import com.like.minded.backend.domain.match.Match;
-import com.like.minded.backend.domain.profile.Profile;
 import com.like.minded.backend.dto.profile.ProfileDto;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -24,7 +23,7 @@ public class MatchResponseBodyDto {
     private LocalDateTime updatedDate;
     private ProfileDto profile;
 
-    public MatchResponseBodyDto (Match match, ProfileDto profileDto) {
+    public MatchResponseBodyDto(Match match, ProfileDto profileDto) {
         this.matchId = match.getMatchId();
         this.profileId_1 = match.getProfileId_1();
         this.profileId_2 = match.getProfileId_2();
@@ -37,4 +36,3 @@ public class MatchResponseBodyDto {
         this.profile = profileDto;
     }
 }
-

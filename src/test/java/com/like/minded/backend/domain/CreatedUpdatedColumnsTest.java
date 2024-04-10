@@ -1,13 +1,12 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.domain;
 
-import com.like.minded.backend.domain.vendor.Activity;
-import com.like.minded.backend.domain.vendor.Vendor;
-import com.like.minded.backend.domain.voucher.Voucher;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
+import com.like.minded.backend.domain.voucher.Voucher;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class CreatedUpdatedColumnsTest {
 
@@ -22,13 +21,14 @@ class CreatedUpdatedColumnsTest {
         boolean redeemStatus = false;
         Integer vendorId = 1;
 
-        Voucher testEntity = Voucher.builder()
-                .voucherName(voucherName)
-                .voucherEndDate(voucherEndDate)
-                .voucherDescription(voucherDescription)
-                .redeemStatus(redeemStatus)
-                .vendorId(vendorId)
-                .build();
+        Voucher testEntity =
+                Voucher.builder()
+                        .voucherName(voucherName)
+                        .voucherEndDate(voucherEndDate)
+                        .voucherDescription(voucherDescription)
+                        .redeemStatus(redeemStatus)
+                        .vendorId(vendorId)
+                        .build();
 
         // Wait a bit to ensure a time difference
         try {
@@ -40,7 +40,9 @@ class CreatedUpdatedColumnsTest {
         LocalDateTime afterCreation = LocalDateTime.now();
 
         assertNotNull(testEntity.getCreatedDate(), "Created date should not be null");
-        assertTrue(testEntity.getCreatedDate().isAfter(beforeCreation) && testEntity.getCreatedDate().isBefore(afterCreation),
+        assertTrue(
+                testEntity.getCreatedDate().isAfter(beforeCreation)
+                        && testEntity.getCreatedDate().isBefore(afterCreation),
                 "Created date should be within the test's time frame");
         assertNotNull(testEntity.getUpdatedDate(), "Updated date should not be null");
         assertEquals("SYSTEM", testEntity.getCreatedBy(), "Created by should be SYSTEM");

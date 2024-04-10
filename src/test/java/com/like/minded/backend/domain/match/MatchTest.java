@@ -1,8 +1,9 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.domain.match;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 class MatchTest {
 
@@ -13,16 +14,19 @@ class MatchTest {
         Boolean like1 = true;
         Boolean like2 = false;
 
-        Match match = Match.builder()
-                .profileId_1(profileId1)
-                .profileId_2(profileId2)
-                .like_1(like1)
-                .like_2(like2)
-                .build();
+        Match match =
+                Match.builder()
+                        .profileId_1(profileId1)
+                        .profileId_2(profileId2)
+                        .like_1(like1)
+                        .like_2(like2)
+                        .build();
 
         assertNotNull(match);
-        assertEquals(profileId1, match.getProfileId_1(), "Profile ID 1 should match the provided value");
-        assertEquals(profileId2, match.getProfileId_2(), "Profile ID 2 should match the provided value");
+        assertEquals(
+                profileId1, match.getProfileId_1(), "Profile ID 1 should match the provided value");
+        assertEquals(
+                profileId2, match.getProfileId_2(), "Profile ID 2 should match the provided value");
         assertEquals(like1, match.getLike_1(), "Like 1 should match the provided value");
         assertEquals(like2, match.getLike_2(), "Like 2 should match the provided value");
     }
@@ -40,7 +44,8 @@ class MatchTest {
         Match match = new Match(1, 100, 200, true, false);
         Object other = new Object();
 
-        assertNotEquals(match, other, "A match should not be equal to an object of a different class");
+        assertNotEquals(
+                match, other, "A match should not be equal to an object of a different class");
     }
 
     @Test
@@ -71,11 +76,17 @@ class MatchTest {
         Match match1 = new Match(null, 1, 2, true, false);
         Match match2 = new Match(null, 1, 2, true, false);
 
-        assertEquals(match1.hashCode(), match2.hashCode(), "Two matches with the same field values must have the same hash code.");
+        assertEquals(
+                match1.hashCode(),
+                match2.hashCode(),
+                "Two matches with the same field values must have the same hash code.");
 
         Match matchModified = new Match(null, 1, 2, false, false);
 
-        assertNotEquals(match1.hashCode(), matchModified.hashCode(), "Two matches with different field values are likely to have different hash codes.");
+        assertNotEquals(
+                match1.hashCode(),
+                matchModified.hashCode(),
+                "Two matches with different field values are likely to have different hash codes.");
     }
 
     @Test
@@ -83,6 +94,9 @@ class MatchTest {
         Match match = new Match(null, 1, 2, true, false);
         int initialHashCode = match.hashCode();
 
-        assertEquals(initialHashCode, match.hashCode(), "Hash code should remain consistent across calls.");
+        assertEquals(
+                initialHashCode,
+                match.hashCode(),
+                "Hash code should remain consistent across calls.");
     }
 }

@@ -1,11 +1,10 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.dto.profile;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
-import java.util.Optional;
 
 @Data
 @AllArgsConstructor
@@ -22,4 +21,3 @@ public class UpdateUserProfileDto {
     private String image5;
     private String image6;
 }
-

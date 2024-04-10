@@ -1,3 +1,4 @@
+/* LikeMinded (C)2024 */
 package com.like.minded.backend.dto.user;
 
 import lombok.*;
@@ -11,5 +12,4 @@ public class UserRegistrationDto {
     private String email;
     private String password;
     private String confirmPassword;
-
 }

@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 
 import com.like.minded.backend.domain.vendor.Vendor;
 import com.like.minded.backend.dto.vendor.VendorCreationDto;
+import com.like.minded.backend.enums.VendorType;
 import com.like.minded.backend.exception.VendorException;
 import com.like.minded.backend.repository.vendor.VendorRepository;
 import com.like.minded.backend.vo.vendor.VendorResponse;
@@ -31,7 +32,15 @@ class VendorServiceImplTest {
     void createVendorShouldSucceed() {
         VendorCreationDto dto =
                 new VendorCreationDto(
-                        "VendorName", "Activity", "Address", 87654321, "www.example.com", 1);
+                        "VendorName",
+                        "Activity",
+                        "Address",
+                        87654321,
+                        "www.example.com",
+                        1,
+                        VendorType.OUTDOOR,
+                        "High",
+                        null);
 
         when(vendorRepository.existsByVendorName(anyString())).thenReturn(false);
         when(vendorRepository.existsByPhoneNumber(anyInt())).thenReturn(false);
@@ -51,7 +60,15 @@ class VendorServiceImplTest {
     void createVendorShouldFailWhenNameExists() {
         VendorCreationDto dto =
                 new VendorCreationDto(
-                        "VendorName", "Activity", "Address", 87654321, "www.example.com", 1);
+                        "VendorName",
+                        "Activity",
+                        "Address",
+                        87654321,
+                        "www.example.com",
+                        1,
+                        VendorType.INDOOR,
+                        null,
+                        "Yes");
 
         when(vendorRepository.existsByVendorName(dto.getVendorName())).thenReturn(true);
 

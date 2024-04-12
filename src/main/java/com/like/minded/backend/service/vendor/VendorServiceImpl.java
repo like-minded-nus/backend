@@ -1,8 +1,11 @@
 /* LikeMinded (C)2024 */
 package com.like.minded.backend.service.vendor;
 
+import com.like.minded.backend.domain.vendor.IndoorVendor;
+import com.like.minded.backend.domain.vendor.OutdoorVendor;
 import com.like.minded.backend.domain.vendor.Vendor;
 import com.like.minded.backend.dto.vendor.VendorCreationDto;
+import com.like.minded.backend.enums.VendorType;
 import com.like.minded.backend.exception.DatabaseTransactionException;
 import com.like.minded.backend.exception.VendorException;
 import com.like.minded.backend.repository.vendor.VendorRepository;
@@ -25,15 +28,26 @@ public class VendorServiceImpl implements VendorService {
     public ResponseEntity<VendorResponse> createVendor(VendorCreationDto vendorCreationDto) {
         validateVendorCreationData(vendorCreationDto);
 
-        Vendor newVendor =
-                Vendor.builder()
-                        .vendorName(vendorCreationDto.getVendorName())
-                        .activityName(vendorCreationDto.getActivityName())
-                        .address(vendorCreationDto.getAddress())
-                        .phoneNumber(vendorCreationDto.getPhoneNumber())
-                        .website(vendorCreationDto.getWebsite())
-                        .passionId(vendorCreationDto.getPassionId())
-                        .build();
+        Vendor newVendor;
+        if (vendorCreationDto.getVendorType() == VendorType.INDOOR) {
+            IndoorVendor indoorVendor = new IndoorVendor();
+            indoorVendor.setConversationFriendly(vendorCreationDto.getConversationFriendly());
+            newVendor = indoorVendor;
+        } else if (vendorCreationDto.getVendorType() == VendorType.OUTDOOR) {
+            OutdoorVendor outdoorVendor = new OutdoorVendor();
+            outdoorVendor.setIntensityLevel(vendorCreationDto.getIntensityLevel());
+            newVendor = outdoorVendor;
+        } else {
+            return ResponseEntity.badRequest().body(new VendorResponse(400, "Invalid vendor type"));
+        }
+
+        newVendor.setVendorName(vendorCreationDto.getVendorName());
+        newVendor.setActivityName(vendorCreationDto.getActivityName());
+        newVendor.setAddress(vendorCreationDto.getAddress());
+        newVendor.setPhoneNumber(vendorCreationDto.getPhoneNumber());
+        newVendor.setWebsite(vendorCreationDto.getWebsite());
+        newVendor.setPassionId(vendorCreationDto.getPassionId());
+        newVendor.setVendorType(vendorCreationDto.getVendorType());
 
         try {
             vendorRepository.save(newVendor);
@@ -54,12 +68,28 @@ public class VendorServiceImpl implements VendorService {
             return ResponseEntity.notFound().build();
         }
 
+        if (!existingVendor.getVendorType().equals(updatedVendorDto.getVendorType())) {
+            return ResponseEntity.badRequest()
+                    .body(new VendorResponse(400, "Cannot change vendor type"));
+        }
+
         existingVendor.setVendorName(updatedVendorDto.getVendorName());
         existingVendor.setActivityName(updatedVendorDto.getActivityName());
         existingVendor.setAddress(updatedVendorDto.getAddress());
         existingVendor.setPhoneNumber(updatedVendorDto.getPhoneNumber());
         existingVendor.setWebsite(updatedVendorDto.getWebsite());
         existingVendor.setPassionId(updatedVendorDto.getPassionId());
+
+        if (existingVendor instanceof IndoorVendor
+                && updatedVendorDto.getConversationFriendly() != null) {
+            ((IndoorVendor) existingVendor)
+                    .setConversationFriendly(updatedVendorDto.getConversationFriendly());
+        }
+        if (existingVendor instanceof OutdoorVendor
+                && updatedVendorDto.getIntensityLevel() != null) {
+            ((OutdoorVendor) existingVendor)
+                    .setIntensityLevel(updatedVendorDto.getIntensityLevel());
+        }
 
         try {
             vendorRepository.save(existingVendor);

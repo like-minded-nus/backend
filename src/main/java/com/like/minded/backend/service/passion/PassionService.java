@@ -9,4 +9,6 @@ public interface PassionService {
     public ResponseEntity<BaseResponse<PassionResponse>> getPassions();
 
     public ResponseEntity<BaseResponse<PassionResponse>> getPassionsByProfileId(Integer profileId);
+
+    public ResponseEntity<BaseResponse<PassionResponse>> getPassionById(Integer passionId);
 }

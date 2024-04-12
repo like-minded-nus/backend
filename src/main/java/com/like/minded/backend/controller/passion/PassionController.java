@@ -25,4 +25,10 @@ public class PassionController {
             @PathVariable Integer profileId) {
         return passionService.getPassionsByProfileId(profileId);
     }
+
+    @GetMapping("/{passionId}")
+    public ResponseEntity<BaseResponse<PassionResponse>> getPassionById(
+            @PathVariable Integer passionId) {
+        return passionService.getPassionById(passionId);
+    }
 }

@@ -1,8 +1,7 @@
 /* LikeMinded (C)2024 */
 package com.like.minded.backend.controller.report;
 
-import com.like.minded.backend.dto.profile.*;
-import com.like.minded.backend.dto.report.GetReportedProfileDto;
+import com.like.minded.backend.dto.report.GetReportsDto;
 import com.like.minded.backend.dto.report.ReportDto;
 import com.like.minded.backend.service.report.ReportService;
 import com.like.minded.backend.vo.BaseResponse;
@@ -20,15 +19,15 @@ public class ReportController {
 
     @Autowired private ReportService reportService;
 
-    @PostMapping("/")
-    public ResponseEntity<BaseResponse<Integer>> reportProfile(@RequestBody ReportDto reportDto)
+    @PostMapping
+    public ResponseEntity<BaseResponse<Integer>> reportUser(@RequestBody ReportDto reportDto)
             throws SQLException, IOException {
-        return reportService.reportProfile(reportDto);
+        return reportService.reportUser(reportDto);
     }
 
-    @GetMapping("/")
-    public ResponseEntity<BaseResponse<List<GetReportedProfileDto>>> getReportedRecords()
+    @GetMapping
+    public ResponseEntity<BaseResponse<List<GetReportsDto>>> getReportedRecords()
             throws SQLException, IOException {
-        return reportService.findReportedProfile();
+        return reportService.findReports();
     }
 }

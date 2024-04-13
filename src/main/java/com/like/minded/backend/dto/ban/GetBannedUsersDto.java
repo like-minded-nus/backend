@@ -1,8 +1,7 @@
 /* LikeMinded (C)2024 */
-package com.like.minded.backend.dto.report;
+package com.like.minded.backend.dto.ban;
 
 /* LikeMinded (C)2024 */
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,10 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetReportedProfileDto {
-    private Integer reportId;
-    private Integer profileId;
+public class GetBannedUsersDto {
+    private Integer banId;
     private Integer userId;
-    private String displayName;
-    private String reportedReason;
+    private String username;
+    private String bannedReason;
 }

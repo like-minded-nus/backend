@@ -22,8 +22,8 @@ public class Report {
     private Integer id;
 
     @NonNull
-    @Column(name = "PROFILE_ID")
-    private Integer profileId;
+    @Column(name = "USER_ID")
+    private Integer userId;
 
     @NonNull
     @Column(name = "REPORTED_REASON")

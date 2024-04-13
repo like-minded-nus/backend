@@ -2,7 +2,7 @@
 package com.like.minded.backend.service.report;
 
 import com.like.minded.backend.domain.report.Report;
-import com.like.minded.backend.dto.report.GetReportedProfileDto;
+import com.like.minded.backend.dto.report.GetReportsDto;
 import com.like.minded.backend.dto.report.ReportDto;
 import com.like.minded.backend.exception.DatabaseTransactionException;
 import com.like.minded.backend.repository.report.ReportRepository;
@@ -26,44 +26,42 @@ public class ReportServiceImpl implements ReportService {
     private final ReportRepository reportRepository;
 
     @Override
-    public ResponseEntity<BaseResponse<Integer>> reportProfile(ReportDto reportDto)
+    public ResponseEntity<BaseResponse<Integer>> reportUser(ReportDto reportDto)
             throws SQLException, IOException {
 
         Report newReport =
                 Report.builder()
-                        .profileId(reportDto.getProfileId())
+                        .userId(reportDto.getUserId())
                         .reportedReason(reportDto.getReportedReason())
                         .build();
 
         try {
             reportRepository.save(newReport);
         } catch (Exception e) {
-            throw new DatabaseTransactionException(
-                    "Error saving reported profile into Database", e);
+            throw new DatabaseTransactionException("Error saving report into Database", e);
         }
 
         BaseResponse<Integer> response =
                 BaseResponse.<Integer>builder()
                         .status(200)
-                        .message("Successfully created reported profile")
-                        .payload(reportDto.getProfileId())
+                        .message("Successfully created report")
+                        .payload(reportDto.getUserId())
                         .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @Override
-    public ResponseEntity<BaseResponse<List<GetReportedProfileDto>>> findReportedProfile()
+    public ResponseEntity<BaseResponse<List<GetReportsDto>>> findReports()
             throws SQLException, IOException {
 
-        List<GetReportedProfileDto> getReportedProfileDtoList =
-                reportRepository.findReportedProfiles();
+        List<GetReportsDto> getReportsDtoList = reportRepository.findReports();
 
-        BaseResponse<List<GetReportedProfileDto>> response =
-                BaseResponse.<List<GetReportedProfileDto>>builder()
+        BaseResponse<List<GetReportsDto>> response =
+                BaseResponse.<List<GetReportsDto>>builder()
                         .status(200)
                         .message("Successfully retrieved reports")
-                        .payload(getReportedProfileDtoList)
+                        .payload(getReportsDtoList)
                         .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);

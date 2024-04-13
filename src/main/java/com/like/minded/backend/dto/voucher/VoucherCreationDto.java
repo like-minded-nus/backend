@@ -12,7 +12,9 @@ import lombok.NoArgsConstructor;
 public class VoucherCreationDto {
     private String voucherName;
     private LocalDate voucherEndDate;
-    private String voucherDescription;
+    //    private String voucherDescription;
+    private Integer voucherType;
+    private Integer voucherAmount;
     private boolean redeemStatus;
     private Integer vendorId;
 }

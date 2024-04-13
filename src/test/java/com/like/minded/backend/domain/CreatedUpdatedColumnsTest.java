@@ -4,6 +4,7 @@ package com.like.minded.backend.domain;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.like.minded.backend.domain.voucher.Voucher;
+import com.like.minded.backend.domain.voucher.VoucherType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
@@ -21,11 +22,17 @@ class CreatedUpdatedColumnsTest {
         boolean redeemStatus = false;
         Integer vendorId = 1;
 
+        VoucherType voucherType = new VoucherType();
+        voucherType.setVoucherType(1);
+        voucherType.setVoucherTypeDesc("Free Trial");
+        Integer voucherAmount = 3;
+
         Voucher testEntity =
                 Voucher.builder()
                         .voucherName(voucherName)
                         .voucherEndDate(voucherEndDate)
-                        .voucherDescription(voucherDescription)
+                        .voucherType(voucherType)
+                        .voucherAmount(voucherAmount)
                         .redeemStatus(redeemStatus)
                         .vendorId(vendorId)
                         .build();

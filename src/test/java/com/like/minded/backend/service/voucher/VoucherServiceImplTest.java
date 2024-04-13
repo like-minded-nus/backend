@@ -5,9 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import com.like.minded.backend.domain.voucher.Voucher;
+import com.like.minded.backend.domain.voucher.VoucherType;
 import com.like.minded.backend.dto.voucher.VoucherCreationDto;
 import com.like.minded.backend.exception.VoucherException;
 import com.like.minded.backend.repository.voucher.VoucherRepository;
+import com.like.minded.backend.repository.voucher.VoucherTypeRepository;
 import com.like.minded.backend.vo.voucher.VoucherResponse;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -27,15 +29,19 @@ class VoucherServiceImplTest {
 
     @Mock private VoucherRepository voucherRepository;
 
+    @Mock private VoucherTypeRepository voucherTypeRepository;
+
     @InjectMocks private VoucherServiceImpl voucherService;
 
     @Test
     void createVoucherSuccessfully() {
         VoucherCreationDto dto =
-                new VoucherCreationDto(
-                        "Summer Sale", LocalDate.now().plusDays(10), "10% off", true, 1);
+                new VoucherCreationDto("Summer Sale", LocalDate.now().plusDays(10), 1, 3, true, 1);
 
+        VoucherType mockVoucherType = new VoucherType(2, "Discount");
         when(voucherRepository.existsByVoucherName(dto.getVoucherName())).thenReturn(false);
+        when(voucherTypeRepository.findByVoucherType(any(Integer.class)))
+                .thenReturn(mockVoucherType);
         when(voucherRepository.save(any(Voucher.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -52,8 +58,7 @@ class VoucherServiceImplTest {
     @Test
     void createVoucherFailsWhenNameExists() {
         VoucherCreationDto dto =
-                new VoucherCreationDto(
-                        "Summer Sale", LocalDate.now().plusDays(10), "10% off", true, 1);
+                new VoucherCreationDto("Summer Sale", LocalDate.now().plusDays(10), 1, 3, true, 1);
 
         when(voucherRepository.existsByVoucherName(dto.getVoucherName())).thenReturn(true);
 

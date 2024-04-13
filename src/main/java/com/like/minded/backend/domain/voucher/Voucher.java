@@ -27,11 +27,17 @@ public class Voucher extends CreatedUpdatedColumns {
     @Column(name = "VOUCHER_NAME")
     private String voucherName;
 
+    @NonNull
+    @ManyToOne
+    @JoinColumn(name = "VOUCHER_TYPE")
+    private VoucherType voucherType;
+
+    @NonNull
+    @Column(name = "VOUCHER_AMOUNT")
+    private Integer voucherAmount;
+
     @Column(name = "VOUCHER_END_DATE")
     private LocalDate voucherEndDate;
-
-    @Column(name = "VOUCHER_DESCRIPTION")
-    private String voucherDescription;
 
     @Column(name = "REDEEM_STATUS")
     private boolean redeemStatus;

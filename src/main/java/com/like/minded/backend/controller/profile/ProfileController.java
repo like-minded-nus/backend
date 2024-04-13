@@ -4,6 +4,7 @@ package com.like.minded.backend.controller.profile;
 import com.like.minded.backend.dto.profile.*;
 import com.like.minded.backend.service.profile.ProfilePassionMatchService;
 import com.like.minded.backend.service.profile.ProfileService;
+import com.like.minded.backend.service.report.ReportService;
 import com.like.minded.backend.vo.BaseResponse;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProfileController {
 
     @Autowired private ProfileService profileService;
+    @Autowired private ReportService reportService;
 
     @Autowired private ProfilePassionMatchService profilePassionMatchService;
 

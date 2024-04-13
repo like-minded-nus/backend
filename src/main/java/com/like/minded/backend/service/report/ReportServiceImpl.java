@@ -32,6 +32,7 @@ public class ReportServiceImpl implements ReportService {
         Report newReport =
                 Report.builder()
                         .userId(reportDto.getUserId())
+                        .reportedBy(reportDto.getReportedBy())
                         .reportedReason(reportDto.getReportedReason())
                         .build();
 

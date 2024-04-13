@@ -13,7 +13,7 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
 
     @Query(
             "SELECT NEW com.like.minded.backend.dto.report.GetReportsDto(r.id, "
-                    + " u.userId, u.username, r.reportedReason) FROM User u JOIN"
+                    + " u.userId, u.username, r.reportedBy, r.reportedReason) FROM User u JOIN"
                     + " Report r ON r.userId = u.userId")
     List<GetReportsDto> findReports();
 }

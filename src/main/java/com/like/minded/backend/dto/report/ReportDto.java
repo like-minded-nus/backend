@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 public class ReportDto {
     private Integer id;
     private Integer userId;
+    private Integer reportedBy;
     private String reportedReason;
 }

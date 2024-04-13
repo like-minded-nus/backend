@@ -14,5 +14,6 @@ public class GetReportsDto {
     private Integer reportId;
     private Integer userId;
     private String username;
+    private Integer reportedBy;
     private String reportedReason;
 }

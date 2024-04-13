@@ -26,6 +26,10 @@ public class Report {
     private Integer userId;
 
     @NonNull
+    @Column(name = "REPORTED_BY")
+    private Integer reportedBy;
+
+    @NonNull
     @Column(name = "REPORTED_REASON")
     private String reportedReason;
 }

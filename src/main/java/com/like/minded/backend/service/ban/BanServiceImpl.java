@@ -6,13 +6,11 @@ import com.like.minded.backend.dto.ban.BanUserDto;
 import com.like.minded.backend.dto.ban.GetBannedUsersDto;
 import com.like.minded.backend.exception.DatabaseTransactionException;
 import com.like.minded.backend.repository.ban.BanRepository;
+import com.like.minded.backend.repository.report.ReportRepository;
 import com.like.minded.backend.vo.BaseResponse;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,12 +20,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class BanServiceImpl implements BanService {
 
-    private final ModelMapper modelMapper;
     private final BanRepository banRepository;
+    private final ReportRepository reportRepository;
 
     @Override
-    public ResponseEntity<BaseResponse<Integer>> banUser(BanUserDto banUserDto)
-            throws SQLException, IOException {
+    public ResponseEntity<BaseResponse<Integer>> banUser(BanUserDto banUserDto) {
 
         Ban newBan =
                 Ban.builder()
@@ -37,6 +34,7 @@ public class BanServiceImpl implements BanService {
 
         try {
             banRepository.save(newBan);
+            reportRepository.deleteById(banUserDto.getId());
         } catch (Exception e) {
             throw new DatabaseTransactionException("Error saving ban into Database", e);
         }
@@ -52,8 +50,7 @@ public class BanServiceImpl implements BanService {
     }
 
     @Override
-    public ResponseEntity<BaseResponse<List<GetBannedUsersDto>>> findBannedUsers()
-            throws SQLException, IOException {
+    public ResponseEntity<BaseResponse<List<GetBannedUsersDto>>> findBannedUsers() {
 
         List<GetBannedUsersDto> getBannedUsersDtoList = banRepository.findBannedUsers();
 
@@ -68,8 +65,7 @@ public class BanServiceImpl implements BanService {
     }
 
     @Override
-    public ResponseEntity<BaseResponse<Boolean>> findIsUserBanned(Integer userId)
-            throws SQLException, IOException {
+    public ResponseEntity<BaseResponse<Boolean>> findIsUserBanned(Integer userId) {
         List<Ban> ban = banRepository.findByUserId(userId);
 
         Boolean result = !ban.isEmpty();

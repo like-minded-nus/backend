@@ -14,4 +14,5 @@ public class UserDto {
     private String email;
     private Integer userRole;
     private Integer isPremium;
+    private boolean isBanned;
 }

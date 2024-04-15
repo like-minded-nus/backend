@@ -13,5 +13,5 @@ public interface BanService {
 
     ResponseEntity<BaseResponse<List<GetBannedUsersDto>>> findBannedUsers();
 
-    ResponseEntity<BaseResponse<Boolean>> findIsUserBanned(Integer userId);
+    public boolean findIsUserBanned(Integer userId);
 }

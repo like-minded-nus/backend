@@ -68,18 +68,19 @@ public class BanServiceImpl implements BanService {
     }
 
     @Override
-    public ResponseEntity<BaseResponse<Boolean>> findIsUserBanned(Integer userId) {
+    public boolean findIsUserBanned(Integer userId) {
         List<Ban> ban = banRepository.findByUserId(userId);
 
-        Boolean result = !ban.isEmpty();
+        //        boolean result = !ban.isEmpty();
 
-        BaseResponse<Boolean> response =
-                BaseResponse.<Boolean>builder()
-                        .status(200)
-                        .message("Successfully checks user ban status")
-                        .payload(result)
-                        .build();
+        //        BaseResponse<Boolean> response =
+        //                BaseResponse.<Boolean>builder()
+        //                        .status(200)
+        //                        .message("Successfully checks user ban status")
+        //                        .payload(result)
+        //                        .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        //        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return !ban.isEmpty();
     }
 }

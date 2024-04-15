@@ -15,6 +15,8 @@ public interface VendorService {
 
     Vendor getVendorById(Integer vendorId);
 
+    List<Vendor> getVendorsByPassionIds(List<Integer> passionIds);
+
     List<Vendor> getAllVendors();
 
     ResponseEntity<VendorResponse> deleteVendor(Integer vendorId);

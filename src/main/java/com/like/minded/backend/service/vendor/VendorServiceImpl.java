@@ -11,6 +11,7 @@ import com.like.minded.backend.exception.VendorException;
 import com.like.minded.backend.repository.vendor.VendorRepository;
 import com.like.minded.backend.vo.vendor.VendorResponse;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -116,6 +117,13 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public Vendor getVendorById(Integer vendorId) {
         return vendorRepository.findById(vendorId).orElse(null);
+    }
+
+    @Override
+    public List<Vendor> getVendorsByPassionIds(List<Integer> passionIds) {
+        return vendorRepository.findAll().stream()
+                .filter(vendor -> passionIds.contains(vendor.getPassionId()))
+                .collect(Collectors.toList());
     }
 
     @Override

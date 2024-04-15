@@ -41,6 +41,11 @@ public class VendorController {
         return ResponseEntity.ok(vendor);
     }
 
+    @GetMapping("/byPassionIds")
+    public List<Vendor> getVendorsByPassionIds(@RequestParam List<Integer> passionIds) {
+        return vendorService.getVendorsByPassionIds(passionIds);
+    }
+
     @PutMapping("/{vendorId}")
     public ResponseEntity<VendorResponse> updateVendor(
             @PathVariable Integer vendorId, @RequestBody VendorCreationDto updatedVendorDto) {

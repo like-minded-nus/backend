@@ -9,12 +9,14 @@ import com.like.minded.backend.domain.user.UserRole;
 import com.like.minded.backend.dto.user.UserDto;
 import com.like.minded.backend.dto.user.UserLoginDto;
 import com.like.minded.backend.dto.user.UserRegistrationDto;
+import com.like.minded.backend.dto.user.UserUpgradePremiumDto;
 import com.like.minded.backend.repository.user.UserRepository;
 import com.like.minded.backend.repository.user.UserRoleRepository;
 import com.like.minded.backend.service.ban.BanService;
 import com.like.minded.backend.vo.BaseResponse;
 import com.like.minded.backend.vo.user.UserResponse;
 import java.util.Objects;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -82,5 +84,43 @@ class UserServiceImplTest {
         assertEquals("testUser", response.getBody().getPayload().getUsername());
 
         verify(userRepository, times(1)).findByUsername("testUser");
+    }
+
+    @Test
+    void upgradeToPremiumUserExists() {
+        User user = new User();
+        user.setUserId(1);
+        user.setIsPremium(0);
+
+        UserUpgradePremiumDto userUpgradePremiumDto = new UserUpgradePremiumDto();
+        userUpgradePremiumDto.setUserId(1);
+
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
+        doAnswer(
+                        invocation -> {
+                            User u = invocation.getArgument(0);
+                            assertEquals(1, u.getIsPremium());
+                            return null;
+                        })
+                .when(userRepository)
+                .save(any(User.class));
+
+        ResponseEntity<BaseResponse<Boolean>> response =
+                userService.upgradeToPremium(userUpgradePremiumDto);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertTrue(response.getBody().getPayload());
+        assertEquals("Successfully upgraded to premium.", response.getBody().getMessage());
+    }
+
+    @Test
+    void upgradeToPremiumUserNotFound() {
+        when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        ResponseEntity<BaseResponse<Boolean>> response =
+                userService.upgradeToPremium(new UserUpgradePremiumDto(1));
+
+        assertEquals(404, response.getStatusCodeValue());
+        assertNull(response.getBody());
     }
 }

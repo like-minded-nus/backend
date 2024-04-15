@@ -7,6 +7,7 @@ import com.like.minded.backend.vo.BaseResponse;
 import com.like.minded.backend.vo.passion.PassionResponse;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -76,5 +77,22 @@ public class PassionServiceImpl implements PassionService {
                             .build();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
+    }
+
+    @Override
+    public ResponseEntity<BaseResponse<List<Integer>>> getPassionIdsByName(
+            List<String> passionNames) {
+        List<Passion> passions = passionRepository.findByPassionNameIn(passionNames);
+        List<Integer> passionIds =
+                passions.stream().map(Passion::getPassionId).collect(Collectors.toList());
+
+        BaseResponse<List<Integer>> response =
+                BaseResponse.<List<Integer>>builder()
+                        .status(HttpStatus.OK.value())
+                        .message("Successfully retrieved passion IDs by names")
+                        .payload(passionIds)
+                        .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

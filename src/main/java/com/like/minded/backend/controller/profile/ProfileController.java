@@ -8,13 +8,14 @@ import com.like.minded.backend.service.report.ReportService;
 import com.like.minded.backend.vo.BaseResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/profile")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class ProfileController {
 
     @Autowired private ProfileService profileService;
@@ -50,5 +51,12 @@ public class ProfileController {
     public ResponseEntity<BaseResponse<ProfilePassionMatchListDto>> getProfilePassionMatches(
             @PathVariable Integer profileId) {
         return profilePassionMatchService.getProfilePassionMatches(profileId);
+    }
+
+    @GetMapping("/profileId/{profileId1}/{profileId2}")
+    public ResponseEntity<BaseResponse<List<ProfileResponseBodyDto>>> getProfilesByProfileIds(
+            @PathVariable Integer profileId1, @PathVariable Integer profileId2)
+            throws SQLException, IOException {
+        return profileService.getProfilesByProfileIds(profileId1, profileId2);
     }
 }

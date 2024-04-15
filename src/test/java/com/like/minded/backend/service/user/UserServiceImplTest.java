@@ -11,6 +11,7 @@ import com.like.minded.backend.dto.user.UserLoginDto;
 import com.like.minded.backend.dto.user.UserRegistrationDto;
 import com.like.minded.backend.repository.user.UserRepository;
 import com.like.minded.backend.repository.user.UserRoleRepository;
+import com.like.minded.backend.service.ban.BanService;
 import com.like.minded.backend.vo.BaseResponse;
 import com.like.minded.backend.vo.user.UserResponse;
 import java.util.Objects;
@@ -30,6 +31,8 @@ class UserServiceImplTest {
     @Mock private UserRoleRepository userRoleRepository;
 
     @InjectMocks private UserServiceImpl userService;
+
+    @Mock private BanService banService;
 
     @Test
     void registerUserSuccessfully() {
@@ -71,7 +74,7 @@ class UserServiceImplTest {
         when(userRepository.findByUsername("testUser")).thenReturn(foundUser);
 
         ResponseEntity<BaseResponse<UserDto>> response = userService.loginUser(userLoginDto);
-
+        //        when(banService.findIsUserBanned(1)).thenReturn(false);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(
                 "Successfully logged in.", Objects.requireNonNull(response.getBody()).getMessage());

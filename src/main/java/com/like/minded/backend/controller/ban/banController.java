@@ -30,9 +30,9 @@ public class banController {
         return banService.findBannedUsers();
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<BaseResponse<Boolean>> getIsUserBanned(@PathVariable Integer userId)
-            throws SQLException, IOException {
-        return banService.findIsUserBanned(userId);
-    }
+    //    @GetMapping("/{userId}")
+    //    public ResponseEntity<BaseResponse<Boolean>> getIsUserBanned(@PathVariable Integer userId)
+    //            throws SQLException, IOException {
+    //        return banService.findIsUserBanned(userId);
+    //    }
 }

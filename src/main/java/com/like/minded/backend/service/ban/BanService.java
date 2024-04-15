@@ -17,6 +17,5 @@ public interface BanService {
     public ResponseEntity<BaseResponse<List<GetBannedUsersDto>>> findBannedUsers()
             throws SQLException, IOException;
 
-    public ResponseEntity<BaseResponse<Boolean>> findIsUserBanned(Integer userId)
-            throws SQLException, IOException;
+    public boolean findIsUserBanned(Integer userId);
 }

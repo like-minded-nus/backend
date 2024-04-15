@@ -64,10 +64,10 @@ public class BanServiceImplTest {
         List<Ban> bans = Arrays.asList(new Ban(1, 1, "Fake profile"));
         when(banRepository.findByUserId(anyInt())).thenReturn(bans);
 
-        ResponseEntity<BaseResponse<Boolean>> response = banService.findIsUserBanned(1);
+        boolean response = banService.findIsUserBanned(1);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody().getPayload());
+        //        assertEquals(false, response);
+        assertTrue(response);
         verify(banRepository).findByUserId(1);
     }
 }

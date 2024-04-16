@@ -25,8 +25,14 @@ jobs:
       - name: Build Maven Project
         run: ./mvnw clean install -DskipTests
 
-      - name: Run Tests
+      - name: Run Tests and Generate Coverage Report
         run: ./mvnw clean verify
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/index.html
 
   docker:
     runs-on: ubuntu-latest

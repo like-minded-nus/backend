@@ -32,7 +32,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-report
-          path: target/site/jacoco/index.html
+          path: target/site/jacoco/
 
       - name: Run OWASP Dependency Check
         run: ./mvnw org.owasp:dependency-check-maven:check

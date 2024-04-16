@@ -207,6 +207,15 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>9.1.0</version>
+                <configuration>
+                    <!-- Fail the build on CVSS scores above 8 -->
+                    <failBuildOnCVSS>8</failBuildOnCVSS>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <repositories>

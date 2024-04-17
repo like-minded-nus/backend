@@ -1,5 +1,5 @@
 /* LikeMinded (C)2024 */
-package com.like.minded.backend.domain.user;
+package com.like.minded.backend.service.user;
 
 public class NormalUserStrategy implements UserStrategy {
     @Override

@@ -4,12 +4,19 @@ package com.like.minded.backend.service.vendor;
 import com.like.minded.backend.domain.vendor.IndoorVendor;
 import com.like.minded.backend.domain.vendor.OutdoorVendor;
 import com.like.minded.backend.domain.vendor.Vendor;
+import com.like.minded.backend.domain.voucher.Voucher;
 import com.like.minded.backend.dto.vendor.VendorCreationDto;
+import com.like.minded.backend.dto.vendor.VendorResponseDto;
+import com.like.minded.backend.dto.voucher.VoucherResponseDto;
 import com.like.minded.backend.enums.VendorType;
 import com.like.minded.backend.exception.DatabaseTransactionException;
 import com.like.minded.backend.exception.VendorException;
 import com.like.minded.backend.repository.vendor.VendorRepository;
+import com.like.minded.backend.service.user.NormalUserStrategy;
+import com.like.minded.backend.service.user.PremiumUserStrategy;
+import com.like.minded.backend.service.user.UserContext;
 import com.like.minded.backend.vo.vendor.VendorResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -124,6 +131,56 @@ public class VendorServiceImpl implements VendorService {
         return vendorRepository.findAll().stream()
                 .filter(vendor -> passionIds.contains(vendor.getPassionId()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<VendorResponseDto> getVendorsByPassionIdsAndUserPremiumStatus(
+            List<Integer> passionIds, Integer userPremiumStatus) {
+        UserContext userContext;
+        if (userPremiumStatus.equals(0)) {
+            userContext = new UserContext(new NormalUserStrategy());
+        } else {
+            userContext = new UserContext(new PremiumUserStrategy());
+        }
+        List<VendorResponseDto> vendorListResponseDto = new ArrayList<>();
+
+        List<Vendor> foundVendorList =
+                vendorRepository.findAll().stream()
+                        .filter(vendor -> passionIds.contains(vendor.getPassionId()))
+                        .collect(Collectors.toList());
+
+        for (Vendor foundVendor : foundVendorList) {
+            List<VoucherResponseDto> voucherListResponseDto = new ArrayList<>();
+            VendorResponseDto vendorResponseDto =
+                    VendorResponseDto.builder()
+                            .vendorId(foundVendor.getVendorId())
+                            .vendorName(foundVendor.getVendorName())
+                            .vendorType(foundVendor.getVendorType())
+                            .activityName(foundVendor.getActivityName())
+                            .address(foundVendor.getAddress())
+                            .phoneNumber(foundVendor.getPhoneNumber())
+                            .website(foundVendor.getWebsite())
+                            .passionId(foundVendor.getPassionId())
+                            .build();
+            for (Voucher existingVoucher : foundVendor.getVouchers()) {
+                Integer discountedAmount =
+                        userContext.performCalculateDiscount(existingVoucher.getVoucherAmount());
+                VoucherResponseDto voucherResponseDto =
+                        VoucherResponseDto.builder()
+                                .voucherId(existingVoucher.getVoucherId())
+                                .voucherName(existingVoucher.getVoucherName())
+                                .voucherType(existingVoucher.getVoucherType())
+                                .voucherAmount(discountedAmount)
+                                .voucherEndDate(existingVoucher.getVoucherEndDate())
+                                .redeemStatus(existingVoucher.isRedeemStatus())
+                                .vendorId(existingVoucher.getVendorId())
+                                .build();
+                voucherListResponseDto.add(voucherResponseDto);
+            }
+            vendorResponseDto.setVouchers(voucherListResponseDto);
+            vendorListResponseDto.add(vendorResponseDto);
+        }
+        return vendorListResponseDto;
     }
 
     @Override

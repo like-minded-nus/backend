@@ -15,19 +15,23 @@
     <description>Dating app for like-minded people</description>
     <properties>
         <java.version>21</java.version>
+        <spring-boot-starter.version>3.2.4</spring-boot-starter.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jdbc</artifactId>
+            <version>${spring-boot-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>${spring-boot-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
+            <version>${spring-boot-starter.version}</version>
         </dependency>
         <!--        		<dependency>-->
         <!--        			<groupId>org.springframework.boot</groupId>-->
@@ -36,19 +40,17 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring-boot-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
+            <version>${spring-boot-starter.version}</version>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.session</groupId>-->
-        <!--            <artifactId>spring-session-jdbc</artifactId>-->
-        <!--        </dependency>-->
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
+            <version>${spring-boot-starter.version}</version>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
@@ -66,6 +68,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
+            <version>${spring-boot-starter.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -76,13 +79,9 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring-boot-starter.version}</version>
             <scope>test</scope>
         </dependency>
-        <!--        		<dependency>-->
-        <!--        			<groupId>org.springframework.security</groupId>-->
-        <!--        			<artifactId>spring-security-test</artifactId>-->
-        <!--        			<scope>test</scope>-->
-        <!--        		</dependency>-->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>

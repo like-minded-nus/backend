@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 
 import com.like.minded.backend.domain.message.Message;
 import com.like.minded.backend.domain.message.MessageSequence;
+import com.like.minded.backend.dto.message.MarkMessageAsReadDto;
 import com.like.minded.backend.dto.message.MessageDto;
 import com.like.minded.backend.repository.message.MessageRepository;
 import com.like.minded.backend.repository.message.MessageSequenceRepository;
@@ -51,11 +52,14 @@ class MessageServiceImplTest {
 
     @Test
     void markMessageAsRead() {
+        MarkMessageAsReadDto markMessageAsReadDto = new MarkMessageAsReadDto(1);
+
         Message message =
                 new Message(1, 2, 3, "Read me", new Timestamp(System.currentTimeMillis()), "N");
         when(messageRepository.findById(1)).thenReturn(Optional.of(message));
 
-        ResponseEntity<BaseResponse<String>> response = messageService.markMessageAsRead(1);
+        ResponseEntity<BaseResponse<String>> response =
+                messageService.markMessageAsRead(markMessageAsReadDto);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         verify(messageRepository).save(message);

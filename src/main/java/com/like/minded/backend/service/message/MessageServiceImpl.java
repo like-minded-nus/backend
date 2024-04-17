@@ -3,6 +3,7 @@ package com.like.minded.backend.service.message;
 
 import com.like.minded.backend.domain.message.Message;
 import com.like.minded.backend.domain.message.MessageSequence;
+import com.like.minded.backend.dto.message.MarkMessageAsReadDto;
 import com.like.minded.backend.dto.message.MessageDto;
 import com.like.minded.backend.exception.DatabaseTransactionException;
 import com.like.minded.backend.repository.message.MessageRepository;
@@ -72,11 +73,32 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public ResponseEntity<BaseResponse<String>> markMessageAsRead(Integer messageId) {
-        Optional<Message> messageOptional = messageRepository.findById(messageId);
+    public ResponseEntity<BaseResponse<String>> markMessageAsRead(
+            MarkMessageAsReadDto markMessageAsReadDto) {
 
-        if (messageOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.OK).body(null);
+        int retryCount = 50;
+        Optional<Message> messageOptional =
+                messageRepository.findById(markMessageAsReadDto.getMessageId());
+        ;
+
+        for (int i = 1; i <= retryCount; i++) {
+            System.out.println("Retrying " + i);
+            messageOptional = messageRepository.findById(markMessageAsReadDto.getMessageId());
+
+            BaseResponse<String> messageIdNotFoundResponse =
+                    BaseResponse.<String>builder()
+                            .status(200)
+                            .message(
+                                    "Message "
+                                            + markMessageAsReadDto.getMessageId()
+                                            + "cannot be found")
+                            .build();
+
+            if (i == retryCount && messageOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.OK).body(messageIdNotFoundResponse);
+            }
+
+            if (!messageOptional.isEmpty()) break;
         }
 
         Message message = messageOptional.get();
@@ -88,6 +110,8 @@ public class MessageServiceImpl implements MessageService {
             throw new DatabaseTransactionException(
                     "Error marking message as read into Database", e);
         }
+
+        String responseMessage = "";
 
         BaseResponse<String> response =
                 BaseResponse.<String>builder()

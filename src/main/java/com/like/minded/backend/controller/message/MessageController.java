@@ -2,6 +2,7 @@
 package com.like.minded.backend.controller.message;
 
 import com.like.minded.backend.domain.message.Message;
+import com.like.minded.backend.dto.message.MarkMessageAsReadDto;
 import com.like.minded.backend.dto.message.MessageDto;
 import com.like.minded.backend.dto.message.ReadMessageDto;
 import com.like.minded.backend.service.message.MessageService;
@@ -41,10 +42,15 @@ public class MessageController {
     }
 
     @MessageMapping("/message-read")
-    public ResponseEntity<BaseResponse<String>> markMessageAsRead(@Payload ReadMessageDto payload) {
+    public void markMessageAsRead(@Payload ReadMessageDto payload) {
         simpMessagingTemplate.convertAndSendToUser(
                 payload.getSenderProfileId().toString(), "/private/read", payload.getMessageId());
-        return messageService.markMessageAsRead(payload.getMessageId());
+    }
+
+    @PutMapping("/read")
+    public ResponseEntity<BaseResponse<String>> readMessage(
+            @RequestBody MarkMessageAsReadDto markMessageAsReadDto) {
+        return messageService.markMessageAsRead(markMessageAsReadDto);
     }
 
     @GetMapping("/{senderProfileId}/{receiverProfileId}")

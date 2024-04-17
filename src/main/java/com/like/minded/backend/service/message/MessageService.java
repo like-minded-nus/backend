@@ -2,6 +2,7 @@
 package com.like.minded.backend.service.message;
 
 import com.like.minded.backend.domain.message.Message;
+import com.like.minded.backend.dto.message.MarkMessageAsReadDto;
 import com.like.minded.backend.dto.message.MessageDto;
 import com.like.minded.backend.vo.BaseResponse;
 import java.util.List;
@@ -12,7 +13,8 @@ public interface MessageService {
 
     public ResponseEntity<BaseResponse<MessageDto>> sendMessage(MessageDto messageDto);
 
-    public ResponseEntity<BaseResponse<String>> markMessageAsRead(Integer messageId);
+    public ResponseEntity<BaseResponse<String>> markMessageAsRead(
+            MarkMessageAsReadDto markMessageAsReadDto);
 
     ResponseEntity<BaseResponse<List<Message>>> getMessageBetweenUsers(
             Integer senderProfileId, Integer receiverProfileId);

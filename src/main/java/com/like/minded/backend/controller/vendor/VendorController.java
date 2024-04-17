@@ -3,6 +3,7 @@ package com.like.minded.backend.controller.vendor;
 
 import com.like.minded.backend.domain.vendor.Vendor;
 import com.like.minded.backend.dto.vendor.VendorCreationDto;
+import com.like.minded.backend.dto.vendor.VendorResponseDto;
 import com.like.minded.backend.service.vendor.VendorService;
 import com.like.minded.backend.vo.vendor.VendorResponse;
 import java.util.List;
@@ -44,6 +45,13 @@ public class VendorController {
     @GetMapping("/byPassionIds")
     public List<Vendor> getVendorsByPassionIds(@RequestParam List<Integer> passionIds) {
         return vendorService.getVendorsByPassionIds(passionIds);
+    }
+
+    @GetMapping("/byPassionIdsAndUserPremiumStatus")
+    public List<VendorResponseDto> getVendorsByPassionIdsAndUserPremiumStatus(
+            @RequestParam List<Integer> passionIds, @RequestParam Integer userPremiumStatus) {
+        return vendorService.getVendorsByPassionIdsAndUserPremiumStatus(
+                passionIds, userPremiumStatus);
     }
 
     @PutMapping("/{vendorId}")

@@ -7,9 +7,15 @@ import com.like.minded.backend.domain.voucher.Voucher;
 import com.like.minded.backend.domain.voucher.VoucherType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.junit.jupiter.api.Test;
 
+class ConcreteCreatedUpdatedColumns extends CreatedUpdatedColumns {}
+
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 class CreatedUpdatedColumnsTest {
+    ConcreteCreatedUpdatedColumns columns = new ConcreteCreatedUpdatedColumns();
 
     @Test
     void testCreatedUpdatedColumnsInheritance() {
@@ -54,5 +60,72 @@ class CreatedUpdatedColumnsTest {
         assertNotNull(testEntity.getUpdatedDate(), "Updated date should not be null");
         assertEquals("SYSTEM", testEntity.getCreatedBy(), "Created by should be SYSTEM");
         assertEquals("SYSTEM", testEntity.getUpdatedBy(), "Updated by should be SYSTEM");
+    }
+
+    @Test
+    void getCreatedBy() {
+        assertEquals("SYSTEM", columns.getCreatedBy());
+    }
+
+    @Test
+    void getCreatedDate() {
+        assertNotNull(columns.getCreatedDate());
+    }
+
+    @Test
+    void getUpdatedBy() {
+        assertEquals("SYSTEM", columns.getUpdatedBy());
+    }
+
+    @Test
+    void getUpdatedDate() {
+        assertNotNull(columns.getUpdatedDate());
+    }
+
+    @Test
+    void setCreatedBy() {
+        columns.setCreatedBy("USER1");
+        assertEquals("USER1", columns.getCreatedBy());
+    }
+
+    @Test
+    void setCreatedDate() {
+        LocalDateTime now = LocalDateTime.now().plusDays(1);
+        columns.setCreatedDate(now);
+        assertEquals(now, columns.getCreatedDate());
+    }
+
+    @Test
+    void setUpdatedBy() {
+        columns.setUpdatedBy("USER2");
+        assertEquals("USER2", columns.getUpdatedBy());
+    }
+
+    @Test
+    void setUpdatedDate() {
+        LocalDateTime later = LocalDateTime.now().plusDays(2);
+        columns.setUpdatedDate(later);
+        assertEquals(later, columns.getUpdatedDate());
+    }
+
+    @Test
+    void testToString() {
+        String expected =
+                String.format(
+                        "CreatedUpdatedColumns(createdBy=SYSTEM, createdDate=%s,"
+                                + " updatedBy=SYSTEM, updatedDate=%s)",
+                        columns.getCreatedDate(), columns.getUpdatedDate());
+        assertEquals(expected, columns.toString());
+    }
+
+    @Test
+    void canEqual() {
+        ConcreteCreatedUpdatedColumns other = new ConcreteCreatedUpdatedColumns();
+        assertTrue(columns.canEqual(other) && other.canEqual(columns));
+    }
+
+    @Test
+    void testHashCode() {
+        assertNotNull(columns.hashCode());
     }
 }

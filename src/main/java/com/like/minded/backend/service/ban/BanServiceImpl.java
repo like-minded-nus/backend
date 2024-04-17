@@ -9,7 +9,9 @@ import com.like.minded.backend.repository.ban.BanRepository;
 import com.like.minded.backend.repository.report.ReportRepository;
 import com.like.minded.backend.vo.BaseResponse;
 import java.util.List;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +19,12 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
 public class BanServiceImpl implements BanService {
 
-    private final BanRepository banRepository;
-    private final ReportRepository reportRepository;
+    BanRepository banRepository;
+    ReportRepository reportRepository;
 
     @Override
     public ResponseEntity<BaseResponse<Integer>> banUser(BanUserDto banUserDto) {
@@ -65,18 +68,19 @@ public class BanServiceImpl implements BanService {
     }
 
     @Override
-    public ResponseEntity<BaseResponse<Boolean>> findIsUserBanned(Integer userId) {
+    public boolean findIsUserBanned(Integer userId) {
         List<Ban> ban = banRepository.findByUserId(userId);
 
-        Boolean result = !ban.isEmpty();
+        //        boolean result = !ban.isEmpty();
 
-        BaseResponse<Boolean> response =
-                BaseResponse.<Boolean>builder()
-                        .status(200)
-                        .message("Successfully checks user ban status")
-                        .payload(result)
-                        .build();
+        //        BaseResponse<Boolean> response =
+        //                BaseResponse.<Boolean>builder()
+        //                        .status(200)
+        //                        .message("Successfully checks user ban status")
+        //                        .payload(result)
+        //                        .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        //        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return !ban.isEmpty();
     }
 }

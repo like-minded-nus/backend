@@ -7,12 +7,11 @@ import com.like.minded.backend.dto.report.ReportDto;
 import com.like.minded.backend.exception.DatabaseTransactionException;
 import com.like.minded.backend.repository.report.ReportRepository;
 import com.like.minded.backend.vo.BaseResponse;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,14 +19,13 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ReportServiceImpl implements ReportService {
 
-    private final ModelMapper modelMapper;
-    private final ReportRepository reportRepository;
+    ReportRepository reportRepository;
 
     @Override
-    public ResponseEntity<BaseResponse<Integer>> reportUser(ReportDto reportDto)
-            throws SQLException, IOException {
+    public ResponseEntity<BaseResponse<Integer>> reportUser(ReportDto reportDto) {
 
         Report newReport =
                 Report.builder()
@@ -53,8 +51,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ResponseEntity<BaseResponse<List<GetReportsDto>>> findReports()
-            throws SQLException, IOException {
+    public ResponseEntity<BaseResponse<List<GetReportsDto>>> findReports() {
 
         List<GetReportsDto> getReportsDtoList = reportRepository.findReports();
 

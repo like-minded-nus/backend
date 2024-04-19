@@ -8,6 +8,12 @@ spring:
     hikari:
       keep-alive-time:240000
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
   jpa:
     show-sql: false
     hibernate:
@@ -19,14 +25,13 @@ spring:
         jdbc:
           time_zone: +08:00
 
-  server:
-    servlet:
-      context-path:
-
   devtools:
     restart:
       exclude: static/**,public/**
       additional-paths: src/main/java
+  server:
+    base-path:
+
 logging:
   level:
     root: info

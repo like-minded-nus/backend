@@ -8,7 +8,6 @@ import com.like.minded.backend.exception.DatabaseTransactionException;
 import com.like.minded.backend.exception.VoucherException;
 import com.like.minded.backend.repository.voucher.VoucherRepository;
 import com.like.minded.backend.repository.voucher.VoucherTypeRepository;
-import com.like.minded.backend.service.user.UserStrategy;
 import com.like.minded.backend.vo.voucher.VoucherResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -104,8 +103,6 @@ public class VoucherServiceImpl implements VoucherService {
     public List<Voucher> getVouchersByVendorId(Integer vendorId) {
         return voucherRepository.findByVendorId(vendorId);
     }
-
-    private UserStrategy userStrategy;
 
     @Override
     public ResponseEntity<VoucherResponse> deleteVoucher(Integer voucherId) {

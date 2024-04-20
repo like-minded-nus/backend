@@ -22,8 +22,10 @@ public interface ProfilePassionRepository extends JpaRepository<ProfilePassion, 
                 + " p2.profileId = :profileId JOIN Profile u1 ON p1.profileId = u1.profileId JOIN"
                 + " Profile u2 ON p2.profileId = u2.profileId AND u1.gender != u2.gender WHERE"
                 + " p1.profileId != :profileId AND NOT EXISTS (SELECT 1 FROM Match m WHERE"
-                + " m.profileId_2 = p1.profileId) GROUP BY p1.profileId ORDER BY SimilarityScore"
-                + " DESC, MatchProfileId ASC")
+                + " ((m.profileId_2 = p1.profileId OR m.profileId_1 = p1.profileId) AND (m.like_1 ="
+                + " true AND m.like_2 = true)) OR (m.profileId_1 = p2.profileId AND m.profileId_2 ="
+                + " p1.profileId)) GROUP BY p1.profileId ORDER BY SimilarityScore DESC,"
+                + " MatchProfileId ASC")
     List<String> findProfilePassionMatchesByProfileId(Integer profileId);
 
     @Modifying

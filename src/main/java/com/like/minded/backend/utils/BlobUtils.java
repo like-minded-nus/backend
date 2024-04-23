@@ -11,6 +11,10 @@ import java.util.Base64;
 public class BlobUtils {
 
     public static String blobToBase64(Blob blob) throws SQLException, IOException {
+        if (blob == null) {
+            return "";
+        }
+
         try {
             InputStream inputStream = blob.getBinaryStream();
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

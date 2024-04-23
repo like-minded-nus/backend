@@ -1,13 +1,24 @@
 /* LikeMinded (C)2024 */
 package com.like.minded.backend.service.vendor;
 
+import com.like.minded.backend.domain.vendor.IndoorVendor;
+import com.like.minded.backend.domain.vendor.OutdoorVendor;
 import com.like.minded.backend.domain.vendor.Vendor;
+import com.like.minded.backend.domain.voucher.Voucher;
 import com.like.minded.backend.dto.vendor.VendorCreationDto;
+import com.like.minded.backend.dto.vendor.VendorResponseDto;
+import com.like.minded.backend.dto.voucher.VoucherResponseDto;
+import com.like.minded.backend.enums.VendorType;
 import com.like.minded.backend.exception.DatabaseTransactionException;
 import com.like.minded.backend.exception.VendorException;
 import com.like.minded.backend.repository.vendor.VendorRepository;
+import com.like.minded.backend.service.user.NormalUserStrategy;
+import com.like.minded.backend.service.user.PremiumUserStrategy;
+import com.like.minded.backend.service.user.UserContext;
 import com.like.minded.backend.vo.vendor.VendorResponse;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,15 +36,26 @@ public class VendorServiceImpl implements VendorService {
     public ResponseEntity<VendorResponse> createVendor(VendorCreationDto vendorCreationDto) {
         validateVendorCreationData(vendorCreationDto);
 
-        Vendor newVendor =
-                Vendor.builder()
-                        .vendorName(vendorCreationDto.getVendorName())
-                        .activityName(vendorCreationDto.getActivityName())
-                        .address(vendorCreationDto.getAddress())
-                        .phoneNumber(vendorCreationDto.getPhoneNumber())
-                        .website(vendorCreationDto.getWebsite())
-                        .passionId(vendorCreationDto.getPassionId())
-                        .build();
+        Vendor newVendor;
+        if (vendorCreationDto.getVendorType() == VendorType.INDOOR) {
+            IndoorVendor indoorVendor = new IndoorVendor();
+            indoorVendor.setConversationFriendly(vendorCreationDto.getConversationFriendly());
+            newVendor = indoorVendor;
+        } else if (vendorCreationDto.getVendorType() == VendorType.OUTDOOR) {
+            OutdoorVendor outdoorVendor = new OutdoorVendor();
+            outdoorVendor.setIntensityLevel(vendorCreationDto.getIntensityLevel());
+            newVendor = outdoorVendor;
+        } else {
+            return ResponseEntity.badRequest().body(new VendorResponse(400, "Invalid vendor type"));
+        }
+
+        newVendor.setVendorName(vendorCreationDto.getVendorName());
+        newVendor.setActivityName(vendorCreationDto.getActivityName());
+        newVendor.setAddress(vendorCreationDto.getAddress());
+        newVendor.setPhoneNumber(vendorCreationDto.getPhoneNumber());
+        newVendor.setWebsite(vendorCreationDto.getWebsite());
+        newVendor.setPassionId(vendorCreationDto.getPassionId());
+        newVendor.setVendorType(vendorCreationDto.getVendorType());
 
         try {
             vendorRepository.save(newVendor);
@@ -54,12 +76,28 @@ public class VendorServiceImpl implements VendorService {
             return ResponseEntity.notFound().build();
         }
 
+        if (!existingVendor.getVendorType().equals(updatedVendorDto.getVendorType())) {
+            return ResponseEntity.badRequest()
+                    .body(new VendorResponse(400, "Cannot change vendor type"));
+        }
+
         existingVendor.setVendorName(updatedVendorDto.getVendorName());
         existingVendor.setActivityName(updatedVendorDto.getActivityName());
         existingVendor.setAddress(updatedVendorDto.getAddress());
         existingVendor.setPhoneNumber(updatedVendorDto.getPhoneNumber());
         existingVendor.setWebsite(updatedVendorDto.getWebsite());
         existingVendor.setPassionId(updatedVendorDto.getPassionId());
+
+        if (existingVendor instanceof IndoorVendor
+                && updatedVendorDto.getConversationFriendly() != null) {
+            ((IndoorVendor) existingVendor)
+                    .setConversationFriendly(updatedVendorDto.getConversationFriendly());
+        }
+        if (existingVendor instanceof OutdoorVendor
+                && updatedVendorDto.getIntensityLevel() != null) {
+            ((OutdoorVendor) existingVendor)
+                    .setIntensityLevel(updatedVendorDto.getIntensityLevel());
+        }
 
         try {
             vendorRepository.save(existingVendor);
@@ -86,6 +124,63 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public Vendor getVendorById(Integer vendorId) {
         return vendorRepository.findById(vendorId).orElse(null);
+    }
+
+    @Override
+    public List<Vendor> getVendorsByPassionIds(List<Integer> passionIds) {
+        return vendorRepository.findAll().stream()
+                .filter(vendor -> passionIds.contains(vendor.getPassionId()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<VendorResponseDto> getVendorsByPassionIdsAndUserPremiumStatus(
+            List<Integer> passionIds, Integer userPremiumStatus) {
+        UserContext userContext;
+        if (userPremiumStatus.equals(0)) {
+            userContext = new UserContext(new NormalUserStrategy());
+        } else {
+            userContext = new UserContext(new PremiumUserStrategy());
+        }
+        List<VendorResponseDto> vendorListResponseDto = new ArrayList<>();
+
+        List<Vendor> foundVendorList =
+                vendorRepository.findAll().stream()
+                        .filter(vendor -> passionIds.contains(vendor.getPassionId()))
+                        .collect(Collectors.toList());
+
+        for (Vendor foundVendor : foundVendorList) {
+            List<VoucherResponseDto> voucherListResponseDto = new ArrayList<>();
+            VendorResponseDto vendorResponseDto =
+                    VendorResponseDto.builder()
+                            .vendorId(foundVendor.getVendorId())
+                            .vendorName(foundVendor.getVendorName())
+                            .vendorType(foundVendor.getVendorType())
+                            .activityName(foundVendor.getActivityName())
+                            .address(foundVendor.getAddress())
+                            .phoneNumber(foundVendor.getPhoneNumber())
+                            .website(foundVendor.getWebsite())
+                            .passionId(foundVendor.getPassionId())
+                            .build();
+            for (Voucher existingVoucher : foundVendor.getVouchers()) {
+                Integer discountedAmount =
+                        userContext.performCalculateDiscount(existingVoucher.getVoucherAmount());
+                VoucherResponseDto voucherResponseDto =
+                        VoucherResponseDto.builder()
+                                .voucherId(existingVoucher.getVoucherId())
+                                .voucherName(existingVoucher.getVoucherName())
+                                .voucherType(existingVoucher.getVoucherType())
+                                .voucherAmount(discountedAmount)
+                                .voucherEndDate(existingVoucher.getVoucherEndDate())
+                                .redeemStatus(existingVoucher.isRedeemStatus())
+                                .vendorId(existingVoucher.getVendorId())
+                                .build();
+                voucherListResponseDto.add(voucherResponseDto);
+            }
+            vendorResponseDto.setVouchers(voucherListResponseDto);
+            vendorListResponseDto.add(vendorResponseDto);
+        }
+        return vendorListResponseDto;
     }
 
     @Override

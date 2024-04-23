@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetMessageRequestBodyDto {
-    private Integer senderProfileId;
-    private Integer receiverProfileId;
+public class MarkMessageAsReadDto {
+    private Integer messageId;
 }

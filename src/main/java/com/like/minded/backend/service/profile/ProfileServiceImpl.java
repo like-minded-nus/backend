@@ -156,6 +156,12 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public ResponseEntity<BaseResponse<ProfileResponseBodyDto>> createProfile(
             UserProfileDto userProfileDto) {
+
+        log.info("user id: " + userProfileDto.getUserId());
+        log.info("profile id: " + userProfileDto.getProfileId());
+        log.info("display name: " + userProfileDto.getDisplayName());
+        log.info("bio: " + userProfileDto.getBio());
+
         String image1Base64 =
                 userProfileDto.getImage1().isEmpty()
                         ? ""
@@ -368,5 +374,49 @@ public class ProfileServiceImpl implements ProfileService {
             profileSetter.accept(imageBlob);
             dtoSetter.accept(imageBase64);
         }
+    }
+
+    @Override
+    public ResponseEntity<BaseResponse<List<ProfileResponseBodyDto>>> getProfilesByProfileIds(
+            Integer profileId1, Integer profileId2) throws SQLException, IOException {
+        Optional<Profile> profile1Optional = profileRepository.findById(profileId1);
+        Optional<Profile> profile2Optional = profileRepository.findById(profileId2);
+
+        if (profile1Optional.isEmpty() || profile2Optional.isEmpty()) {
+            // If any of the profiles does not exist, return null or handle the error accordingly
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        Profile profile1 = profile1Optional.get();
+        Profile profile2 = profile2Optional.get();
+
+        // Map profiles to ProfileResponseBodyDto
+        ProfileResponseBodyDto profileDto1 = mapProfileToDto(profile1);
+        ProfileResponseBodyDto profileDto2 = mapProfileToDto(profile2);
+
+        // Create a list to hold both profiles
+        List<ProfileResponseBodyDto> profileDtos = new ArrayList<>();
+        profileDtos.add(profileDto1);
+        profileDtos.add(profileDto2);
+
+        // Build the response
+        BaseResponse<List<ProfileResponseBodyDto>> response =
+                BaseResponse.<List<ProfileResponseBodyDto>>builder()
+                        .status(HttpStatus.OK.value())
+                        .message("Successfully retrieved profiles by profileIds")
+                        .payload(profileDtos)
+                        .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    private ProfileResponseBodyDto mapProfileToDto(Profile profile) {
+        List<String> profilePassions =
+                profilePassionRepository.findProfilePassionNameByProfileId(profile.getProfileId());
+
+        ProfileResponseBodyDto profileDto = modelMapper.map(profile, ProfileResponseBodyDto.class);
+        profileDto.setProfilePassionList(profilePassions);
+
+        return profileDto;
     }
 }

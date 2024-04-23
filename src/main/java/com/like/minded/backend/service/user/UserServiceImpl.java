@@ -12,6 +12,7 @@ import com.like.minded.backend.exception.LoginException;
 import com.like.minded.backend.exception.RegistrationException;
 import com.like.minded.backend.repository.user.UserRepository;
 import com.like.minded.backend.repository.user.UserRoleRepository;
+import com.like.minded.backend.service.ban.BanService;
 import com.like.minded.backend.vo.BaseResponse;
 import com.like.minded.backend.vo.user.UserResponse;
 import java.util.Optional;
@@ -28,6 +29,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
+    private final BanService banService;
 
     @Override
     public ResponseEntity<UserResponse> registerUser(UserRegistrationDto userRegistrationDto) {
@@ -59,17 +61,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<BaseResponse<UserDto>> loginUser(UserLoginDto userLoginDto) {
-        User foundUser = userRepository.findByUsername(userLoginDto.getUsername());
-        validateUserLoginData(userLoginDto, foundUser);
+        BaseResponse<UserDto> response;
 
         UserDto userDto = new UserDto();
+        User foundUser = userRepository.findByUsername(userLoginDto.getUsername());
+        if (banService.findIsUserBanned(foundUser.getUserId())) {
+            userDto.setId(foundUser.getUserId());
+            userDto.setUsername(foundUser.getUsername());
+            userDto.setEmail(foundUser.getEmail());
+            userDto.setUserRole(foundUser.getUserRole().getRoleType());
+            userDto.setIsPremium(foundUser.getIsPremium());
+            userDto.setBanned(true);
+            response =
+                    BaseResponse.<UserDto>builder()
+                            .status(200)
+                            .message("User is banned.")
+                            .payload(userDto)
+                            .build();
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+        validateUserLoginData(userLoginDto, foundUser);
+
         userDto.setId(foundUser.getUserId());
         userDto.setUsername(foundUser.getUsername());
         userDto.setEmail(foundUser.getEmail());
         userDto.setUserRole(foundUser.getUserRole().getRoleType());
         userDto.setIsPremium(foundUser.getIsPremium());
+        userDto.setBanned(false);
 
-        BaseResponse<UserDto> response =
+        response =
                 BaseResponse.<UserDto>builder()
                         .status(200)
                         .message("Successfully logged in.")

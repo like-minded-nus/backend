@@ -14,4 +14,6 @@ public interface PassionRepository extends JpaRepository<Passion, Integer> {
             "SELECT p FROM Passion p JOIN ProfilePassion pp on p.passionId = pp.passionId WHERE"
                     + " pp.profileId=:profileId")
     List<Passion> findPassionsByProfileId(@Param("profileId") Integer profileId);
+
+    List<Passion> findByPassionNameIn(List<String> passionNames);
 }

@@ -5,6 +5,7 @@ import com.like.minded.backend.dto.profile.*;
 import com.like.minded.backend.vo.BaseResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 
 public interface ProfileService {
@@ -19,4 +20,7 @@ public interface ProfileService {
 
     public ResponseEntity<BaseResponse<ProfileResponseBodyDto>> updateProfile(
             UpdateUserProfileDto updateUserProfileDto);
+
+    ResponseEntity<BaseResponse<List<ProfileResponseBodyDto>>> getProfilesByProfileIds(
+            Integer profileId1, Integer profileId2) throws SQLException, IOException;
 }

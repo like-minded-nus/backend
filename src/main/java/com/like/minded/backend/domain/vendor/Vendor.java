@@ -3,12 +3,15 @@ package com.like.minded.backend.domain.vendor;
 
 import com.like.minded.backend.domain.CreatedUpdatedColumns;
 import com.like.minded.backend.domain.voucher.Voucher;
+import com.like.minded.backend.enums.VendorType;
 import jakarta.persistence.*;
 import java.util.List;
 import lombok.*;
 
 @EqualsAndHashCode(callSuper = false)
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "VENDOR_TYPE", discriminatorType = DiscriminatorType.STRING)
 @Builder
 @Data
 @AllArgsConstructor
@@ -45,6 +48,12 @@ public class Vendor extends CreatedUpdatedColumns {
     @NonNull
     @Column(name = "PASSION_ID")
     private Integer passionId;
+
+    @Enumerated(EnumType.STRING)
+    //    @Column(name = "VENDOR_TYPE", columnDefinition = "ENUM('indoor', 'outdoor')", insertable =
+    // false, updatable = false)
+    @Column(name = "VENDOR_TYPE", insertable = false, updatable = false)
+    private VendorType vendorType;
 
     @OneToMany(mappedBy = "vendorId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Voucher> vouchers;

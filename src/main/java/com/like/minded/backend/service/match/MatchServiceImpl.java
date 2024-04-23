@@ -93,6 +93,10 @@ public class MatchServiceImpl implements MatchService {
                 match.setLike_1(matchRequestBody.getLike());
             else if (match.getProfileId_2().equals(matchRequestBody.getUserProfileId()))
                 match.setLike_2(matchRequestBody.getLike());
+            if (!match.getLike_1() || !match.getLike_2()) {
+                match.setLike_1(false);
+                match.setLike_2(false);
+            }
             match.setUpdatedDate(LocalDateTime.now());
             message = "Successfully updated match record";
         }

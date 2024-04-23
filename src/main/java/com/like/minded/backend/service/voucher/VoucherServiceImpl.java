@@ -2,10 +2,12 @@
 package com.like.minded.backend.service.voucher;
 
 import com.like.minded.backend.domain.voucher.Voucher;
+import com.like.minded.backend.domain.voucher.VoucherType;
 import com.like.minded.backend.dto.voucher.VoucherCreationDto;
 import com.like.minded.backend.exception.DatabaseTransactionException;
 import com.like.minded.backend.exception.VoucherException;
 import com.like.minded.backend.repository.voucher.VoucherRepository;
+import com.like.minded.backend.repository.voucher.VoucherTypeRepository;
 import com.like.minded.backend.vo.voucher.VoucherResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,16 +22,19 @@ import org.springframework.stereotype.Service;
 public class VoucherServiceImpl implements VoucherService {
 
     private final VoucherRepository voucherRepository;
+    private final VoucherTypeRepository voucherTypeRepository;
 
     @Override
     public ResponseEntity<VoucherResponse> createVoucher(VoucherCreationDto voucherCreationDto) {
         validateVoucherCreationData(voucherCreationDto);
-
+        VoucherType creationVoucherType =
+                voucherTypeRepository.findByVoucherType(voucherCreationDto.getVoucherType());
         Voucher newVoucher =
                 Voucher.builder()
                         .voucherName(voucherCreationDto.getVoucherName())
                         .voucherEndDate(voucherCreationDto.getVoucherEndDate())
-                        .voucherDescription(voucherCreationDto.getVoucherDescription())
+                        .voucherType(creationVoucherType)
+                        .voucherAmount(voucherCreationDto.getVoucherAmount())
                         .redeemStatus(voucherCreationDto.isRedeemStatus())
                         .vendorId(voucherCreationDto.getVendorId())
                         .build();
@@ -55,10 +60,12 @@ public class VoucherServiceImpl implements VoucherService {
         if (existingVoucher == null) {
             return ResponseEntity.notFound().build();
         }
-
+        VoucherType updatedVoucherType =
+                voucherTypeRepository.findByVoucherType(updatedVoucherDto.getVoucherType());
         existingVoucher.setVoucherName(updatedVoucherDto.getVoucherName());
         existingVoucher.setVoucherEndDate(updatedVoucherDto.getVoucherEndDate());
-        existingVoucher.setVoucherDescription(updatedVoucherDto.getVoucherDescription());
+        existingVoucher.setVoucherType(updatedVoucherType);
+        existingVoucher.setVoucherAmount(updatedVoucherDto.getVoucherAmount());
         existingVoucher.setRedeemStatus(updatedVoucherDto.isRedeemStatus());
         existingVoucher.setVendorId(updatedVoucherDto.getVendorId());
 

@@ -7,7 +7,9 @@ import com.like.minded.backend.repository.profile.ProfilePassionRepository;
 import com.like.minded.backend.vo.BaseResponse;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +18,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProfilePassionMatchServiceImpl implements ProfilePassionMatchService {
-    private final ProfilePassionRepository profilePassionRepository;
+
+    ProfilePassionRepository profilePassionRepository;
 
     @Override
     public ResponseEntity<BaseResponse<ProfilePassionMatchListDto>> getProfilePassionMatches(

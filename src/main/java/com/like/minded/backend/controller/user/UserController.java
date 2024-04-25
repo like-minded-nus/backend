@@ -8,16 +8,20 @@ import com.like.minded.backend.dto.user.UserUpgradePremiumDto;
 import com.like.minded.backend.service.user.UserService;
 import com.like.minded.backend.vo.BaseResponse;
 import com.like.minded.backend.vo.user.UserResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 @RequestMapping("/api/v1/user")
 @CrossOrigin(origins = "*")
 public class UserController {
 
-    @Autowired private UserService userService;
+    UserService userService;
 
     @PostMapping(path = "/register")
     public ResponseEntity<UserResponse> registerUser(

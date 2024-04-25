@@ -13,10 +13,14 @@ import com.like.minded.backend.repository.profile.ProfileRepository;
 import com.like.minded.backend.utils.BlobUtils;
 import com.like.minded.backend.vo.BaseResponse;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.sql.Blob;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,16 +30,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @ExtendWith(MockitoExtension.class)
 class ProfileServiceImplTest {
 
-    @Mock private ProfileRepository profileRepository;
-
-    @Mock private ProfilePassionRepository profilePassionRepository;
-
-    @Mock private ModelMapper modelMapper;
-
-    @InjectMocks private ProfileServiceImpl profileService;
+    @Mock ProfileRepository profileRepository;
+    @Mock ProfilePassionRepository profilePassionRepository;
+    @Mock ModelMapper modelMapper;
+    @InjectMocks ProfileServiceImpl profileService;
 
     @Test
     void getProfileByProfileIdShouldReturnProfile() throws Exception {
@@ -106,7 +108,7 @@ class ProfileServiceImplTest {
         // Arrange
         Integer userId = 1;
         Blob mockBlob = mock(Blob.class);
-        byte[] bytes = new byte[0]; // Assuming an empty byte array for simplicity
+        byte[] bytes = new byte[0];
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 
         when(mockBlob.getBinaryStream()).thenReturn(byteArrayInputStream);
@@ -263,5 +265,57 @@ class ProfileServiceImplTest {
 
         verify(profileRepository).findById(profileId);
         verify(profileRepository).save(profile);
+    }
+
+    @Test
+    void testGetProfilesByProfileIds_BothProfilesFound() throws SQLException, IOException {
+        // Arrange
+        Profile profile1 =
+                Profile.builder()
+                        .userId(1)
+                        .displayName("John Doe")
+                        .gender("male")
+                        .birthdate(LocalDate.now())
+                        .bio("bio")
+                        .build();
+
+        Profile profile2 =
+                Profile.builder()
+                        .userId(1)
+                        .displayName("Jane Doe")
+                        .gender("female")
+                        .birthdate(LocalDate.now())
+                        .bio("bio")
+                        .build();
+
+        when(profileRepository.findById(1)).thenReturn(Optional.of(profile1));
+        when(profileRepository.findById(2)).thenReturn(Optional.of(profile2));
+        when(modelMapper.map(profile1, ProfileResponseBodyDto.class))
+                .thenReturn(new ProfileResponseBodyDto());
+        when(modelMapper.map(profile2, ProfileResponseBodyDto.class))
+                .thenReturn(new ProfileResponseBodyDto());
+
+        // Execution
+        ResponseEntity<BaseResponse<List<ProfileResponseBodyDto>>> response =
+                profileService.getProfilesByProfileIds(1, 2);
+
+        // Verification
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(2, response.getBody().getPayload().size());
+    }
+
+    @Test
+    void testGetProfilesByProfileIds_ProfileNotFound() throws SQLException, IOException {
+        // Setup
+        when(profileRepository.findById(1)).thenReturn(Optional.empty());
+
+        // Execution
+        ResponseEntity<BaseResponse<List<ProfileResponseBodyDto>>> response =
+                profileService.getProfilesByProfileIds(1, 2);
+
+        // Verification
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
     }
 }

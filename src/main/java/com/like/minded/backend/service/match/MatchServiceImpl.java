@@ -15,7 +15,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -25,11 +27,12 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class MatchServiceImpl implements MatchService {
-    private final ModelMapper modelMapper;
-    private final MatchRepository matchRepository;
-    private final ProfileRepository profileRepository;
-    private final MatchStrategy matchStrategy;
+    ModelMapper modelMapper;
+    MatchRepository matchRepository;
+    ProfileRepository profileRepository;
+    MatchStrategy matchStrategy;
 
     public ResponseEntity<BaseResponse<List<MatchResponseBodyDto>>> getProfileMatches(
             Integer profileId) throws Exception {

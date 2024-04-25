@@ -159,12 +159,6 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public ResponseEntity<BaseResponse<ProfileResponseBodyDto>> createProfile(
             UserProfileDto userProfileDto) {
-
-        log.info("user id: " + userProfileDto.getUserId());
-        log.info("profile id: " + userProfileDto.getProfileId());
-        log.info("display name: " + userProfileDto.getDisplayName());
-        log.info("bio: " + userProfileDto.getBio());
-
         String image1Base64 =
                 userProfileDto.getImage1().isEmpty()
                         ? ""
@@ -267,7 +261,6 @@ public class ProfileServiceImpl implements ProfileService {
     @Transactional
     public ResponseEntity<BaseResponse<ProfileResponseBodyDto>> updateProfile(
             UpdateUserProfileDto updateUserProfileDto) {
-        //        log.info("update profile dto: " + updateUserProfileDto);
         Optional<Profile> profile = profileRepository.findById(updateUserProfileDto.getProfileId());
         ProfileResponseBodyDto profileResponseBodyDto = new ProfileResponseBodyDto();
 

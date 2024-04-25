@@ -7,8 +7,6 @@ import com.like.minded.backend.dto.message.MessageDto;
 import com.like.minded.backend.dto.message.ReadMessageDto;
 import com.like.minded.backend.service.message.MessageService;
 import com.like.minded.backend.vo.BaseResponse;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -59,21 +57,18 @@ public class MessageController {
 
     @GetMapping("/{senderProfileId}/{receiverProfileId}")
     public ResponseEntity<BaseResponse<List<Message>>> getMessageBetweenUsers(
-            @PathVariable Integer senderProfileId, @PathVariable Integer receiverProfileId)
-            throws SQLException, IOException {
+            @PathVariable Integer senderProfileId, @PathVariable Integer receiverProfileId) {
         return messageService.getMessageBetweenUsers(senderProfileId, receiverProfileId);
     }
 
     @GetMapping("/latest/{senderProfileId}/{receiverProfileId}")
     public ResponseEntity<BaseResponse<List<Message>>> getLatestMessageBetweenUsers(
-            @PathVariable Integer senderProfileId, @PathVariable Integer receiverProfileId)
-            throws SQLException, IOException {
+            @PathVariable Integer senderProfileId, @PathVariable Integer receiverProfileId) {
         return messageService.getLatestMessageBetweenUsers(senderProfileId, receiverProfileId);
     }
 
     @GetMapping("/sequence")
-    public ResponseEntity<BaseResponse<Integer>> getNextMessageId()
-            throws SQLException, IOException {
+    public ResponseEntity<BaseResponse<Integer>> getNextMessageId() {
         return messageService.getNextMessageId();
     }
 }

@@ -82,10 +82,4 @@ public class BanController {
     public ResponseEntity<BaseResponse<List<GetBannedUsersDto>>> getBannedUsers() {
         return banService.findBannedUsers();
     }
-
-    //    @GetMapping("/{userId}")
-    //    public ResponseEntity<BaseResponse<Boolean>> getIsUserBanned(@PathVariable Integer userId)
-    // {
-    //        return banService.findIsUserBanned(userId);
-    //    }
 }

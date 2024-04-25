@@ -11,7 +11,7 @@ public class BaseResponse<T> {
     private String message;
     private T payload;
 
-    private BaseResponse(Builder<T> builder) {
+    public BaseResponse(Builder<T> builder) {
         this.status = builder.status;
         this.message = builder.message;
         this.payload = builder.payload;

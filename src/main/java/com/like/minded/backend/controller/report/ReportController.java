@@ -5,8 +5,6 @@ import com.like.minded.backend.dto.report.GetReportsDto;
 import com.like.minded.backend.dto.report.ReportDto;
 import com.like.minded.backend.service.report.ReportService;
 import com.like.minded.backend.vo.BaseResponse;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -24,14 +22,12 @@ public class ReportController {
     ReportService reportService;
 
     @PostMapping
-    public ResponseEntity<BaseResponse<Integer>> reportUser(@RequestBody ReportDto reportDto)
-            throws SQLException, IOException {
+    public ResponseEntity<BaseResponse<Integer>> reportUser(@RequestBody ReportDto reportDto) {
         return reportService.reportUser(reportDto);
     }
 
     @GetMapping
-    public ResponseEntity<BaseResponse<List<GetReportsDto>>> getReportedRecords()
-            throws SQLException, IOException {
+    public ResponseEntity<BaseResponse<List<GetReportsDto>>> getReportedRecords() {
         return reportService.findReports();
     }
 }

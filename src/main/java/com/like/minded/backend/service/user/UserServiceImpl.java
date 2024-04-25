@@ -16,7 +16,9 @@ import com.like.minded.backend.service.ban.BanService;
 import com.like.minded.backend.vo.BaseResponse;
 import com.like.minded.backend.vo.user.UserResponse;
 import java.util.Optional;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,20 +27,18 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-    private final UserRoleRepository userRoleRepository;
-    private final BanService banService;
+    UserRepository userRepository;
+    UserRoleRepository userRoleRepository;
+    BanService banService;
 
     @Override
     public ResponseEntity<UserResponse> registerUser(UserRegistrationDto userRegistrationDto) {
         validateUserRegistrationData(userRegistrationDto);
 
-        //        User newUser = UserMapper.INSTANCE.mapToUser(userRegistrationDto);
-        // "user" role == 2, "admin" role == 1
         UserRole userRole = userRoleRepository.findByRoleType(2);
-        //        newUser.setUserRole(userRole);
         User newUser =
                 User.builder()
                         .username(userRegistrationDto.getUsername())
@@ -119,12 +119,6 @@ public class UserServiceImpl implements UserService {
                             .payload(true)
                             .build();
         } catch (Exception e) {
-            response =
-                    BaseResponse.<Boolean>builder()
-                            .status(200)
-                            .message("Failed to upgraded to premium.")
-                            .payload(false)
-                            .build();
             throw new DatabaseTransactionException("Error saving into database", e);
         }
 

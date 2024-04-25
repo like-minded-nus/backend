@@ -5,16 +5,20 @@ import com.like.minded.backend.service.passion.PassionService;
 import com.like.minded.backend.vo.BaseResponse;
 import com.like.minded.backend.vo.passion.PassionResponse;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 @RequestMapping("/api/v1/passion")
 @CrossOrigin(origins = "*")
 public class PassionController {
 
-    @Autowired private PassionService passionService;
+    PassionService passionService;
 
     @GetMapping
     public ResponseEntity<BaseResponse<PassionResponse>> getPassions() {

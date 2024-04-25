@@ -4,24 +4,25 @@ package com.like.minded.backend.controller.profile;
 import com.like.minded.backend.dto.profile.*;
 import com.like.minded.backend.service.profile.ProfilePassionMatchService;
 import com.like.minded.backend.service.profile.ProfileService;
-import com.like.minded.backend.service.report.ReportService;
 import com.like.minded.backend.vo.BaseResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 @RequestMapping("/api/v1/profile")
 @CrossOrigin(origins = "*")
 public class ProfileController {
 
-    @Autowired private ProfileService profileService;
-    @Autowired private ReportService reportService;
-
-    @Autowired private ProfilePassionMatchService profilePassionMatchService;
+    ProfileService profileService;
+    ProfilePassionMatchService profilePassionMatchService;
 
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse<ProfileResponseBodyDto>> getProfile(@PathVariable Integer id)

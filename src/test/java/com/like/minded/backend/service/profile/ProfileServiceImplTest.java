@@ -108,7 +108,7 @@ class ProfileServiceImplTest {
         // Arrange
         Integer userId = 1;
         Blob mockBlob = mock(Blob.class);
-        byte[] bytes = new byte[0]; // Assuming an empty byte array for simplicity
+        byte[] bytes = new byte[0];
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 
         when(mockBlob.getBinaryStream()).thenReturn(byteArrayInputStream);

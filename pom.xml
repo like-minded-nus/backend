@@ -178,6 +178,8 @@
                     <excludes>
                         <exclude>**/BackendApplication.class</exclude>
                         <exclude>**/config/**</exclude>
+                        <exclude>**/dto/**</exclude>
+                        <exclude>**/vo/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>

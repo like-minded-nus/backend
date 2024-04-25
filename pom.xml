@@ -176,6 +176,7 @@
                 </executions>
                 <configuration>
                     <excludes>
+                        <exclude>**/BackendApplication.class</exclude>
                         <exclude>**/config/**</exclude>
                     </excludes>
                 </configuration>

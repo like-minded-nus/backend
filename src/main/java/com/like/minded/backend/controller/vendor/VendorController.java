@@ -7,16 +7,21 @@ import com.like.minded.backend.dto.vendor.VendorResponseDto;
 import com.like.minded.backend.service.vendor.VendorService;
 import com.like.minded.backend.vo.vendor.VendorResponse;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 @RequestMapping("/api/v1/vendors")
 @CrossOrigin(origins = "*")
 public class VendorController {
-    @Autowired private VendorService vendorService;
+
+    VendorService vendorService;
 
     @PostMapping("/create_vendor")
     public ResponseEntity<VendorResponse> createVendor(

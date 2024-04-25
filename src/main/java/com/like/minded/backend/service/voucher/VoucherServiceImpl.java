@@ -10,7 +10,9 @@ import com.like.minded.backend.repository.voucher.VoucherRepository;
 import com.like.minded.backend.repository.voucher.VoucherTypeRepository;
 import com.like.minded.backend.vo.voucher.VoucherResponse;
 import java.util.List;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +21,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class VoucherServiceImpl implements VoucherService {
 
-    private final VoucherRepository voucherRepository;
-    private final VoucherTypeRepository voucherTypeRepository;
+    VoucherRepository voucherRepository;
+    VoucherTypeRepository voucherTypeRepository;
 
     @Override
     public ResponseEntity<VoucherResponse> createVoucher(VoucherCreationDto voucherCreationDto) {

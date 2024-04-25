@@ -7,15 +7,20 @@ import com.like.minded.backend.dto.match.MatchResponseBodyDto;
 import com.like.minded.backend.service.match.MatchService;
 import com.like.minded.backend.vo.BaseResponse;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 @RequestMapping("/api/v1/match")
 @CrossOrigin(origins = "*")
 public class MatchController {
-    @Autowired private MatchService matchService;
+
+    MatchService matchService;
 
     @GetMapping("/{profileId}")
     public ResponseEntity<BaseResponse<List<MatchResponseBodyDto>>> getProfileMatches(

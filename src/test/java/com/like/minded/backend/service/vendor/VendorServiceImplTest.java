@@ -7,14 +7,21 @@ import static org.mockito.Mockito.*;
 import com.like.minded.backend.domain.vendor.IndoorVendor;
 import com.like.minded.backend.domain.vendor.OutdoorVendor;
 import com.like.minded.backend.domain.vendor.Vendor;
+import com.like.minded.backend.domain.voucher.Voucher;
+import com.like.minded.backend.domain.voucher.VoucherType;
 import com.like.minded.backend.dto.vendor.VendorCreationDto;
+import com.like.minded.backend.dto.vendor.VendorResponseDto;
 import com.like.minded.backend.enums.VendorType;
 import com.like.minded.backend.exception.VendorException;
 import com.like.minded.backend.repository.vendor.VendorRepository;
+import com.like.minded.backend.service.user.UserContext;
 import com.like.minded.backend.vo.vendor.VendorResponse;
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.junit.jupiter.api.Test;
@@ -30,11 +37,39 @@ import org.springframework.http.ResponseEntity;
 class VendorServiceImplTest {
 
     @Mock VendorRepository vendorRepository;
-
+    @Mock UserContext userContext;
     @InjectMocks VendorServiceImpl vendorService;
 
     @Test
-    void createVendorShouldSucceed() {
+    void createVendorIndoorShouldSucceed() {
+        VendorCreationDto dto =
+                new VendorCreationDto(
+                        "VendorName",
+                        "Activity",
+                        "Address",
+                        87654321,
+                        "www.example.com",
+                        1,
+                        VendorType.INDOOR,
+                        "High",
+                        null);
+
+        when(vendorRepository.existsByVendorName(anyString())).thenReturn(false);
+        when(vendorRepository.existsByPhoneNumber(anyInt())).thenReturn(false);
+        when(vendorRepository.save(any(Vendor.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        ResponseEntity<VendorResponse> response = vendorService.createVendor(dto);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Successfully created vendor", response.getBody().getMessage());
+
+        verify(vendorRepository).save(any(Vendor.class));
+    }
+
+    @Test
+    void createVendorOutdoorShouldSucceed() {
         VendorCreationDto dto =
                 new VendorCreationDto(
                         "VendorName",
@@ -94,6 +129,140 @@ class VendorServiceImplTest {
         assertEquals(vendorId, foundVendor.getVendorId());
 
         verify(vendorRepository).findById(vendorId);
+    }
+
+    @Test
+    void testGetVendorsByPassionIdsAndUserPremiumStatus_NormalUser() {
+        // Arrange
+        Integer userPremiumStatus = 0;
+        List<Integer> passionIds = Arrays.asList(1, 2);
+        List<Vendor> vendors =
+                Arrays.asList(
+                        new Vendor(
+                                1,
+                                "VendorName1",
+                                "Activity1",
+                                "Address1",
+                                98765432,
+                                "website1.com",
+                                1,
+                                VendorType.INDOOR,
+                                Collections.emptyList()),
+                        new Vendor(
+                                2,
+                                "VendorName2",
+                                "Activity2",
+                                "Address2",
+                                87654321,
+                                "website2.com",
+                                2,
+                                VendorType.OUTDOOR,
+                                Collections.emptyList()));
+        when(vendorRepository.findAll()).thenReturn(vendors);
+
+        // Act
+        List<VendorResponseDto> result =
+                vendorService.getVendorsByPassionIdsAndUserPremiumStatus(
+                        passionIds, userPremiumStatus);
+
+        // Assert
+        assertEquals(2, result.size());
+        assertEquals("VendorName1", result.get(0).getVendorName());
+        assertEquals("VendorName2", result.get(1).getVendorName());
+    }
+
+    @Test
+    void testGetVendorsByPassionIdsAndUserPremiumStatus_PremiumUser() {
+        // Arrange
+        Integer userPremiumStatus = 1;
+        List<Integer> passionIds = Arrays.asList(1, 2);
+        List<Vendor> vendors =
+                Arrays.asList(
+                        new Vendor(
+                                1,
+                                "VendorName1",
+                                "Activity1",
+                                "Address1",
+                                98765432,
+                                "website1.com",
+                                1,
+                                VendorType.INDOOR,
+                                Collections.emptyList()),
+                        new Vendor(
+                                2,
+                                "VendorName2",
+                                "Activity2",
+                                "Address2",
+                                87654321,
+                                "website2.com",
+                                2,
+                                VendorType.OUTDOOR,
+                                Collections.emptyList()));
+        when(vendorRepository.findAll())
+                .thenReturn(
+                        vendors.stream()
+                                .filter(v -> passionIds.contains(v.getPassionId()))
+                                .collect(Collectors.toList()));
+
+        // Act
+        List<VendorResponseDto> result =
+                vendorService.getVendorsByPassionIdsAndUserPremiumStatus(
+                        passionIds, userPremiumStatus);
+
+        // Assert
+        assertEquals(2, result.size());
+        assertEquals("VendorName1", result.get(0).getVendorName());
+        assertEquals("VendorName2", result.get(1).getVendorName());
+    }
+
+    @Test
+    void testVouchersProcessedCorrectly() {
+        // Arrange
+        Integer userPremiumStatus = 1;
+        List<Integer> passionIds = List.of(1);
+        Voucher voucher1 =
+                new Voucher(
+                        1,
+                        "voucher1",
+                        new VoucherType(1, "voucherType1"),
+                        75,
+                        LocalDate.now().plusDays(30),
+                        false,
+                        1);
+        Voucher voucher2 =
+                new Voucher(
+                        2,
+                        "voucher2",
+                        new VoucherType(1, "voucherType2"),
+                        158,
+                        LocalDate.now().plusDays(30),
+                        true,
+                        1);
+        List<Voucher> vouchers = Arrays.asList(voucher1, voucher2);
+        Vendor vendor =
+                new Vendor(
+                        1,
+                        "VendorName1",
+                        "Activity1",
+                        "Address1",
+                        98765432,
+                        "website1.com",
+                        1,
+                        VendorType.INDOOR,
+                        vouchers);
+
+        when(vendorRepository.findAll()).thenReturn(List.of(vendor));
+
+        // Act
+        List<VendorResponseDto> result =
+                vendorService.getVendorsByPassionIdsAndUserPremiumStatus(
+                        passionIds, userPremiumStatus);
+
+        // Assert
+        assertEquals(1, result.size());
+        assertEquals(2, result.getFirst().getVouchers().size());
+        assertEquals(90, result.getFirst().getVouchers().get(0).getVoucherAmount());
+        assertEquals(190, result.getFirst().getVouchers().get(1).getVoucherAmount());
     }
 
     @Test

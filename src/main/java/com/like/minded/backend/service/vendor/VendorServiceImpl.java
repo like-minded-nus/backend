@@ -4,11 +4,13 @@ package com.like.minded.backend.service.vendor;
 import com.like.minded.backend.domain.vendor.IndoorVendor;
 import com.like.minded.backend.domain.vendor.OutdoorVendor;
 import com.like.minded.backend.domain.vendor.Vendor;
+import com.like.minded.backend.domain.vendor.factory.IndoorVendorFactory;
+import com.like.minded.backend.domain.vendor.factory.OutdoorVendorFactory;
+import com.like.minded.backend.domain.vendor.factory.VendorFactory;
 import com.like.minded.backend.domain.voucher.Voucher;
 import com.like.minded.backend.dto.vendor.VendorCreationDto;
 import com.like.minded.backend.dto.vendor.VendorResponseDto;
 import com.like.minded.backend.dto.voucher.VoucherResponseDto;
-import com.like.minded.backend.enums.VendorType;
 import com.like.minded.backend.exception.DatabaseTransactionException;
 import com.like.minded.backend.exception.VendorException;
 import com.like.minded.backend.repository.vendor.VendorRepository;
@@ -34,42 +36,87 @@ import org.springframework.stereotype.Service;
 public class VendorServiceImpl implements VendorService {
 
     VendorRepository vendorRepository;
+    IndoorVendorFactory indoorVendorFactory;
+    OutdoorVendorFactory outdoorVendorFactory;
 
     @Override
     public ResponseEntity<VendorResponse> createVendor(VendorCreationDto vendorCreationDto) {
         validateVendorCreationData(vendorCreationDto);
 
-        Vendor newVendor;
-        if (vendorCreationDto.getVendorType() == VendorType.INDOOR) {
-            IndoorVendor indoorVendor = new IndoorVendor();
-            indoorVendor.setConversationFriendly(vendorCreationDto.getConversationFriendly());
-            newVendor = indoorVendor;
-        } else if (vendorCreationDto.getVendorType() == VendorType.OUTDOOR) {
-            OutdoorVendor outdoorVendor = new OutdoorVendor();
-            outdoorVendor.setIntensityLevel(vendorCreationDto.getIntensityLevel());
-            newVendor = outdoorVendor;
-        } else {
-            return ResponseEntity.badRequest().body(new VendorResponse(400, "Invalid vendor type"));
+        VendorFactory vendorFactory;
+        switch (vendorCreationDto.getVendorType()) {
+            case INDOOR:
+                vendorFactory = indoorVendorFactory;
+                break;
+            case OUTDOOR:
+                vendorFactory = outdoorVendorFactory;
+                break;
+            default:
+                return ResponseEntity.badRequest()
+                        .body(new VendorResponse(400, "Invalid vendor type"));
         }
 
-        newVendor.setVendorName(vendorCreationDto.getVendorName());
-        newVendor.setActivityName(vendorCreationDto.getActivityName());
-        newVendor.setAddress(vendorCreationDto.getAddress());
-        newVendor.setPhoneNumber(vendorCreationDto.getPhoneNumber());
-        newVendor.setWebsite(vendorCreationDto.getWebsite());
-        newVendor.setPassionId(vendorCreationDto.getPassionId());
-        newVendor.setVendorType(vendorCreationDto.getVendorType());
+        Vendor newVendor = vendorFactory.createVendor(vendorCreationDto);
+        setCommonVendorProperties(newVendor, vendorCreationDto);
 
         try {
             vendorRepository.save(newVendor);
         } catch (Exception e) {
-            throw new DatabaseTransactionException("Error saving vendor into Database", e);
+            throw new DatabaseTransactionException("Error saving Vendor into database", e);
         }
 
         VendorResponse response =
                 VendorResponse.builder().status(200).message("Successfully created vendor").build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    private void setCommonVendorProperties(Vendor vendor, VendorCreationDto vendorCreationDto) {
+        vendor.setVendorName(vendorCreationDto.getVendorName());
+        vendor.setActivityName(vendorCreationDto.getActivityName());
+        vendor.setAddress(vendorCreationDto.getAddress());
+        vendor.setPhoneNumber(vendorCreationDto.getPhoneNumber());
+        vendor.setWebsite(vendorCreationDto.getWebsite());
+        vendor.setPassionId(vendorCreationDto.getPassionId());
+        vendor.setVendorType(vendorCreationDto.getVendorType());
+    }
+
+    //    @Override
+    //    public ResponseEntity<VendorResponse> createVendor(VendorCreationDto vendorCreationDto) {
+    //        validateVendorCreationData(vendorCreationDto);
+    //
+    //        Vendor newVendor;
+    //        if (vendorCreationDto.getVendorType() == VendorType.INDOOR) {
+    //            IndoorVendor indoorVendor = new IndoorVendor();
+    //            indoorVendor.setConversationFriendly(vendorCreationDto.getConversationFriendly());
+    //            newVendor = indoorVendor;
+    //        } else if (vendorCreationDto.getVendorType() == VendorType.OUTDOOR) {
+    //            OutdoorVendor outdoorVendor = new OutdoorVendor();
+    //            outdoorVendor.setIntensityLevel(vendorCreationDto.getIntensityLevel());
+    //            newVendor = outdoorVendor;
+    //        } else {
+    //            return ResponseEntity.badRequest().body(new VendorResponse(400, "Invalid vendor
+    // type"));
+    //        }
+    //
+    //        newVendor.setVendorName(vendorCreationDto.getVendorName());
+    //        newVendor.setActivityName(vendorCreationDto.getActivityName());
+    //        newVendor.setAddress(vendorCreationDto.getAddress());
+    //        newVendor.setPhoneNumber(vendorCreationDto.getPhoneNumber());
+    //        newVendor.setWebsite(vendorCreationDto.getWebsite());
+    //        newVendor.setPassionId(vendorCreationDto.getPassionId());
+    //        newVendor.setVendorType(vendorCreationDto.getVendorType());
+    //
+    //        try {
+    //            vendorRepository.save(newVendor);
+    //        } catch (Exception e) {
+    //            throw new DatabaseTransactionException("Error saving vendor into Database", e);
+    //        }
+    //
+    //        VendorResponse response =
+    //                VendorResponse.builder().status(200).message("Successfully created
+    // vendor").build();
+    //        return ResponseEntity.status(HttpStatus.OK).body(response);
+    //    }
 
     @Override
     public ResponseEntity<VendorResponse> updateVendor(

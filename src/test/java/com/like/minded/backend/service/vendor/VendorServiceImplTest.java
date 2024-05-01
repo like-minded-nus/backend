@@ -7,6 +7,8 @@ import static org.mockito.Mockito.*;
 import com.like.minded.backend.domain.vendor.IndoorVendor;
 import com.like.minded.backend.domain.vendor.OutdoorVendor;
 import com.like.minded.backend.domain.vendor.Vendor;
+import com.like.minded.backend.domain.vendor.factory.IndoorVendorFactory;
+import com.like.minded.backend.domain.vendor.factory.OutdoorVendorFactory;
 import com.like.minded.backend.domain.voucher.Voucher;
 import com.like.minded.backend.domain.voucher.VoucherType;
 import com.like.minded.backend.dto.vendor.VendorCreationDto;
@@ -37,6 +39,8 @@ import org.springframework.http.ResponseEntity;
 class VendorServiceImplTest {
 
     @Mock VendorRepository vendorRepository;
+    @Mock IndoorVendorFactory indoorVendorFactory;
+    @Mock OutdoorVendorFactory outdoorVendorFactory;
     @Mock UserContext userContext;
     @InjectMocks VendorServiceImpl vendorService;
 
@@ -54,10 +58,24 @@ class VendorServiceImplTest {
                         "High",
                         null);
 
-        when(vendorRepository.existsByVendorName(anyString())).thenReturn(false);
-        when(vendorRepository.existsByPhoneNumber(anyInt())).thenReturn(false);
-        when(vendorRepository.save(any(Vendor.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
+        IndoorVendor expectedVendor = new IndoorVendor();
+        expectedVendor.setVendorName("VendorName");
+        expectedVendor.setActivityName("Activity");
+        expectedVendor.setAddress("Address");
+        expectedVendor.setPhoneNumber(87654321);
+        expectedVendor.setWebsite("www.example.com");
+        expectedVendor.setPassionId(1);
+        expectedVendor.setVendorType(VendorType.INDOOR);
+        expectedVendor.setConversationFriendly("High");
+
+        when(indoorVendorFactory.createVendor(any(VendorCreationDto.class)))
+                .thenReturn(expectedVendor);
+        when(vendorRepository.save(any(Vendor.class))).thenReturn(expectedVendor);
+
+        //        when(vendorRepository.existsByVendorName(anyString())).thenReturn(false);
+        //        when(vendorRepository.existsByPhoneNumber(anyInt())).thenReturn(false);
+        //        when(vendorRepository.save(any(Vendor.class)))
+        //                .thenAnswer(invocation -> invocation.getArgument(0));
 
         ResponseEntity<VendorResponse> response = vendorService.createVendor(dto);
 
@@ -65,7 +83,9 @@ class VendorServiceImplTest {
         assertNotNull(response.getBody());
         assertEquals("Successfully created vendor", response.getBody().getMessage());
 
-        verify(vendorRepository).save(any(Vendor.class));
+        verify(indoorVendorFactory).createVendor(dto);
+        verify(vendorRepository).save(expectedVendor);
+        //        verify(vendorRepository).save(any(Vendor.class));
     }
 
     @Test
@@ -82,10 +102,23 @@ class VendorServiceImplTest {
                         "High",
                         null);
 
-        when(vendorRepository.existsByVendorName(anyString())).thenReturn(false);
-        when(vendorRepository.existsByPhoneNumber(anyInt())).thenReturn(false);
-        when(vendorRepository.save(any(Vendor.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
+        OutdoorVendor expectedVendor = new OutdoorVendor();
+        expectedVendor.setVendorName("VendorName");
+        expectedVendor.setActivityName("Activity");
+        expectedVendor.setAddress("Address");
+        expectedVendor.setPhoneNumber(87654321);
+        expectedVendor.setWebsite("www.example.com");
+        expectedVendor.setPassionId(1);
+        expectedVendor.setVendorType(VendorType.OUTDOOR);
+        expectedVendor.setIntensityLevel("High");
+
+        when(outdoorVendorFactory.createVendor(any(VendorCreationDto.class)))
+                .thenReturn(expectedVendor);
+        when(vendorRepository.save(any(Vendor.class))).thenReturn(expectedVendor);
+        //        when(vendorRepository.existsByVendorName(anyString())).thenReturn(false);
+        //        when(vendorRepository.existsByPhoneNumber(anyInt())).thenReturn(false);
+        //        when(vendorRepository.save(any(Vendor.class)))
+        //                .thenAnswer(invocation -> invocation.getArgument(0));
 
         ResponseEntity<VendorResponse> response = vendorService.createVendor(dto);
 
@@ -93,7 +126,9 @@ class VendorServiceImplTest {
         assertNotNull(response.getBody());
         assertEquals("Successfully created vendor", response.getBody().getMessage());
 
-        verify(vendorRepository).save(any(Vendor.class));
+        verify(outdoorVendorFactory).createVendor(dto);
+        verify(vendorRepository).save(expectedVendor);
+        //        verify(vendorRepository).save(any(Vendor.class));
     }
 
     @Test

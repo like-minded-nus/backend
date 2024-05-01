@@ -35,9 +35,9 @@ import org.springframework.stereotype.Service;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class VendorServiceImpl implements VendorService {
 
-    private final VendorRepository vendorRepository;
-    private final IndoorVendorFactory indoorVendorFactory;
-    private final OutdoorVendorFactory outdoorVendorFactory;
+    VendorRepository vendorRepository;
+    IndoorVendorFactory indoorVendorFactory;
+    OutdoorVendorFactory outdoorVendorFactory;
 
     @Override
     public ResponseEntity<VendorResponse> createVendor(VendorCreationDto vendorCreationDto) {

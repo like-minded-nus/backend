@@ -4,9 +4,9 @@ package com.like.minded.backend.service.vendor;
 import com.like.minded.backend.domain.vendor.IndoorVendor;
 import com.like.minded.backend.domain.vendor.OutdoorVendor;
 import com.like.minded.backend.domain.vendor.Vendor;
-import com.like.minded.backend.domain.vendor.factory.IndoorVendorFactory;
-import com.like.minded.backend.domain.vendor.factory.OutdoorVendorFactory;
-import com.like.minded.backend.domain.vendor.factory.VendorFactory;
+import com.like.minded.backend.domain.vendor.creator.IndoorVendorCreator;
+import com.like.minded.backend.domain.vendor.creator.OutdoorVendorCreator;
+import com.like.minded.backend.domain.vendor.creator.VendorCreator;
 import com.like.minded.backend.domain.voucher.Voucher;
 import com.like.minded.backend.dto.vendor.VendorCreationDto;
 import com.like.minded.backend.dto.vendor.VendorResponseDto;
@@ -36,34 +36,27 @@ import org.springframework.stereotype.Service;
 public class VendorServiceImpl implements VendorService {
 
     VendorRepository vendorRepository;
-    IndoorVendorFactory indoorVendorFactory;
-    OutdoorVendorFactory outdoorVendorFactory;
+    IndoorVendorCreator indoorVendorCreator;
+    OutdoorVendorCreator outdoorVendorCreator;
 
-    @Override
     public ResponseEntity<VendorResponse> createVendor(VendorCreationDto vendorCreationDto) {
         validateVendorCreationData(vendorCreationDto);
 
-        VendorFactory vendorFactory;
+        VendorCreator vendorCreator;
+
         switch (vendorCreationDto.getVendorType()) {
             case INDOOR:
-                vendorFactory = indoorVendorFactory;
+                vendorCreator = indoorVendorCreator;
                 break;
             case OUTDOOR:
-                vendorFactory = outdoorVendorFactory;
+                vendorCreator = outdoorVendorCreator;
                 break;
             default:
-                return ResponseEntity.badRequest()
-                        .body(new VendorResponse(400, "Invalid vendor type"));
+                throw new IllegalArgumentException("Invalid vendor type");
         }
 
-        Vendor newVendor = vendorFactory.createVendor(vendorCreationDto);
-        setCommonVendorProperties(newVendor, vendorCreationDto);
-
-        try {
-            vendorRepository.save(newVendor);
-        } catch (Exception e) {
-            throw new DatabaseTransactionException("Error saving Vendor into database", e);
-        }
+        Vendor vendor = vendorCreator.createVendor(vendorCreationDto);
+        vendorRepository.save(vendor);
 
         VendorResponse response =
                 VendorResponse.builder().status(200).message("Successfully created vendor").build();
@@ -79,44 +72,6 @@ public class VendorServiceImpl implements VendorService {
         vendor.setPassionId(vendorCreationDto.getPassionId());
         vendor.setVendorType(vendorCreationDto.getVendorType());
     }
-
-    //    @Override
-    //    public ResponseEntity<VendorResponse> createVendor(VendorCreationDto vendorCreationDto) {
-    //        validateVendorCreationData(vendorCreationDto);
-    //
-    //        Vendor newVendor;
-    //        if (vendorCreationDto.getVendorType() == VendorType.INDOOR) {
-    //            IndoorVendor indoorVendor = new IndoorVendor();
-    //            indoorVendor.setConversationFriendly(vendorCreationDto.getConversationFriendly());
-    //            newVendor = indoorVendor;
-    //        } else if (vendorCreationDto.getVendorType() == VendorType.OUTDOOR) {
-    //            OutdoorVendor outdoorVendor = new OutdoorVendor();
-    //            outdoorVendor.setIntensityLevel(vendorCreationDto.getIntensityLevel());
-    //            newVendor = outdoorVendor;
-    //        } else {
-    //            return ResponseEntity.badRequest().body(new VendorResponse(400, "Invalid vendor
-    // type"));
-    //        }
-    //
-    //        newVendor.setVendorName(vendorCreationDto.getVendorName());
-    //        newVendor.setActivityName(vendorCreationDto.getActivityName());
-    //        newVendor.setAddress(vendorCreationDto.getAddress());
-    //        newVendor.setPhoneNumber(vendorCreationDto.getPhoneNumber());
-    //        newVendor.setWebsite(vendorCreationDto.getWebsite());
-    //        newVendor.setPassionId(vendorCreationDto.getPassionId());
-    //        newVendor.setVendorType(vendorCreationDto.getVendorType());
-    //
-    //        try {
-    //            vendorRepository.save(newVendor);
-    //        } catch (Exception e) {
-    //            throw new DatabaseTransactionException("Error saving vendor into Database", e);
-    //        }
-    //
-    //        VendorResponse response =
-    //                VendorResponse.builder().status(200).message("Successfully created
-    // vendor").build();
-    //        return ResponseEntity.status(HttpStatus.OK).body(response);
-    //    }
 
     @Override
     public ResponseEntity<VendorResponse> updateVendor(
